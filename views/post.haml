@@ -1,11 +1,11 @@
 .post
   %h1
     #{@title}
-  %p
-    by: #{@author} on: #{@date}
   %hr
   :preserve
     #{@content}
+  %p.footer
+    First published on #{@date} by #{@author}.
   %hr
   %p
     If you'd like to comment, just send me an email at wilkie@xomb.org or on either 
@@ -13,6 +13,12 @@
     or via my
     %a{:href=>"https://rstat.us/users/DaveWilkinsonII", :title=>"rstat.us Profile", :alt=>"rstat.us Profile"} rstat.us
     profile. I will love to hear from you! Any opinions, criticism, etc are welcome.
+    All content off of this domain is licensed as
+    %a{:href=>"http://creativecommons.org/publicdomain/zero/1.0/", :title=>"CC0 License", :alt=>"Creative Commons Zero 1.0 License"}
+      CC0
+
+- content_for :summary do
+  #{@summary}
 
 - content_for :toc do
   = format_outline @outline

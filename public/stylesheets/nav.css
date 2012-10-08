@@ -42,6 +42,14 @@ nav .nav-section + h3 {
 	margin-top: 30px;
 }
 
+nav .nav-section p.summary {
+	font-family: 'Metrophobic', sans-serif;
+	font-size: 12px;
+	line-height: 1.3em;
+  text-align: justify;
+	margin: 0;
+}
+
 nav li {
 	font-family: 'Metrophobic', sans-serif;
 	font-size: 12px;

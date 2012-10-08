@@ -69,6 +69,7 @@ class Post
   attr_reader :content
   attr_reader :title
   attr_reader :author
+  attr_reader :summary
   attr_reader :date
   attr_reader :tags
   attr_reader :outline
@@ -92,6 +93,7 @@ class Post
       @title = meta_data["title"]
       @author = meta_data["author"]
       @tags = meta_data["tags"] || []
+      @summary = meta_data["summary"]
     end
 
     @date = name.match(/^\d{4}-\d{2}-\d{2}/)

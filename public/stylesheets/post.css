@@ -31,8 +31,12 @@ body,html {
 	color: #d9d;
 }
 
-.post h1, .post h2, .post h3 {
+.post h1 {
 	font-family: 'Forum', serif;
+}
+
+.post h2, .post h3 {
+	font-family: 'Archivo Narrow', serif;
 }
 
 .post h1 {
@@ -209,4 +213,9 @@ body,html {
 .post p.image span.caption {
   font-size: 12px;
   font-style: italic;
+}
+
+.post p.footer {
+  font-size: 10px;
+  color: #888888;
 }

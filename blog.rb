@@ -51,6 +51,8 @@ class Blog < Sinatra::Base
     @title = source.title
     @author = source.author
     @date = source.date
+    @summary = source.summary
+    p @summary
     @outline = source.outline
 
     haml :post
