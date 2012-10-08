@@ -21,11 +21,10 @@
       .nav-section
         %ul.toc
           = yield_content :toc
-    %h3 archive
-    .nav-section
-      %ul.archive
-        - latest_posts.each do |post|
-          %li
-            %a{:href => post[:url],
-               :title => post[:title],
-               :alt=> post[:title]}= post[:title]
+    %a{:href=>"/archive", :title=>"List past topics by tag", :alt=>"List past topics by tag"}
+      %h3 archive
+      .nav-section
+        %ul.archive
+          - tags.each do |tag|
+            %li
+              tag

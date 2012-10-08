@@ -2,6 +2,7 @@ require 'bundler'
 Bundler.require
 
 require_relative 'post'
+require_relative 'tags'
 
 class Blog < Sinatra::Base
   TITLE = "wilkie writes a thing"
@@ -17,14 +18,8 @@ class Blog < Sinatra::Base
       "#{@title} - #{TITLE}"
     end
 
-    def latest_posts
-      ret = []
-      Dir.glob("posts/*.md") do |post|
-        post = post[/posts\/(.*?).md$/,1]
-        p = Post.new(post)
-        ret << {:title => p.title, :url => "/posts/#{post}"}
-      end
-      ret
+    def tags
+      []
     end
 
     def partial(page, options={})
@@ -43,6 +38,28 @@ class Blog < Sinatra::Base
 
   get '/' do
     haml :index
+  end
+
+  get '/archive' do
+    @tags = Tags.archive_content
+    @tags_rest = Tags.rest(@tags)
+
+    haml :archive
+  end
+
+  get '/tags/:id' do
+    tags = Tags.gather(params[:id])
+
+    # if post is empty, 404
+    if tags.empty?
+      raise Sinatra::NotFound
+    end
+
+    @content = Tags.tag_summary(params[:id])
+    @tag = params[:id]
+    @posts = tags
+
+    haml :tag
   end
 
   get '/posts/:id' do
@@ -69,6 +86,7 @@ class Blog < Sinatra::Base
     @date = source.date
     @summary = source.summary
     @outline = source.outline
+    @tags = source.tags
 
     # render
     haml :post

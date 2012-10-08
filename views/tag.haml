@@ -1,23 +1,19 @@
 .post
   %h1
-    #{@title}
-  %hr
-  :preserve
-    #{@content}
-  %p.footer
-    First published on #{@date} by #{@author}.
-  %hr
-  - if @tags.length > 0
-    %p
-      This is a post regarding
-      - @tags.each_with_index do |tag, i|
-        - if i < @tags.length - 1
-          = succeed ',' do
-            %a{:href=>"/tags/#{tag}", :title=>tag, :alt=>"List topics relating to #{tag}"}=tag
-        - else
-          = succeed '.' do
-            %a{:href=>"/tags/#{tag}", :title=>tag, :alt=>"List topics relating to #{tag}"}=tag
+    All posts tagged #{@tag}
+  - if @content
     %hr
+    :preserve
+      #{@content}
+  - @posts.each do |post|
+    %hr
+    %h2
+      %a{:href=>post.url, :title=>post.title, :alt=>post.title}
+        #{post.title}
+    - if post.summary
+      %p
+        #{post.summary}
+  %hr
   %p
     If you'd like to comment, just send me an email at wilkie@xomb.org or on either 
     %a{:href=>"http://twitter.com/DaveWilkinsonII", :title=>"Twitter Profile", :alt=>"Twitter Profile"} Twitter

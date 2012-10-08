@@ -74,6 +74,7 @@ class Post
   attr_reader :tags
   attr_reader :outline
   attr_reader :slug
+  attr_reader :url
 
   def initialize(name)
     begin
@@ -103,5 +104,6 @@ class Post
     r = Redcarpet::Markdown.new(renderer, :fenced_code_blocks => true)
     @content = r.render(content)
     @outline = renderer.outline.child
+    @url = "/posts/#{slug}"
   end
 end

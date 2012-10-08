@@ -1,0 +1,1 @@
+Diversity in technology is very important *to promote solutions that impact the lives of every individual* on this planet. To that end, a discussion of the **gender** inequalities that exist in the technology field that hinder this diversity of both problems and solutions is essential.

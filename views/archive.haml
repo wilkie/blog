@@ -1,0 +1,25 @@
+.post
+  %h1
+    Archive
+  %hr
+  %p
+    - if @tags
+      - @tags.each do |tag, content|
+        %h2
+          %a{:href=>"/tags/#{tag}"}
+            #{tag}
+        :preserve
+          #{content}
+    - if @tags_rest
+      - @tags_rest.each do |tag|
+        %h2
+          %a{:href=>"/tags/#{tag}"}
+            #{tag}
+  %hr
+  %p
+    All content off of this domain is licensed as
+    %a{:href=>"http://creativecommons.org/publicdomain/zero/1.0/", :title=>"CC0 License", :alt=>"Creative Commons Zero 1.0 License"}
+      CC0
+
+- content_for :toc do
+  = format_outline @outline

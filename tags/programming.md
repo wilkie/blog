@@ -1,0 +1,1 @@
+A discussion of technology is *not sufficient without bringing up the languages and methods of expression* that we use to develop solutions to technical (and social) problems. As such, **programming** is obviously an important part of the discourse, of which I have many opinions and advice to counter pitfalls and exercises to strengthen skill.

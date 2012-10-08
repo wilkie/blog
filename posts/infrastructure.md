@@ -3,6 +3,7 @@ title: "An Infrastructure to Promote Sustainable Software"
 author: wilkie
 date: 2012-10-06
 summary: "Given that we have a problem with the organization of code to provide better objective reuse, we can solve this by using a language to describe computational behaviors and specifications and define absolutely nothing else. Implementations of these behaviors can contain isolated abstractions, and applications as a whole can use abstractions to glue together computations. This simple infrastructure provides not just technical benefits but also illustrates many social merits."
+tags: [programming, social]
 ---
 
 We have long promoted the idea of the re-usability of our code. After an era of writing for our machines instead of ourselves, we discovered that human literacy was preferred over performance. From this notion, we developed higher level languages that started to abstract and even completely obscure the underlying machine. A beautiful era emerged where the Turing machine was our model, and humans our audience.

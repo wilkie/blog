@@ -5,6 +5,10 @@ body,html {
 	height: 100%;
 }
 
+.post hr {
+  margin-bottom: 13px;
+}
+
 .container {
 	min-height: 100%;
 }
@@ -39,7 +43,7 @@ body,html {
 	font-family: 'Archivo Narrow', serif;
 }
 
-.post h1 {
+.post h1, .post h1 a {
 	color: rgb(72, 74, 171);
 	font-size: 36px;
 	font-weight: bold;
@@ -51,7 +55,7 @@ body,html {
 	margin-top: 0;
 }
 
-.post h2 {
+.post h2, .post h2 a, .post h2 a:visited {
 	color: rgb(88, 90, 209);
 	font-size: 28px;
 	margin-bottom: 3px;
