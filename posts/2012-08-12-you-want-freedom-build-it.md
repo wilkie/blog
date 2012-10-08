@@ -1,6 +1,7 @@
 ---
 title: You want freedom? Build it.
 author: wilkie
+summary: "It is easy to build federated systems since the infrastructure exists. Therefore, if you do not trust a centralized system, then build a new system that the people can control. Github is a good example, but not the only choice."
 ---
 
 There has been [many](http://bytbox.net/blog/2012/08/leaving-github.html) a [debate](http://news.ycombinator.com/item?id=4220353) about the recent, somehow surprising discovery that github is a company with [interests](http://peter.a16z.com/2012/07/09/software-eats-software-development/) that are perhaps beyond our own. Whatever. Honestly, github is replaceable. The real issue is the one we as developers, creatives, and people who like difficult problems should be talking about: WTF is a centralized website doing wrapping a distributed protocol?
