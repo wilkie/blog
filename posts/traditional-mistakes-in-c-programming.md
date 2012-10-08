@@ -1,6 +1,7 @@
 ---
 title: Traditional Mistakes in C Programming
 author: Dave Wilkinson
+date: 2012-01-16
 tags: [programming, c, style, mistakes]
 ---
 

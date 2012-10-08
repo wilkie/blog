@@ -1,6 +1,7 @@
 ---
 title: tmux Configuration for Great Good
 author: Dave Wilkinson
+date: 2012-02-06
 summary: "tmux is a great tool for productivity in the terminal. Since you are going to use it extensively, then you should customize it to work better for *you*. Here are some very common configurations you should have as defaults."
 ---
 

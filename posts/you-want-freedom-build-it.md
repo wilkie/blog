@@ -1,6 +1,7 @@
 ---
 title: You want freedom? Build it.
 author: wilkie
+date: 2012-08-12
 summary: "It is easy to build federated systems since the infrastructure exists. Therefore, if you do not trust a centralized system, then build a new system that the people can control. Github is a good example, but not the only choice."
 ---
 

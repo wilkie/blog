@@ -1,6 +1,7 @@
 ---
 title: "Coding Naturally: How to Achieve Sustainable Software"
 author: wilkie
+date: 2012-10-06
 summary: "We tend to use too many opinions in our comparisons of libraries and frameworks. This is systemic and relates to a problem that we, socially, are not organizing code effectively for objective reuse. We can fix this with a better infrastructure that puts objective metrics first and describes computation rather than human expression. We can find better ways of expression using abstractions on top."
 ---
 

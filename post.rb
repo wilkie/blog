@@ -94,10 +94,10 @@ class Post
       @author = meta_data["author"]
       @tags = meta_data["tags"] || []
       @summary = meta_data["summary"]
+      @date = meta_data["date"]
     end
 
-    @date = name.match(/^\d{4}-\d{2}-\d{2}/)
-    @slug = name[/#{@date}-(.*)$/,1]
+    @slug = name
 
     renderer = Post::Renderer.new(@slug)
     r = Redcarpet::Markdown.new(renderer, :fenced_code_blocks => true)

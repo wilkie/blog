@@ -46,15 +46,31 @@ class Blog < Sinatra::Base
   end
 
   get '/posts/:id' do
+    # support date-slug as well as just slug
+    slug = params[:id][/^\d{4}-\d{2}-\d{2}-(.*)$/, 1]
+    if slug
+      # tell it that the resource has moved permanently
+      redirect "/posts/#{slug}", 301
+      return
+    end
+
+    # load post
     source = Post.new(params[:id])
+
+    # if post is empty, 404
+    if source.content.nil?
+      raise Sinatra::NotFound
+    end
+
+    # gather info
     @content = source.content
     @title = source.title
     @author = source.author
     @date = source.date
     @summary = source.summary
-    p @summary
     @outline = source.outline
 
+    # render
     haml :post
   end
 end
