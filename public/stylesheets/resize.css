@@ -38,13 +38,16 @@
 	}
 	nav { padding-bottom: 5px; }
 	nav .nav-section { display: none; }
-	nav .nav-title { display: inline; float: left; }
+	nav .nav-title { display: inline; float: left; margin-left: -1px; }
 	nav .nav-title + .nav-section {
 		display: block;
 		position: absolute;
-		right: 10px;
+		right: 3px;
 		top: 25px;
 	}
+  nav .hidden {
+    display: inline;
+  }
 	nav .nav-content > h3 { display: none; }
 	.post {
 		border-left: 10px solid #f0e0f0;

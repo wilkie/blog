@@ -4,6 +4,10 @@
 	border-left: 3px solid #a8a;
 }
 
+nav .hidden {
+  display: none;
+}
+
 nav {
 	padding-left: 0px;
 	padding-top: 15px;

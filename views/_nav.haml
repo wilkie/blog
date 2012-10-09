@@ -5,6 +5,8 @@
         %a{:href=>"/"}
           #{TITLE}
     .nav-section
+      %a.image.hidden{:href=>"/archive", :title=>"List past posts by topic", :alt=>"List past posts by topic"}<
+        %img{:src=>"/images/archive.png"}
       %a.image{:href=>"http://github.com/#{GITHUB_USERNAME}", :title=>"#{GITHUB_USERNAME}'s code"}<
         %img{:src=>"/images/github.png", :title=>"#{GITHUB_USERNAME}'s code", :alt=>"#{GITHUB_USERNAME}'s code"}
       %a.image{:href=>"http://twitter.com/#{TWITTER_USERNAME}", :title=>"#{TWITTER_USERNAME}'s twitter profile"}<
@@ -21,8 +23,9 @@
       .nav-section
         %ul.toc
           = yield_content :toc
-    %a{:href=>"/archive", :title=>"List past topics by tag", :alt=>"List past topics by tag"}
-      %h3 archive
+    %h3
+      %a{:href=>"/archive", :title=>"List past topics by tag", :alt=>"List past topics by tag"}
+        archive
       .nav-section
         %ul.archive
           - tags.each do |tag|
