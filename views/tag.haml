@@ -1,10 +1,20 @@
 .post
   %h1
     All posts tagged #{@tag}
+  %hr
   - if @content
-    %hr
     :preserve
       #{@content}
+  - unless @subtags.empty?
+    %hr
+    %h2
+      All subtags under #{@tag}
+    - @subtags.each do |tag, content|
+      %h3
+        %a{:href=>"/tags/#{@tag}/#{tag}", :title=>"All posts tagged #{tag}", :alt=>"All posts tagged #{tag}"}
+          #{tag}
+      :preserve
+        #{content}
   - @posts.each do |post|
     %hr
     %h2

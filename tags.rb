@@ -1,28 +1,42 @@
 class Tags
-  def Tags.archive_content
+  # Gather tags off of a given tag, do not recurse
+  # Root tags are removed from names
+  def Tags.archive_content(root_tag = '')
     ret = {}
     renderer = Redcarpet::Render::HTML.new
     markdown = Redcarpet::Markdown.new(renderer)
 
-    Dir.glob("tags/*.md") do |filename|
-      tag = filename[/tags\/(.*).md$/, 1]
+    root_tag = root_tag + "/" unless root_tag == ''
+
+    Dir.glob("tags/#{root_tag}*.md") do |filename|
+      tag = filename[/tags\/#{root_tag}(.*).md$/, 1]
       ret[tag] = markdown.render(File.read(filename))
     end
     ret
   end
 
+  # Get the tag summary for a given tag.
   def Tags.tag_summary(tag)
     renderer = Redcarpet::Render::HTML.new
     markdown = Redcarpet::Markdown.new(renderer)
 
-    filename = "tags/#{tag}.md"
-    begin
-      markdown.render(File.read(filename))
-    rescue
-      nil
+    hierarchy = tag.split('/')
+
+    ret = ""
+    parent = "/"
+    hierarchy.each do |tag|
+      filename = "tags#{parent}#{tag}.md"
+      parent << tag + "/"
+      begin
+        ret << markdown.render(File.read(filename))
+      rescue
+        nil
+      end
     end
+    ret
   end
 
+  # Get all tags used by all posts
   def Tags.all
     ret = []
     Dir.glob("posts/*.md") do |post|
@@ -37,16 +51,7 @@ class Tags
     ret
   end
 
-  def Tags.rest(gathered)
-    ret = Tags.all
-    gathered.each do |tag, content|
-      if ret.include? tag
-        ret.delete(tag)
-      end
-    end
-    ret
-  end
-
+  # Gather posts with a given tag
   def Tags.gather(tag)
     ret = []
     Dir.glob("posts/*.md") do |post|

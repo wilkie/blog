@@ -1,0 +1,1 @@
+*Programming is inherently social.* Anybody that claims otherwise cannot hold my respect. That's a strong statement, because without a grasp of the idea that the languages we use are primarily for human eyes, we cannot write effectively. Much like writing natural language, we must use a writing **style** that will speak better to our audience: people.

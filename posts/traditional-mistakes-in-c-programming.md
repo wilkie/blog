@@ -2,7 +2,8 @@
 title: Traditional Mistakes in C Programming
 author: Dave Wilkinson
 date: 2012-01-16
-tags: [programming, c, style, mistakes]
+tags: [programming, "programming/c", "programming/style", "programming/mistakes"]
+summary: "C is a tricky language. For beginners, it can be daunting. It is, however, a very very simple language at its core. Once you commit yourself to avoiding certain fallacies or style mishaps, you can very easily write good C that both humans and machines understand."
 ---
 
 When you approach a procedural language from an object-oriented, (mostly) type-safe language such as Java, there are certain concepts that do not make the best translation. Of course, the main topic is that of pointers. Frankly, the memory model being exposed to you, unlike the memory abstractions of Java, is a daunting thing at first. It does not have to be!

@@ -42,12 +42,15 @@ class Blog < Sinatra::Base
 
   get '/archive' do
     @tags = Tags.archive_content
-    @tags_rest = Tags.rest(@tags)
+    @tags_rest = []
 
     haml :archive
   end
 
-  get '/tags/:id' do
+  get '/tags/*' do
+    address = params[:splat].join('/')
+    params[:id] = address
+
     tags = Tags.gather(params[:id])
 
     # if post is empty, 404
@@ -56,6 +59,7 @@ class Blog < Sinatra::Base
     end
 
     @content = Tags.tag_summary(params[:id])
+    @subtags = Tags.archive_content(params[:id])
     @tag = params[:id]
     @posts = tags
 
