@@ -1,0 +1,1 @@
+I am a very open person in general. I'm not afraid to have and support my opinions, and I'm not afraid to represent who I am to the world. *I wish everybody to be comfortable with who they are.* These are posts that relate to me **personally**.
