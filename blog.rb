@@ -7,7 +7,7 @@ require_relative 'tags'
 class Blog < Sinatra::Base
   TITLE = "wilkie writes a thing"
   GITHUB_USERNAME = "wilkie"
-  TWITTER_USERNAME = "DaveWilkinsonII"
+  TWITTER_USERNAME = "wilkieii"
   RSTATUS_USERNAME = "DaveWilkinsonII"
 
   helpers Sinatra::ContentFor
