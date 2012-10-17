@@ -1,0 +1,1 @@
+**Diversity** in technology is very important *to promote solutions that impact the lives of every individual* on this planet. We need to promote all cultures and all people and bring them into the discussions we have about technology.
