@@ -27,7 +27,7 @@ I've added some comments in brackets to correct some of Salvatore's English
 
 > More than ten years ago I started to understand that sexism in IT was not an easy topic. Talking with my female coworkers I discovered they were deeply upset and offended by other women that were too [read: found it] easy to ask for respect using sexism as a flag. At first I was a bit shocked about that, but then I realised how obvious it is. 
 
-## Anecdote Provides Epiphemy
+## Anecdote Provides Epiphany
 
 Salvatore starts out explaining that sexism is not an easy topic. He is correct, of course. The history of oppression of any kind is long and complicated.
 However, he sidesteps this history by discussing his personal conversations with his female coworkers. He suggests that these women were offended at
