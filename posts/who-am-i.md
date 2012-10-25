@@ -55,7 +55,7 @@ I was beaten by the others in the school. I was called names. The feminine manne
 
 At home, it was no better. We had little money and sometimes food was hard to get. My mother went through one abusive relationship after another. I was assaulted there as well. In one case, one was brought up on domestic abuse charges and got 24 hours time served and 20 hours community service. I figured hitting my mother was worth more, but alas, that is not how the world works. But by a combination of going through garbage for recyclables and sharing meals with friends, I made it through ok.
 
-![An optimistic artist's rendition of the Bay that spit out Madonna](sailboats.jpg)
+![An optimistic artist's rendition of the Bay that spat out Madonna](sailboats.jpg)
 
 It was not long until we were being threatened by her first boyfriend that my mother and I had to move to Bay City out of fear. I slept with a knife under my pillow. I moved to yet another school. I decided to be popular instead of a pincushion and sat at the popular table. I cracked a few jokes and quickly realized how fake the world really is. It all felt wrong. I was not at all comfortable. I moved back to Johnstown for high school, but ultimately I didn't feel comfortable until college. This seems to be rather typical.
 
