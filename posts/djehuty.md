@@ -13,6 +13,8 @@ summary: "I have a dream that we can solve the current crisis that is software. 
 What are we burning to the ground, you ask? Well, a system of organization that ignores the decentralized world we built out of it.
 We build software in a centralized manner. It has one blessed location where it exists, the pieces used to build it (libraries, frameworks) are all built in a centralized manner and exist in generally one place, and we generally hold a relationship between a set of a few people as being in control of that code (and we bless them, perhaps religiously in some cases.)
 
+![Ok. It's not *that* bad, but we can do better. [1]](apocalypse.jpg)
+
 This has resulted in a tolerable, yet inefficient ecosystem where we tend to rewrite instead of reuse.
 This is due to spirited debates about abstractions, expression, and simply how likable a set of people are.
 This system inherits the lack of diversity of its whole and by being so centralized to ego, it leaves out a rather
@@ -36,14 +38,20 @@ This is the software component. It is driven by the notion that we select code b
 
 Regarding the left side of the interface which implements well-defined behavior, it is interesting that since such an implementation is a black box, it may be implemented as hardware. We live in a world where 3d-printed hardware is increasingly available. Now, we can find a bottleneck in our software and have our computers print a hardware implementation to solve the performance issue. We can plug in a hardware solution and have it transparently affect any software which uses that interface immediately.
 
+![Although not feasible yet, <a href="http://news.stanford.edu/news/2012/june/printable-electrical-hydrogel-062712.html">printable conductive gels</a> exist and could make circuit printing available in the home. [2]](printer.jpg)
+
 By using this software infrastructure, we make 3d-printed hardware more meaningful and easier to use for less technical users. We allow anybody with hardware knowledge the ability to contribute to opensource hardware communities by giving them the ability to easily solve any computational problem at any granularity (write a hardware implementation for a yaml parser, or maybe just write a hardware tokenizer, hardware string routines... you decide.) All in all, we will promote the much needed involvement from the electrical/computer/etc engineers and makers.
 
 ## The network
 
 We currently make use of a huge, barely centralized network of networks we call the internet. This network currently allows you to own a name 'davewilkinsonii.com' or 'github.com' and then use that name to map resources: 'davewilkinsonii.com/posts/djehuty' and 'github.com/wilkie/blog'. We then communicate using well-defined methods in order to retrieve and make sense of those resources: 'http' or 'git' respectively.
 
-Alright, say what you want about hardware and copyright, but the network implications here are the real political meat and bones. Frankly, the internet as it stands strengthens the argument for this style of encapsulation of interfaces.
+Alright, say what you want about hardware and copyright, but the network implications here are the real political meat and bones. We want to provide these elements of computation without the interference of a central authority, government, or malicious organization. We want to ensure both the availability and integrity of the code. We may need to devise a new network infrastructure to support this in a minimal fashion, or craft it out of the parts we already have, namely the internet and world wide web as it is now.
+
+Frankly, the internet as it stands strengthens the argument for this style of encapsulation of interfaces.
 It supports a decentralized model where we can ask a question and get an answer. "I need a way to compute a sort of a list of numbers" can retrieve an implementation for quicksort, or maybe on another day will retrieve an implementation of insertion sort. Who knows. All we have to have here, as a basic minimum, is the ability to get *any implementation* that fulfills the specification, of which you retrieve once.
+
+![A peer-to-peer network should be the base model of the infrastructure. [3]](peer-to-peer.png)
 
 Now, with clever use of DNS and frontend servers, we can have a single name resolve to different resources. This is typically done to route resources to the nearest server geographically in order to balance demand and increase responsiveness on popular websites. However, here, we want to get an implementation of a behavior. We can co-opt the internet to get this behavior the same way that bittorrent does in order to create a network without an owner or central authority.
 
@@ -52,6 +60,8 @@ At the end of the day, we can ask for an implementation and get one from a serve
 To sum up, unlike the normal use of the internet and hypermedia, we want to retrieve something that fulfills a behavior through a specification, not retrieve something of a particular name. This network is peer-driven and content-driven, although the specifics of how this would be done are beyond my expertise.
 
 ## Technical merit
+
+Through the design and implementation of such an infrastructure, we can achieve many technical goals that are far more difficult otherwise. This is due to the emphasis on benchmarking and scientific measurement over human expression and abstractions.
 
 ### Science to automate optimizations of software structure
 
@@ -67,6 +77,8 @@ This infrastructure, as mentioned, promotes hardware implementations that may in
 
 ## Social merit
 
+Computation is important to all people. There are cultures that could benefit from equal access to technology and computation. With this infrastructure, society serves to benefit due to the promotion of solutions without attribution and an ecosystem where code propagates across the world without interference.
+
 ### Ubiquitous code
 
 By greatly modularizing code, implementations can exist anywhere. This has a beneficial side-effect: code is much harder to censor or delete. You can build a dependency graph for any application and simply ask any machine in the world for some code that implements those behaviors. Any implementation can be retrieved and then tested for correctness. We can get code reliably from our neighbors, for instance. This better ensures that a single centralized location for code is not the norm, and therefore reduces the ability for centralized authorities to remove or restrict access to computation. Useful code will exist on many machines, and these implementations can be retrieved (along with performance information, [see technical merit](#technical_merit)) from any machine in a network.
@@ -78,3 +90,9 @@ This has another benefit of greatly reducing the cost of entry for using technol
 ### Machines that build themselves
 
 The prospect of hardware printing means that such solutions are potentially available to all people who can manufacture a 3d-printer, or acquire one that can print itself. At the end of the day, we can provide a minimal subset of components that can be used to generate the rest of the machine from information in the network. This should reduce the physical costs of the machine. Upgrades to the machine would be as easy as acquiring the machine, and furthermore would be available to all through the network. Hence, this infrastructure, when implemented at all three components (software, hardware, and network) create a sustainable computational platform for all of humanity and firmly place the power of computation freely in the hands of the people.
+
+### References
+
+1. Artist's depiction of apocalypse from [here](http://pierremassine.deviantart.com/art/Apocalypse-145369171).
+2. Discussion of affordable 3d printing [here](http://www.engadget.com/2012/09/26/form-1-delivers-high-end-3d-printing-for-an-affordable-price/), which the image was taken.
+3. The minimalistic image of a peer-to-peer network and a simple description of what that is can be found [here](http://www.freelan.org/).
