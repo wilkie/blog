@@ -205,13 +205,14 @@ body,html {
 
 .post p.image {
   text-align: center;
+  margin-right: 10px;
 }
 
 .post p.image img {
 	background-color: #f0e8f0;
 	border: 1px solid #a8a;
 	padding: 7px;
-  max-width: 900px;
+  max-width: 100%;
 }
 
 .post p.image span.caption {
