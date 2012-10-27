@@ -1,5 +1,5 @@
 ---
-title: The Djehuty Project
+title: The Djehuty Project - For The Technical Lot
 author: wilkie
 date: 2012-10-25
 tags: ["programming", "social"]
