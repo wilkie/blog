@@ -75,6 +75,14 @@ class Blog < Sinatra::Base
       return
     end
 
+    # find post
+    full_post = Post.find(params[:id])
+    if full_post != params[:id]
+      # Non permanent redirect
+      redirect "/posts/#{full_post}", 302
+      return
+    end
+
     # load post
     source = Post.new(params[:id])
 

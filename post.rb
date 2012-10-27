@@ -76,6 +76,19 @@ class Post
   attr_reader :slug
   attr_reader :url
 
+  def self.latest
+    Dir["posts/*.md"].first[/^posts\/(.*)\.md$/, 1]
+  end
+
+  def self.find(name)
+    return name if File.exists? "posts/#{name}.md"
+
+    glob = Dir["posts/#{name}*.md"]
+    return latest if glob.empty?
+
+    return glob.first[/^posts\/(.*)\.md$/, 1]
+  end
+
   def initialize(name)
     begin
       content = File.read("posts/#{name}.md")
