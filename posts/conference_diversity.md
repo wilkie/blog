@@ -6,8 +6,8 @@ summary: "Conferences are being criticized by the lack of diversity in their spe
 date: 2012-11-19
 ---
 
-In November of 2012, the [BritRuby](http://britruby.com) conference presented their speaker lineup. They decide to invite 15 speakers and then
-allot 5 more to select later based on submissions. However, their speaker lineup was [contested heavily on twitter](https://twitter.com/joshsusser/status/269844125363339264) due to consisting of all white men. Due to this,
+In the spring of 2012, the [BritRuby](http://britruby.com) conference presented their speaker lineup. They decide to invite 15 speakers and then
+allot 5 more to select later based on submissions. However, their speaker lineup was later [contested heavily on twitter](https://twitter.com/joshsusser/status/269844125363339264) due to consisting of all white men. Due to this,
 the organizers decided to [cancel](http://2013.britruby.com/) the conference altogether.
 
 > Nice speaker lineup for BritRuby. Except for the 100% white guys part.
