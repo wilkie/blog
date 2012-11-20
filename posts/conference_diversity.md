@@ -19,7 +19,7 @@ the organizers decided to [cancel](http://2013.britruby.com/) the conference alt
 It is a very dangerous proposition to suggest that the conversations on Twitter that indeed led to the demise of the conference
 should have been suppressed. To say such a thing, and it has [been said](https://gist.github.com/4106776), would be tantamount to suggesting that the value of
 holding the conference surpasses the value of an expression of equal rights. It would be as though the conference as it stood would be better
-than the ideal function of such a venue to provide an fair and equal platform for being heard. Certainly a venue of communication that
+than the ideal function of such a venue to provide a fair and equal platform for being heard. Certainly a venue of communication that
 fails to provide equal voice is devalued over that voice?
 
 Let's look at the math. The likelihood that a selection process that is blind to gender would select certain combinations of men and women
