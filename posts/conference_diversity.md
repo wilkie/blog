@@ -96,3 +96,7 @@ I have developed a small program that produces the probability distribution of g
 for tech events in a [gist found here](https://gist.github.com/4114968). Included with this is
 a simulation experiment that shows just how unlikely the situation that resulted in this conference
 really is. This simulation should affirm the mathematics as well.
+
+### Blind Review Correlation
+
+Some have pointed out that comparing the handpicking scenario of BritRuby does not comapre to the blind evaluation presented here. However, it does indeed compare. If your handpicking process is blind to gender (assuming that intellectual capacities are also gender-neutral) then your process will yield the same gender distribution as a blind review. The point is that their process did not do so, and now we can draw valid conclusions about the bias that exists. We can now say, "their selection process is biased against women.' Furthermore, we can draw some hypotheses that the representation of minorities is also not being considered. This is damning. We must also conclude that bringing awareness to this issue was correct as long as we suggest that bias should not occur in speaker selection at conferences.
