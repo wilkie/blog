@@ -2,7 +2,7 @@
 title: "Conferences Must Be Active to Promote Diversity"
 author: wilkie
 tags: ["diversity", "diversity/sexism", "diversity/racism"]
-summary: "Conferences are being criticized by the lack of diversity in their speaker lineup. This has led to such a critism causing the cancelation of a conference. I argue that this is correct as the conference is devalued by its lack of diversity, and it should have been more active in its promotion of voice."
+summary: "Conferences are being criticized by the lack of diversity in their speaker lineup. This has led to such a criticism causing the cancellation of a conference. I argue that this is correct as the conference is devalued by its lack of diversity, and it should have been more active in its promotion of voice."
 date: 2012-11-19
 ---
 
@@ -80,7 +80,7 @@ section of our community. We should be taking the effort to help those in this s
   and you can promote it with, yes, special focused effort. This conference did not do this, has a statistically significant disparity, and
 was called out upon it rightfully. **If you as a conference are inviting speakers and actively looking for quality yet not actively promoting diversity, then you are not trying hard enough.** Even if you criticize my numbers and suggest that, although 20% of the community are women, more percentage of men than women want to speak. That's
 still a problem! A problem a conference must be willing to solve by actively promoting voice so that there are more potential voices
-through the dispeling of stereotypes and better, more visible role models.
+through the dispelling of stereotypes and better, more visible role models.
 
 Considering the effect occurs on the most optimistic of cases (providing a voice for women) and this voice is being suppressed, it only follows that
 other voices of minority communities that are far less represented are being oppressed considerably more. Since the number of active voices in the
@@ -99,4 +99,4 @@ really is. This simulation should affirm the mathematics as well.
 
 ### Blind Review Correlation
 
-Some have pointed out that comparing the handpicking scenario of BritRuby does not comapre to the blind evaluation presented here. However, it does indeed compare. If your handpicking process is blind to gender (assuming that intellectual capacities are also gender-neutral) then your process will yield the same gender distribution as a blind review. The point is that their process did not do so, and now we can draw valid conclusions about the bias that exists. We can now say, "their selection process is biased against women.' Furthermore, we can draw some hypotheses that the representation of minorities is also not being considered. This is damning. We must also conclude that bringing awareness to this issue was correct as long as we suggest that bias should not occur in speaker selection at conferences.
+Some have pointed out that comparing the handpicking scenario of BritRuby does not compare to the blind evaluation presented here. However, it does indeed compare. If your handpicking process is blind to gender (assuming that intellectual capacities are also gender-neutral) then your process will yield the same gender distribution as a blind review. The point is that their process did not do so, and now we can draw valid conclusions about the bias that exists. We can now say, "their selection process is biased against women.' Furthermore, we can draw some hypotheses that the representation of minorities is also not being considered. This is damning. We must also conclude that bringing awareness to this issue was correct as long as we suggest that bias should not occur in speaker selection at conferences.
