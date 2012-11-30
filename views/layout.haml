@@ -34,3 +34,7 @@
 
     %script{:src=>"http://code.jquery.com/jquery-1.6.4.min.js"}
     %script{:src=>"/javascript/app.js"}
+
+    -if @scripts
+      -@scripts.each do |s|
+        %script{:src=>"/javascript/#{@slug}/#{s}.js"}

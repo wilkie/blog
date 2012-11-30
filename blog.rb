@@ -99,6 +99,8 @@ class Blog < Sinatra::Base
     @summary = source.summary
     @outline = source.outline
     @tags = source.tags
+    @scripts = source.scripts
+    @slug = source.slug
 
     # render
     haml :post

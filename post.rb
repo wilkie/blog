@@ -72,6 +72,7 @@ class Post
   attr_reader :summary
   attr_reader :date
   attr_reader :tags
+  attr_reader :scripts
   attr_reader :outline
   attr_reader :slug
   attr_reader :url
@@ -107,6 +108,7 @@ class Post
       @title = meta_data["title"]
       @author = meta_data["author"]
       @tags = meta_data["tags"] || []
+      @scripts = meta_data["scripts"] || []
       @summary = meta_data["summary"]
       @date = meta_data["date"]
     end
