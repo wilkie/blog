@@ -203,19 +203,21 @@ body,html {
 	font-size: 14px;
 }
 
-.post p.image {
+.post .image {
   text-align: center;
   margin-right: 10px;
 }
 
-.post p.image img {
+.post .image > img, .post .image > div {
 	background-color: #f0e8f0;
 	border: 1px solid #a8a;
 	padding: 7px;
   max-width: 100%;
+  margin: 0 auto;
 }
 
-.post p.image span.caption {
+.post .image span.caption {
+	font-family: 'Metrophobic', sans-serif;
   font-size: 12px;
   font-style: italic;
 }
