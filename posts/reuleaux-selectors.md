@@ -1,5 +1,5 @@
 ---
-title: "Triangle Selectors"
+title: "Reuleaux Selectors"
 author: wilkie
 date: 2012-11-27
 summary: "Gender is a complicated attribute, and as such has been difficult for developers and designers of web services to allow users to describe properly. In this article, we discuss a new type of gender/orientation selector that respects a very broad spectrum of possible values. This selector stresses a solution to a difficult usecase: a selection that allows a large set of possible values, yet is easily comparable."
