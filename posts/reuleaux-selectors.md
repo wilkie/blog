@@ -4,7 +4,7 @@ author: wilkie
 date: 2012-11-27
 summary: "Gender is a complicated attribute, and as such has been difficult for developers and designers of web services to allow users to describe properly. In this article, we discuss a new type of gender/orientation selector that respects a very broad spectrum of possible values. This selector stresses a solution to a difficult usecase: a selection that allows a large set of possible values, yet is easily comparable."
 tags: ["diversity", "diversity/gender", "programming", "programming/ui"]
-scripts: ["raphael-min", "triangle-selectors"]
+scripts: ["raphael-min", "reuleaux-selectors"]
 ---
 
 Whether you believe gender follows essentialist principles or is constructed, the concept of gender identity is a very complicated subject.
@@ -13,6 +13,8 @@ Gender is different for just about every individual and as infinite as our colle
 
 ## What is gender?
 
+In order to describe a method of how to represent gender and allow an individual to select a gender identity, we first will explore the variety of gender we tend to describe, and the variety of gender that exists. Many people may be surprised at the depth of gender that exists. It is perfectly acceptable to be unaware, but as we build social spaces, we should certainly make an attempt to empathize.
+
 ### Gender binary
 
 ![The gender binary is enforced by culture](gender-binary.png)
@@ -20,13 +22,15 @@ Gender is different for just about every individual and as infinite as our colle
 The prevaling, yet optimistically evolving, perspective of gender throughout society remains mostly that of a binary.
 You are either a man or a woman and if you are not one of those two, you are pushed into situations where you have to choose. Our social networks, dating services, and other online communities should not enforce this broad and unfair generalization.
 
-It is clear that our overall society inforces this concept through its presentation in various societal forms: which bathroom we use, and reinforced through cultural symbols: such as the ones that adorn such bathroom doors and through gendered language such as binary pronouns and gendered nouns (blond, blonde in English).
+It is clear that our overall society enforces this concept through its presentation in various societal forms: which bathroom we use, and reinforced through cultural symbols: such as the ones that adorn such bathroom doors and through gendered language such as binary pronouns (he, she) and gendered nouns (blond, blonde in English).
+
+There is no room for diversity here. A person could be on that fuzzy (and everchanging) line between men and women. What pronouns do we use? Well, we should use what pronouns they prefer, and should ask for such. As it stands, though, we are still pushing this individual to select between two choices, when in fact, they may prefer another option. This is perfectly, and naturally, acceptable.
 
 ### Gender scale
 
 ![The gender scale allows for bigender/intersex individuals, but not agender](gender-scale.png)
 
-Another option that people have presented to define gender is a sliding scale with male at one end and female at the other. This is better, because we can now represent more feminine men, masculine women, intersex, bigender, and some androgynous people. However, this scale actually still supports the concept of gender binary, and as such does not respect individuals that exist outside of its normative bounds. For instance, where does one go in the scale that have no self-identifiable gender characteristics?
+Given that a binary system is inadequate for individuals not self-identifying at extremes, another option that people have presented to define gender is a sliding scale with male at one end and female at the other. This is better, because we can now represent more feminine men, masculine women, intersex, bigender, and some androgynous people. However, this scale actually still supports the concept of gender binary, and as such does not respect individuals that exist outside of its normative bounds. For instance, where does one go in the scale that have no self-identifiable gender characteristics? Frankly, an individual that is neither man nor woman is not necessarily in the middle of one particular scale.
 
 ### Gender spectrum
 
@@ -34,17 +38,17 @@ Another option that people have presented to define gender is a sliding scale wi
 
 The reason gender is so hard to define as an input method is that, in reality, gender is more of a spectrum of possibility. Male and female are not truly endpoints, but rather simply points in the spectrum.
 
-So, to interpret the spectrum as I have defined it in the image above, we would have male and female on opposite sides of a ring. Starting from female, moving around toward the northwest portion would add male identity and going toward the southeast portion would subtract female identity. Hitting the topleft would give you both gender identities and hitting the bottomright would be void of both.
+So, to interpret the spectrum as I have defined it in the image above, we would have male and female on opposite sides of a ring. Starting from female, moving around toward the northwest portion would add male identity and going toward the southeast portion would subtract female identity. Hitting the topleft would give you both gender identities and hitting the bottomright would be void of both. By no means is this the only proper representation.
 
 We could stop right here and say, "let's use the spectrum above." While it does illustrate the idea that in reality gender has no endpoints, it is also a bit problematic about where certain representations are.
-Agender individuals, represented here as &#9898;, are within the broad spectrum of gender options. However, you should be able to move from bigender, &#9893;, to agender without having to transition through male or female.
+Agender individuals, represented here as &#9898;, are within the broad spectrum of gender options. However, you should be able to move from bigender, &#9893;, to agender without having to pass through male or female.
 
 That is, it is good for representating the qualification of gender, but not very good for comparison.
 
 ![The gender triangle represents the spectrum yet allows the middle point of agender to be the farthest point from any extreme](gender-triangle.png)
 
 Therefore, a triangle would represent the same idea. It does make certain landmarks clear by placing familiar gender identies in the corners. However, this should help individuals choose by selecting a gender identity relative to those landmarks.
-Also, by placing agender at the midpoint, bigender at the bottom center, and polygender at the top, eschewing gender is always a matter of going toward the center without having to transition genders to be rid of them.
+Also, by placing agender at the midpoint, bigender at the bottom center, and polygender at the top, eschewing gender is always a matter of going toward the center without having to move through genders to be rid of them.
 
 This representation is a 2d input that provides input for a three dimensional point. The point will be calculated as a vector of the distances to each corner. From there, we can create a gender selector using the idea of this triangle such that a fuller representation of the spectrum is available.
 
@@ -103,6 +107,7 @@ There was a conscious effort of developers in general (facebook avoided this tre
 This is an incorrect solution because culturely it paints the image that this third option represents a third gender, when it really collects those strictly outside of the cultural gender-binary.
 It dismisses the gender identity of all of those outside male and female. Furthermore, the term "*other*" depicts these individuals as abnormal.
 It says, you can be a man, a woman, or something else. This is not equality. This is merely placation without respect for identity.
+Not to mention that some individuals may wish to opt out of the politics of gender and the "other" option unduly oppresses them into that system.
 
 In the end, for a dropdown to be successful in representing the full spectrum of gender options, it would have to continue to add them as they become desired.
 Such an exhaustive list would never-the-less be excluding somebody.
@@ -125,7 +130,7 @@ Also, a textfield is hard to compare. There are times when a genderqueer individ
 service. A textfield, beyond influencing self-pigeonholing, is difficult to quantify as a mathematical value. You could limit the choices to a tagged dropdown, [which has been proposed](http://www.sarahdopp.com/blog/2010/designing-a-better-drop-down-menu-for-gender/),
 however, you would then have to manually assign weights in order to determine how far away one gender is from another.
 
-We need a field that can both provide a wealth of gender options that can represent the gender spectrum (qualification) *and* a field that produces values that can be easily compared with one another (quantification).
+While the textfield is still invaluable and it is very apt to recommend it (perhaps in conjunction to our proposal), we need a field that can both provide a wealth of gender options that can represent the gender spectrum (qualification) *and* a field that produces values that can be easily compared with one another (quantification).
 
 ## The selectors
 
@@ -176,16 +181,25 @@ However, in cases where this type of input is very useful (such as with dating s
   </div>
   <span class="caption">
     <strong>Interactive</strong>: Sexual orientation selector can select areas that indicate attraction to the given gender identity. Drag the middle circle out, use smaller circle to expand area. To remove a circle, shrink it until very small. As you drag circles out of the middle area, new circles can be added. Add as many as you would like.
-  </p>
+  </span>
 </div>
+
+Please experiment with the selectors above to create your identity profile below.
 
 ### Describe yourself
 
-TODO: Move labels out of way.
+<p></p>
+<div class="image">
+  <div style="width: 470px">
+    <div id="output">
+    </div>
+  </div>
+  <span class="caption">
+    <strong>Interactive</strong>: Use the selectors directly above these to create your identity image.
+  </span>
+</div>
 
-TODO: Generate png from data.
-
-TODO: Allow people to share?
+TODO: Allow people to share by url?
 
 ## Not an end-all solution
 
@@ -232,8 +246,12 @@ This would show the intention of the selectors and also help the assumed majorit
 If you add a gender field to your project, you must ask yourself the question: what do the users gain from being able to report this value?
 The general advice that one can give is to drop it altogether, especially if there is nothing directly related to the service you are providing that benefits from gender.
 
+![Imagine you are a person that does not fall cleanly into one of these two categories. You are now presented with a bright red flag that will not let you continue until you choose. How would you feel? (Image is rdio's registration and courtesy of <a href="https://www.rstat.us/updates/50e8a221aeb89a00020202e4">@carols10cents</a>)](gender-rdio.png)
+
 A common reason for including gender, even if only privately stored and never publicly displayed, is to provide humanization through gendered language, such as personalizing text with the correct pronouns.
 If this is the case, then the correct action is to just simply ask the user for their preferred pronouns and allow for a nongendered form if language permits (which [English does](http://en.wikipedia.org/wiki/Gender-neutral_pronoun#Summary)).
+
+![Rdio only uses their gender information to provide linguistics. We recommend that pronouns be explicitly asked for in place of gender, and that you allow a non-gendered option (his/her/their.)](gender-rdio-response.png)
 
 When you are providing a social service, users may wish to publicly display their gender.
 In these cases, since it directly benefits their ability to express their identity, you should allow for a free range of choice.
@@ -251,8 +269,9 @@ In such a case, it may offer better opportunities to suggest gender labels for t
 That is, using the gender value as a relevancy hint for the keyword search to order the suggestions more properly.
 
 All in all, gender is a complicated subject.
-It is best avoided if possible, but there is still room in social places where
-gender is meaningful to include individuals that fall outside of gender-normative groups.
+It is best to avoid collecting that aspect of identity if possible.
+However, we wish to make it clear that there is still room in social places where
+gender is meaningful to also be willing to include individuals that fall outside of gender-normative groups.
 We do not believe this is the end-all solution, but we do believe it is progress in a space that
 lacks new ideas and it is our ultimate goal that it motivates discussion and even fresher solutions.
 

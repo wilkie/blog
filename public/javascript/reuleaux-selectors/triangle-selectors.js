@@ -434,8 +434,8 @@ function transformPoint(newx, newy, x,y,size,size_inner) {
 	focal = points[0];
 
 	// Make the center of the reuleaux the origin
-	nx = newx-x;
-	ny = y-newy;
+	nx = newx;
+	ny = newy;
 
 	fx = focal.x-x;
 	fy = y-focal.y;
@@ -618,8 +618,12 @@ window.onload = function() {
 
 		var point = transformPoint(newx,newy,100,100,98,98*0.17);
 
-		if (lastcir1) lastcir1.remove();
-		lastcir1 = gender2.paper.circle(point.x+200,point.y,3);
+		if (lastcir1) {
+      lastcir1.attr({cx: point.x+200, cy: point.y});
+    }
+    else {
+      lastcir1 = gender2.paper.circle(point.x+200, point.y, 3);
+    }
 	}
 
 	gender.tri = gender2.paper.triangle(300,100,98).attr(attr.outer);
@@ -660,7 +664,7 @@ window.onload = function() {
 		// length of a side of the triangle
 		var MAX = Math.sqrt(Math.pow(points[0].x - points[1].x, 2) + Math.pow(points[0].y - points[1].y, 2));
 		
-		if(newx == 100 && newy == 100){
+		if(newx == 0 && newy == 0){
 			// inside the hole
 			triple.a = 0;
 			triple.f = 0;
