@@ -6,7 +6,7 @@ date: 2013-01-08
 summary: "We all make mistakes regardless of how good people think you are. Speedrunners show us that our mistakes can be fun, and we shouldn't be ashamed of them. We look at the video game Doom and the bugs that allow speedrunners to break the game all in good fun."
 ---
 
-So, right now, and every year, the Speedrun Demos Archive ([speeddemosarchive.com](http://speeddemosarchive.com)) runs a marathon where they play video games and exploit glitches 24 hours a day for 7 days. They are promoting a great charity called the [Prevent Cancer Foundation](preventcancer.org) which hopes to aid in the research effort for better detection of cancer in hopes of eradicating it forever.
+So, right now, and every year, the Speedrun Demos Archive ([speeddemosarchive.com](http://speeddemosarchive.com)) runs a marathon (I'm not directly involved) where they play video games and exploit glitches 24 hours a day for 7 days. They are promoting a great charity called the [Prevent Cancer Foundation](preventcancer.org) which hopes to aid in the research effort for better detection of cancer in hopes of eradicating it forever.
 
 ![!Prevent Cancer logo](prevent-cancer.png)
 
@@ -175,6 +175,12 @@ else if (side < -sidemove[speed])
 ```
 
 This will ensure strafe 50 is no longer a problem. You will now not be able to do any better than the original strafe 40.
+
+## Your turn
+
+You can try these tricks as well! Grab a copy of Doom and try running through the levels. Use the cheat code `idclev14` to go to the level the screen cap above illustrates. You can find a guide to other strategies [here](http://doom.wikia.com/wiki/E1M4:_Command_Control_%28Doom%29).
+
+On Thursday at around 8:45pm EST, the Speed Demos Archive charity will be live speed demoing the entire Doom game while giving further commentary on the techniques. Please, [go watch](http://marathon.speeddemosarchive.com/) (right now, in fact, for other games!) and consider donating to Prevent Cancer for prizes and general well-being. Here is a [schedule](http://marathon.speeddemosarchive.com/schedule).
 
 ## Making mistakes
 
