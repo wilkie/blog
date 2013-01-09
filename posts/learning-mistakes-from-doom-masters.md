@@ -3,6 +3,7 @@ title: "Learning Mistakes from Doom Masters"
 author: wilkie
 tags: ["programming", "programming/mistakes", "programming/c"]
 date: 2013-01-08
+summary: "We all make mistakes regardless of how good people think you are. Speedrunners show us that our mistakes can be fun, and we shouldn't be ashamed of them. We look at the video game Doom and the bugs that allow speedrunners to break the game all in good fun."
 ---
 
 So, right now, and every year, the Speedrun Demos Archive ([speeddemosarchive.com](http://speeddemosarchive.com)) runs a marathon where they play video games and exploit glitches 24 hours a day for 7 days. They are promoting a great charity called the [Prevent Cancer Foundation](preventcancer.org) which hopes to aid in the research effort for better detection of cancer in hopes of eradicating it forever.
