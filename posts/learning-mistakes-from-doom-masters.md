@@ -178,7 +178,7 @@ This will ensure strafe 50 is no longer a problem. You will now not be able to d
 
 ## Your turn
 
-You can try these tricks as well! Grab a copy of Doom and try running through the levels. Use the cheat code `idclev14` to go to the level the screen cap above illustrates. You can find a guide to other strategies [here](http://doom.wikia.com/wiki/E1M4:_Command_Control_%28Doom%29).
+You can try these tricks as well! [Grab a copy](http://store.steampowered.com/app/2280) of Doom and try running through the levels. Use the cheat code `idclev14` to go to the level the screen cap above illustrates. You can find a guide to other strategies [here](http://doom.wikia.com/wiki/E1M4:_Command_Control_%28Doom%29).
 
 On Thursday at around 8:45pm EST, the Speed Demos Archive charity will be live speed demoing the entire Doom game while giving further commentary on the techniques. Please, [go watch](http://marathon.speeddemosarchive.com/) (right now, in fact, for other games!) and consider donating to Prevent Cancer for prizes and general well-being. Here is a [schedule](http://marathon.speeddemosarchive.com/schedule).
 
