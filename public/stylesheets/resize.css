@@ -9,6 +9,12 @@
   nav .nav-section ul {
     margin-left: 18px;
   }
+
+  .post h3, .post h2 {
+    text-align: center;
+    margin-left: 0;
+    margin-right: 0;
+  }
 }
 
 /* Anything smaller than standard 960 */
