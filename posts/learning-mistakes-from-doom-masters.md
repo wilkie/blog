@@ -160,7 +160,7 @@ The diagram becomes:
 
 ![<strong>Strafe 50</strong>: By strafing using both the strafe key and using the strafe toggle, we trick the game into strafing more than once and go just a bit faster.](doom-strafe50.svg)
 
-###Fixing Strafe 50
+###Fixing strafe 50
 
 Even though this bug seems more severe and tricky, it's far easier to solve than strafe 40. All you need to do is put the code in section `2` into the else block after section `1` such that the normal strafe is only considered if strafe toggle is off.
 
