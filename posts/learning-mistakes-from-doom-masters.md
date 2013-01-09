@@ -6,7 +6,7 @@ date: 2013-01-08
 summary: "We all make mistakes regardless of how good people think you are. Speedrunners show us that our mistakes can be fun, and we shouldn't be ashamed of them. We look at the video game Doom and the bugs that allow speedrunners to break the game all in good fun."
 ---
 
-So, right now, and every year, the Speedrun Demos Archive ([speeddemosarchive.com](http://speeddemosarchive.com)) runs a marathon (I'm not directly involved) where they play video games and exploit glitches 24 hours a day for 7 days. They are promoting a great charity called the [Prevent Cancer Foundation](preventcancer.org) which hopes to aid in the research effort for better detection of cancer in hopes of eradicating it forever.
+So, right now, and every year, the Speedrun Demos Archive ([speeddemosarchive.com](http://speeddemosarchive.com)) runs a marathon (I'm not directly involved) where they play video games and exploit glitches 24 hours a day for 7 days. They are promoting a great charity called the [Prevent Cancer Foundation](http://preventcancer.org) which hopes to aid in the research effort for better detection of cancer in hopes of eradicating it forever.
 
 ![!Prevent Cancer logo](prevent-cancer.png)
 
@@ -43,7 +43,7 @@ In the [Doom source](https://github.com/osgcc/doom), there are several functions
 
 ### Strafe 40
 
-Let's start with the first bug: the strafe 40, which is triggered simply by moving forward and strafing at the same time. So, we will investigate the code that moves the player:
+Let's start with the first bug: the strafe 40, which is triggered simply by moving forward and strafing at the same time. So, we will investigate the [code](https://github.com/osgcc/DOOM/blob/master/linuxdoom-1.10/p_user.c#L148-171) that moves the player:
 
 ```
 void P_MovePlayer (player_t* player) {
@@ -73,7 +73,7 @@ Given that the player is on the ground, the code checks to see if the player is 
 
 From here, we can see the mistake. We can move forward or strafe independently, and it would work as expected. However, if we move forward **and** strafe, the player will thrust forward, and then afterward, thrust sideways. However, these two movements are done at the same time from the perspective of the game and player because both are done before the screen is drawn and enemies react. Therefore, the actual speed is given by the sum of the vectors; that is, the length of the hypotenuse in the following simple diagram:
 
-![<strong>Strafe 40</strong>: By strafing and moving forward independently, we actually move the distance of the hypotenuse during the same amount of time, thus going faster.](doom-strafe40.svg)
+![<strong>Strafe 40</strong>: By strafing and moving forward independently, we actually move to the far corner, which covers the distance of the hypotenuse during the same amount of time, thus going faster.](doom-strafe40.svg)
 
 ### Fixing strafe 40
 
@@ -85,7 +85,7 @@ Notice that the code does not account for which direction you are strafing. This
 
 To understand how to exploit the next vulnerability, we have to look at how it decides `cmd->forwardmove` and `cmd->sidemove`. These values determine how many units the player will travel per frame in those directions. The flaw is that you can artificially affect these values by having the game accidentally count two different keys as movement during a single frame.
 
-Basically, you tell it to move you to the right... twice, and it diligently listens to you. For this, let's look at the input handling code:
+Basically, you tell it to move you to the right... twice, and it diligently listens to you. For this, let's look at the [input handling code](https://github.com/osgcc/DOOM/blob/master/linuxdoom-1.10/g_game.c#L237-437):
 
 ```
 void G_BuildTiccmd (ticcmd_t* cmd) {
