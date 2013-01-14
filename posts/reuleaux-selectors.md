@@ -19,12 +19,12 @@ In order to describe a method of how to represent gender and allow an individual
 
 ![The gender binary is enforced by culture](gender-binary.png)
 
-The prevaling, yet optimistically evolving, perspective of gender throughout society remains mostly that of a binary.
+The prevailing, yet optimistically evolving, perspective of gender throughout society remains mostly that of a binary.
 You are either a man or a woman and if you are not one of those two, you are pushed into situations where you have to choose. Our social networks, dating services, and other online communities should not enforce this broad and unfair generalization.
 
 It is clear that our overall society enforces this concept through its presentation in various societal forms: which bathroom we use, and reinforced through cultural symbols: such as the ones that adorn such bathroom doors and through gendered language such as binary pronouns (he, she) and gendered nouns (blond, blonde in English).
 
-There is no room for diversity here. A person could be on that fuzzy (and everchanging) line between men and women. What pronouns do we use? Well, we should use what pronouns they prefer, and should ask for such. As it stands, though, we are still pushing this individual to select between two choices, when in fact, they may prefer another option. This is perfectly, and naturally, acceptable.
+There is no room for diversity here. A person could be on that fuzzy (and ever-changing) line between men and women. What pronouns do we use? Well, we should use what pronouns they prefer, and should ask for such. As it stands, though, we are still pushing this individual to select between two choices, when in fact, they may prefer another option. This is perfectly, and naturally, acceptable.
 
 ### Gender scale
 
@@ -38,16 +38,16 @@ Given that a binary system is inadequate for individuals not self-identifying at
 
 The reason gender is so hard to define as an input method is that, in reality, gender is more of a spectrum of possibility. Male and female are not truly endpoints, but rather simply points in the spectrum.
 
-So, to interpret the spectrum as I have defined it in the image above, we would have male and female on opposite sides of a ring. Starting from female, moving around toward the northwest portion would add male identity and going toward the southeast portion would subtract female identity. Hitting the topleft would give you both gender identities and hitting the bottomright would be void of both. By no means is this the only proper representation.
+So, to interpret the spectrum as I have defined it in the image above, we would have male and female on opposite sides of a ring. Starting from female, moving around toward the northwest portion would add male identity and going toward the southeast portion would subtract female identity. Hitting the top-left would give you both gender identities and hitting the bottom-right would be void of both. By no means is this the only proper representation.
 
 We could stop right here and say, "let's use the spectrum above." While it does illustrate the idea that in reality gender has no endpoints, it is also a bit problematic about where certain representations are.
 Agender individuals, represented here as &#9898;, are within the broad spectrum of gender options. However, you should be able to move from bigender, &#9893;, to agender without having to pass through male or female.
 
-That is, it is good for representating the qualification of gender, but not very good for comparison.
+That is, it is good for representing the qualification of gender, but not very good for comparison.
 
 ![The gender triangle represents the spectrum yet allows the middle point of agender to be the farthest point from any extreme](gender-triangle.png)
 
-Therefore, a triangle would represent the same idea. It does make certain landmarks clear by placing familiar gender identies in the corners. However, this should help individuals choose by selecting a gender identity relative to those landmarks.
+Therefore, a triangle would represent the same idea. It does make certain landmarks clear by placing familiar gender identities in the corners. However, this should help individuals choose by selecting a gender identity relative to those landmarks.
 Also, by placing agender at the midpoint, bigender at the bottom center, and polygender at the top, eschewing gender is always a matter of going toward the center without having to move through genders to be rid of them.
 
 This representation is a 2d input that provides input for a three dimensional point. The point will be calculated as a vector of the distances to each corner. From there, we can create a gender selector using the idea of this triangle such that a fuller representation of the spectrum is available.
@@ -63,7 +63,7 @@ The corners, by being corners, could not capture the fluidity of the spectrum.
 
 Therefore, the corners should be rounded off in a way that did not compromise their position as an extent, but also give the impression of fluidity.
 
-Another design flaw of the triangles is that the relationship between two extremes is a straight line. Although the straight line seems intuitive, the relationship to the center point changes rapidly across such a line. That is, one might believe that the relationship between two gender identies could go through the center point, yet that is not true. Individuals may misjudge the relative nature of two points as a result.
+Another design flaw of the triangles is that the relationship between two extremes is a straight line. Although the straight line seems intuitive, the relationship to the center point changes rapidly across such a line. That is, one might believe that the relationship between two gender identities could go through the center point, yet that is not true. Individuals may misjudge the relative nature of two points as a result.
 
 Related, the last design flaw of the triangle is that the center point is nearly invisible and hard to select. Since it represents agender, it seems fitting that the center point be expanded such that defining a point there would position the selector's knob outside of the bounds of the shape representing a value of gender.
 
@@ -104,7 +104,7 @@ The dropdown is the traditional gender selector. Generally, it seems developers 
 ![Facebook, a social network with millions of users, fails to represent non-binary genders.](gender-facebook.png)
 
 There was a conscious effort of developers in general (facebook avoided this trend), one could insist was merely to retrofit a proactive model with an existing system, to add a third catch-all option usually titled "other."
-This is an incorrect solution because culturely it paints the image that this third option represents a third gender, when it really collects those strictly outside of the cultural gender-binary.
+This is an incorrect solution because culturally it paints the image that this third option represents a third gender, when it really collects those strictly outside of the cultural gender-binary.
 It dismisses the gender identity of all of those outside male and female. Furthermore, the term "*other*" depicts these individuals as abnormal.
 It says, you can be a man, a woman, or something else. This is not equality. This is merely placation without respect for identity.
 Not to mention that some individuals may wish to opt out of the politics of gender and the "other" option unduly oppresses them into that system.
@@ -219,7 +219,7 @@ The ability to well-define your identity is still the most practical and most aw
 
 ### Physical characteristics
 
-This selector does not, in any way, take into account physical characterists of the individual.
+This selector does not, in any way, take into account physical characteristics of the individual.
 One criticism received for this selector is that one cannot specify clearly that they have a particular set
 of genitalia. Also, as far as sexual gender preference goes, some were rather upset that they cannot specify
 that they are attracted only to women with cisgendered reproductive systems.
@@ -237,7 +237,7 @@ In open-trials, where no instruction is given, individuals were presented with t
 They were able to give feedback, privately and also among a forum.
 I have suppressed the exact feedback due to privacy and due to the fact that the discussion was not fruitful (that is, sometimes a bit hateful) to the discussion on a whole.
 
-However, it is difficult to conceive of a simpler way of inputing a broad range of gender choices.
+However, it is difficult to conceive of a simpler way of inputting a broad range of gender choices.
 It is possible that one could add the ability to use preset points according to a dropdown or determined from a textfield to prepopulate the selectors.
 This would show the intention of the selectors and also help the assumed majority of people make quick decisions, but still allow the genderqueer community the ability to be visible by refining their identity further.
 
@@ -249,7 +249,7 @@ The general advice that one can give is to drop it altogether, especially if the
 ![Imagine you are a person that does not fall cleanly into one of these two categories. You are now presented with a bright red flag that will not let you continue until you choose. How would you feel? (Image is rdio's registration and courtesy of <a href="https://www.rstat.us/updates/50e8a221aeb89a00020202e4">@carols10cents</a>)](gender-rdio.png)
 
 A common reason for including gender, even if only privately stored and never publicly displayed, is to provide humanization through gendered language, such as personalizing text with the correct pronouns.
-If this is the case, then the correct action is to just simply ask the user for their preferred pronouns and allow for a nongendered form if language permits (which [English does](http://en.wikipedia.org/wiki/Gender-neutral_pronoun#Summary)).
+If this is the case, then the correct action is to just simply ask the user for their preferred pronouns and allow for a non-gendered form if language permits (which [English does](http://en.wikipedia.org/wiki/Gender-neutral_pronoun#Summary)).
 
 ![Rdio only uses their gender information to provide linguistics. We recommend that pronouns be explicitly asked for in place of gender, and that you allow a non-gendered option (his/her/their.)](gender-rdio-response.png)
 
