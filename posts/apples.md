@@ -64,7 +64,7 @@ and arrange it *some well-defined* way. How you sort the array, well.
 
 If we again consider the apple, we would have seeds and skins. To make the metaphor a bit more concrete: *Seeds* would be 
 strictly computation. This is code that
-is written for performance and behavior. Its interface is unchangable and well-known. You cannot argue about
+is written for performance and behavior. Its interface is unchangeable and well-known. You cannot argue about
 the interface without making factual comparisons about performance or correctness. You must
 prove you are correct with a metric or test.
 
@@ -82,7 +82,7 @@ this *sustainable design*.
 
 To promote sustainable design, a software developer must consider the line drawn between expressing behavior and allowing
 human expression through abstraction. To transform existing projects, collaboration between competitors (odd concept, eh?)
-to define a seed is necessary. For instance, the backends for QT and GTK could be consolidated into a new project which implement
+to define a seed is necessary. For instance, the back-ends for QT and GTK could be consolidated into a new project which implement
 the same interface (seed) and then QT and GTK become the abstractions (skins) around it. In this case you could say C and C++ are then the
 abstractions we choose. That's fine. In this world, the languages we choose are to better allow us to use existing code and get applications
 written. We do not inherit a policy or a set of standard libraries that may or may not work well.
