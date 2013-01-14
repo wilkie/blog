@@ -54,6 +54,7 @@ rather insist on its color.
 In the software world, such discussion is only avoidable if we separate human opinion from computation, which is based upon fact. In
 other words, if it were clear where the computation ended and the abstractions began, we could argue about the
 expressive aspects of the code since changing them does not impact the choices on how the behavior is implemented.
+In fact, it is the opposite, we argue precisely because we cannot see the line between computation and abstraction.
 
 ![Can the number of apples in the wild become overwhelming?](apples_full_smallest.png)
 
