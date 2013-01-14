@@ -90,16 +90,16 @@ written. We do not inherit a policy or a set of standard libraries that may or m
 ![Behaviors are what we care about in the end.](apples_drawing.svg)
 
 To provide such a design when writing new projects, write them as libraries with functions that are very specifically tied to behavior. This way, alternative
-implementations may exist. Use abstractions in a separate layer (create a skin) that makes using the library cleaner. You benefit
+implementations may exist. Use abstractions in a separate layer (create that skin with all the luster you want) that makes using the library cleaner. You benefit
 by allowing for better experimentation with new abstractions while isolating core behaviors. You also gain the audience of many languages.
 You also benefit from a much easier and more intuitive ability to refactor implementations while isolating them from their abstractions. To do this, simply
 reimplement the interface and link in the new code.
 
-If you are writing a library, determine if a seed exists and implement your library using that interface. You will gain quick
+If you are writing a library, determine if prior work exists and implement your library using that interface (make use of an existing seed.) You will gain quick
 adoption by being able to assert facts about performance gains over existing implementations, while also being able to be
-quickly used by existing programs that used other implementations of seeds. If you are writing an abstraction, you can leverage
-existing seed implementations and focus only on refining the language. Existing programs may not easily adopt your new abstraction,
-but they do not need to in order to benefit from performance improvements. You write new abstractions for new programs.
+quickly used by existing programs that already make use of the other implementations. If you are writing an abstraction, you can leverage
+existing implementations and focus only on refining the language (implement for humans without hindering performance facts.) Existing programs may not easily adopt your new abstraction,
+but they do not need to in order to benefit from performance improvements. When you write abstractions, you are worried about new, that is non-existing, programs.
 
 Once we have such modularity in place, we can write an infrastructure that manages the code. It can do objective analysis on whatever
 benchmarks are deemed important and throw out code that doesn't perform and replace it with same random implementation that fares well.
