@@ -107,7 +107,7 @@ This system will push good implementations over the bad and can even collectivel
 working before it is used to ensure bugs are limited. You as a developer may develop with one module, but in the future, without your
 awareness, a bug was caught, patched, and automatically retrieved to build your software. Fantastic.
 
-For an introduction to the language we need to describe behaviors, [read on](2012-10-06-infrastructure).
+For an introduction to the language we need to describe behaviors, [read on](/posts/infrastructure).
 
 ### References
 
