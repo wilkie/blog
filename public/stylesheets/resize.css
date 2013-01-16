@@ -10,6 +10,11 @@
     margin-left: 18px;
   }
 
+  nav .nav-section {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+
   .post h3, .post h2 {
     text-align: center;
     margin-left: 0;
