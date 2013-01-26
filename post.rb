@@ -157,6 +157,8 @@ class Post
       @scripts = meta_data["scripts"] || []
       @summary = meta_data["summary"]
       @date = meta_data["date"]
+    else
+      return
     end
 
     @slug = name
