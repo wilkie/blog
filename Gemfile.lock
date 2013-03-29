@@ -2,6 +2,7 @@ GEM
   remote: http://rubygems.org/
   specs:
     backports (2.6.5)
+    builder (3.0.4)
     daemons (1.1.9)
     eventmachine (1.0.0)
     eventmachine (1.0.0-x86-mingw32)
@@ -38,6 +39,7 @@ PLATFORMS
   x86-mingw32
 
 DEPENDENCIES
+  builder
   haml
   nokogiri
   rake
