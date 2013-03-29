@@ -1,0 +1,1362 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>wilkie writes a thing</title><description>wilkie's blog on tech and diversity</description><link>http://blog.davewilkinsonii.com</link><item><title>A Language for Interfaces</title><link>http://blog.davewilkinsonii.com/posts/a-language-for-interfaces</link><description><![CDATA[<p>In my <a href="/posts/djehuty-technical">technical description</a>, I described the motivation for a new infrastructure for software to stress a decentralized code ecosystem. From there I discuss the <a href="/posts/infrastructure">finer details of such an infrastructure</a>. I recommend reading these before you read this article. The gist is that we want to describe behaviors distinctly from the choices made within implementations. Think C&#39;s header files versus the corresponding source files, but with far more purpose.</p>
+<h2 id='what_we_need'>What we need</h2>
+<p>As discussed in a <a href="/posts/infrastructure">prior post</a>, we require the ability to describe a set of facets of a behavior:</p>
+
+<ul>
+<li>We must have a language that describes behavior void of policy</li>
+<li>Implementations of behavior must be flexible</li>
+<li>Behaviors are an interface and a specification</li>
+</ul>
+
+<p>This implies we require a language that defines as few rules as possible, while giving you the power to define rules as you need to in order to describe behavior. Explicit rules, no implicit ones. C is an example of a language that attempts this, but it is not sufficient, as I will describe later.</p>
+
+<p>Also, with the second point, the language we need is one where implementations are not tied to the interface description. Think of a C header file where the source file that implements it is not C. This is possible with languages that can export C functions, and I do not consider some shims/bridges to totally violate this idea. The languages that fall out will be languages which do not work well with others. The language will be, with this in mind, a systems oriented language (honing in on C, C++, D, Rust, Go)</p>
+
+<p>Closing on the third point, being able to describe an interface and also test it without respect of the implementation is not something that is necessarily language specific. It need not limit our choice of language. However, it does encourage our interfaces to have very well-defined inputs and outputs. This includes describing whether or not inputs can change, whether they are passed by reference, or whether the inputs given are defined as never-changing (immutable). This also applies to state described in data types described outside of and shared by implementations.</p>
+
+<p>Given this, we will add more refined rules for what we need from an interface language:</p>
+
+<ul>
+<li>Systems focus</li>
+<li>Lack of a defined memory model</li>
+<li>Typing is static, nominal, preferably subtyped</li>
+</ul>
+
+<p>We care surprisingly little about, due to relegation to implementations, the following:</p>
+
+<ul>
+<li>Object orientedness, polymorphism, inheritance</li>
+<li>Concurrency, Thread models</li>
+<li>Garbage collection</li>
+</ul>
+
+<p>That is, implementations may require a garbage collector, pull memory from a different memory pool, use different pieces of hardware, make use of a virtual machine, etc. This has nothing to do with the relationship between input and output. If an implementation of a parser interface is written in Rust, however, the memory model enforced by Rust may conflict with other implementations, the goal for this entire project is that another implementation can be found to route around the language choice.</p>
+
+<p>In essence, language choices can not interfere with individuals finding and making use of software. This is why we strive for the lowest common denominator in our interface language.</p>
+<h2 id='the_interface_language'>The Interface Language</h2>
+<p>The language that I feel fits these constraints is a subset of Rust. What we will do is take Rust and remove its concurrency model, thus it&#39;s process model, and then we remove some of the strictness and garbage collected nature of its memory model. This requires negating some of the strengths of its concurrency safety, but that can be added back in by using Rust as the implementation language. It also removes the utility of Rust&#39;s managed boxes, since we do not imply a garbage collector (again the implementor&#39;s choice.)</p>
+
+<p></p><div class='image'><img src='/images/a-language-for-interfaces/rust.png' title='' alt='The Rust programming language, developed by Mozilla Research, is an ideal platform for an interface language' /><br /><div class='caption'>The Rust programming language, developed by Mozilla Research, is an ideal platform for an interface language</div></div><p></p>
+
+<p>Essentially, although we don&#39;t need a full language, the resulting language would be a C replacement on its own. It is interesting that we continue to replace C++ or some higher-level languages over C, which has not seen as much progress. It would stress the following:</p>
+
+<ul>
+<li>The type safety of Rust (to counter the lack of proper type checking in C)</li>
+<li>Macros instead of a preprocessor</li>
+<li>No null type with subtypes being used for errors</li>
+<li>Memory model is relegated to libraries</li>
+<li>Mutability adjectives for inputs and outputs and fields of structs/datatypes</li>
+</ul>
+
+<p>We do not need the full C-replacement language for simply defining interfaces. Initially, we only need the ability to describe and thus a simple lexer/parser. But the full thing would be nice to have as a consequence! I encourage anybody with the desire to do this.</p>
+]]></description><pubDate>Sun, 13 Jan 2013 00:00:00 -0500</pubDate><guid>http://blog.davewilkinsonii.com/posts/a-language-for-interfaces</guid></item><item><title>Learning Mistakes from Doom Masters</title><link>http://blog.davewilkinsonii.com/posts/learning-mistakes-from-doom-masters</link><description><![CDATA[<p>So, right now, and every year, the Speedrun Demos Archive (<a href="http://speeddemosarchive.com">speeddemosarchive.com</a>) runs a marathon (I&#39;m not directly involved) where they play video games and exploit glitches 24 hours a day for 7 days. They are promoting a great charity called the <a href="http://preventcancer.org">Prevent Cancer Foundation</a> which hopes to aid in the research effort for better detection of cancer in hopes of eradicating it forever.</p>
+
+<p></p><div class='image'><img src='/images/learning-mistakes-from-doom-masters/prevent-cancer.png' title='' alt='!Prevent Cancer logo' /></div><p></p>
+
+<p>As a hobby speedrunner, programmer and hater of cancer, in my own way to promote their event, I am inspired to talk about how these two concepts (our code and our mistakes) can be used to create art.</p>
+
+<p>Let&#39;s be very clear: we all make mistakes. We cannot learn unless we fail, otherwise there is never an incentive to improve. We may look up to many who have more experience than us, but we should never emphasize their achievements over our own. In the end, what we are capable of is never defined by what others can do. Nor are the mistakes we make indicative of our failure or depict our work as flawed.</p>
+
+<p></p><div class='image'><img src='/images/learning-mistakes-from-doom-masters/doom.gif' title='' alt='Doom, released in 1993, is now open source-- and riddled with interesting programming mistakes.' /><br /><div class='caption'>Doom, released in 1993, is now open source-- and riddled with interesting programming mistakes.</div></div><p></p>
+
+<p>As proof of this point, we will look at bugs humbly illustrated by <a href="http://en.wikipedia.org/wiki/John_D._Carmack">John Carmack</a>, a programmer chiefly responsible for the video game <a href="http://en.wikipedia.org/wiki/Doom_(video_game)">Doom</a>. Carmack is very well known for his programming prowess. However, just like the rest of us, he is actually human and makes the very simplest of mistakes.</p>
+
+<p>To show the art of the bug exploit, we will look at <strong>speedrunning</strong>. <a href="http://en.wikipedia.org/wiki/Speedrun">Speedrunning</a> is a concept where a player attempts to complete a video game challenge as quickly as possible. Speedrunners are typically allowed to break the game in any way. They see code as the rules of the game, and anything the code allows is proper. In Doom, these expert players take advantage of several very basic and simple mistakes in the Doom code.</p>
+<h2 id='speedrun_strategies'>Speedrun Strategies</h2>
+<p>For speedrunning, you are obviously looking for any strategy that allows you to move just a bit faster. There are strategies for speedrunning particular levels of Doom, however there are several general techniques, which prove to be invaluable across the entire game. For Doom, it just so happens that we have the speedrunner&#39;s dream: a simple glitch in the movement code allows us to move faster than intended.</p>
+
+<p></p><div class='image'><img src='/images/learning-mistakes-from-doom-masters/doom-e1m4-gap.png' title='' alt='This gap contains the end of the level and normally requires a switch past this yellow door, which in turn requires a blue key. Crossing this gap is possible with a bug that allows you to move more quickly, skipping all keys, and finishing the level in a record 12 seconds.' /><br /><div class='caption'>This gap contains the end of the level and normally requires a switch past this yellow door, which in turn requires a blue key. Crossing this gap is possible with a bug that allows you to move more quickly, skipping all keys, and finishing the level in a record 12 seconds.</div></div><p></p>
+
+<p>This has broad implications. Moving faster means jumping higher and farther (In Doom&#39;s case, you cannot jump, but you can cross wider gaps!) Some levels intend you to go out of your way to find a switch to raise a bridge, for instance. With a trick that lets you move faster, you might be able to cross the gap without the platform, which means skipping much of the level.</p>
+
+<p>Here are the two movement tricks we will look at:</p>
+
+<ul>
+<li>(Strafe 40) Moving forward while also strafing in either direction will allow you to move 28% faster.</li>
+<li>(Strafe 50) Moving forward while also strafing in either direction while also toggling a feature that interprets turning as strafing allows you to move 41% faster.</li>
+</ul>
+
+<p>Check out how this speedrunner runs:</p>
+
+<p></p><div class='image'><div class='youtube'><div class='youtube_fixture'><img src='/images/youtube_placeholder.png' /><iframe class='youtube_frame' src='http://www.youtube.com/embed/M6PK9bd_uUs'></iframe></div></div><br /><div class='caption'>Rarely will this runner ever travel in the direction the player is facing.</div></div><p></p>
+<h2 id='looking_at_the_code'>Looking at the code</h2>
+<p>Let&#39;s now investigate why these particular bugs happen. Doom is written in <a href="http://en.wikipedia.org/wiki/C_(programming_language)">C</a>, which is a very low-level programming language, meaning it is designed for speed and not particularly for programmer comfort. This was a very common language to write games in at the time since the language allowed you to write very optimized code so one could push the limits of the technology.</p>
+
+<p>In the <a href="https://github.com/osgcc/doom">Doom source</a>, there are several functions that deal with moving the player. The gist of them is that each frame before it draws the screen, it will decide how to move the player. It looks at which keys are pressed, and if, for instance, the walk forward key is down, it will update the player&#39;s position to move them forward. It may then look at collisions and react to running into monster projectiles, but let&#39;s just focus on the movement part.</p>
+<h3 id='strafe_40'>Strafe 40</h3>
+<p>Let&#39;s start with the first bug: the strafe 40, which is triggered simply by moving forward and strafing at the same time. So, we will investigate the <a href="https://github.com/osgcc/DOOM/blob/master/linuxdoom-1.10/p_user.c#L148-171">code</a> that moves the player:</p>
+<pre><code>void P_MovePlayer (player_t* player) {
+  ticcmd_t* cmd;
+  cmd = &amp;player-&gt;cmd;
+
+  // Turn the player
+  player-&gt;mo-&gt;angle += (cmd-&gt;angleturn&lt;&lt;16);
+
+  // Do not let the player control movement
+  // if not onground.
+  onground = (player-&gt;mo-&gt;z &lt;= player-&gt;mo-&gt;floorz);
+
+  // Move the player forward, if allowed
+  if (cmd-&gt;forwardmove &amp;&amp; onground)
+    P_Thrust (player, player-&gt;mo-&gt;angle, cmd-&gt;forwardmove*2048);
+
+  // Move the player sideways, if allowed
+  if (cmd-&gt;sidemove &amp;&amp; onground)
+    P_Thrust (player, player-&gt;mo-&gt;angle-ANG90, cmd-&gt;sidemove*2048);
+} 
+</code></pre>
+<p>In this function, the <code>cmd</code> element holds the distances to move per frame. <code>cmd&#8209;&gt;forwardmove</code> and <code>cmd&#8209;&gt;sidemove</code> contain the distances to travel either ahead of the player or to the side of the player respectively. It will set a <code>onground</code> value to true if the player&#39;s z position (how high off the ground) matches that of the floor the player is currently over. Therefore, it only wants to move if the player is in contact with the ground.</p>
+
+<p>Given that the player is on the ground, the code checks to see if the player is due to move forward (<code>cmd&#8209;&gt;forwardmove</code> will be non-zero) and then calls another piece of code that simply repositions the player to reflect that movement. It does the same thing for a strafe.</p>
+
+<p>From here, we can see the mistake. We can move forward or strafe independently, and it would work as expected. However, if we move forward <strong>and</strong> strafe, the player will thrust forward, and then afterward, thrust sideways. However, these two movements are done at the same time from the perspective of the game and player because both are done before the screen is drawn and enemies react. Therefore, the actual speed is given by the sum of the vectors; that is, the length of the hypotenuse in the following simple diagram:</p>
+
+<p></p><div class='image'><img src='/images/learning-mistakes-from-doom-masters/doom-strafe40.svg' title='' alt='Strafe 40: By strafing and moving forward independently, we actually move to the far corner, which covers the distance of the hypotenuse during the same amount of time, thus going faster.' /><br /><div class='caption'><strong>Strafe 40</strong>: By strafing and moving forward independently, we actually move to the far corner, which covers the distance of the hypotenuse during the same amount of time, thus going faster.</div></div><p></p>
+<h3 id='fixing_strafe_40'>Fixing strafe 40</h3>
+<p>There are of course many ways to repair this bug and handle movement more correctly. One way is to, instead of positioning the player twice, determine the angle of the movement, and always use the same distance. That is, instead of moving in the player&#39;s direction and then moving again in another direction for the strafe, simply calculate the movement angle (around 50 degrees for walking and strafing), and <code>P_Thrust</code> only once in that direction.</p>
+
+<p>Notice that the code does not account for which direction you are strafing. This is because of a naive optimization: the distance (in the code this is the <code>cmd&#8209;&gt;forwardmove * 2048</code>) you give to <code>P_Thrust</code> can be negative to move in the opposite direction. For the fix, you will have to account for the direction you are strafing to get the correct angle, but now you always give a positive distance.</p>
+<h3 id='strafe_50'>Strafe 50</h3>
+<p>To understand how to exploit the next vulnerability, we have to look at how it decides <code>cmd&#8209;&gt;forwardmove</code> and <code>cmd&#8209;&gt;sidemove</code>. These values determine how many units the player will travel per frame in those directions. The flaw is that you can artificially affect these values by having the game accidentally count two different keys as movement during a single frame.</p>
+
+<p>Basically, you tell it to move you to the right... twice, and it diligently listens to you. For this, let&#39;s look at the <a href="https://github.com/osgcc/DOOM/blob/master/linuxdoom-1.10/g_game.c#L237-437">input handling code</a>:</p>
+<pre><code>void G_BuildTiccmd (ticcmd_t* cmd) {
+  boolean strafe;
+  int speed;
+  int forward;
+  int side;
+
+  // We are strafing if a strafe key is pressed
+  strafe = gamekeydown[key_strafe];
+
+  // Is the run key pressed?
+  speed  = gamekeydown[key_speed];
+
+  // The distances we are moving are initially zero
+  forward = side = 0;
+
+  // Determine distances to move
+  if (strafe) {
+<div class='ref_line s1 c1'><div>    // If the strafe toggle is on, interpret moving left and right
+    //   as strafing left and right.
+    if (gamekeydown[key_right]) // Strafe right&lt;/span&gt;
+      side += sidemove[speed];
+    if (gamekeydown[key_left])  // Strafe left
+      side -= sidemove[speed];
+</div></div>  }
+  else {
+    if (gamekeydown[key_right]) // Move right
+      cmd-&gt;angleturn -= angleturn[tspeed];
+    if (gamekeydown[key_left])  // Move left
+      cmd-&gt;angleturn += angleturn[tspeed];
+  }
+
+  if (gamekeydown[key_up])   // Move forward
+    forward += forwardmove[speed];
+  if (gamekeydown[key_down]) // Move backward
+    forward -= forwardmove[speed];
+
+<div class='ref_line s1 c2'><div>  // Strafe right
+  if (gamekeydown[key_straferight])
+    side += sidemove[speed];
+</div></div>
+  // Strafe left
+  if (gamekeydown[key_strafeleft])
+    side -= sidemove[speed];
+
+<div class='ref_line s1 c3'><div>  // Cap speed
+  if (side &gt; forwardmove[speed])
+    side = forwardmove[speed];
+  else if (side &lt; -forwardmove[speed])
+    side = -forwardmove[speed]; 
+</div></div>
+  cmd-&gt;forwardmove += forward;
+  cmd-&gt;sidemove += side;
+} 
+</code></pre>
+<p>We can see the familiar <code>cmd&#8209;&gt;forwardmove</code> and <code>cmd&#8209;&gt;sidemove</code> at the bottom. Ah! So this is the code that determines those! So, how does it translate the key presses into meaningful values in the game?</p>
+
+<p>Well, in Doom, we can strafe one of two ways:</p>
+
+<ul>
+<li>A key that toggles strafe so that left and right do not turn you, but rather make you move sideways.</li>
+<li>A dedicated strafe key for each direction, which works the same way as the A or D keys on most modern games.</li>
+</ul>
+
+<p>Now, with that in mind, look at the code. In section <code>1</code>, we see that the game looks to see if that strafe toggle is held. Depending on that, it either stores the <code>cmd&#8209;&gt;angleturn</code> which tells the <code>P_MovePlayer</code> function above to turn the given degrees before drawing. Or it completely ignores the turning and instead strafes by adding a distance to move (affected by whether or not run is enabled) to the variable <code>side</code>, which is initially zero.</p>
+
+<p>So, ok. We know that when we have the strafe toggle on, and we press the right arrow key, it will handle that as a strafe to the right and add some distance to the variable <code>side</code>. However, note section <code>2</code>, which happens independently of the strafe toggle. If you also press the strafe right key, this code will add more to the current value (<code>side += sidemove[speed]</code> is the same as writing <code>side = side + sidemove[speed]</code>). Well, that means if we press the dedicated strafe right key <strong>and</strong> we also press right while the strafe toggle is on, then we will effectively strafe twice!</p>
+
+<p>Interestingly, the programmer was not very optimistic about the code and if you look at section <code>3</code>, you&#39;ll notice that the speed of side movement is capped to the maximum speed you can run forward. However, this caps the sideways strafe speed incorrectly to that of 50 units per second, which is still faster than the maximum strafing speed of 40! Since this does not interfere with the strafing bug we investigated earlier, we just found a way to make it more effective.</p>
+
+<p>The diagram becomes:</p>
+
+<p></p><div class='image'><img src='/images/learning-mistakes-from-doom-masters/doom-strafe50.svg' title='' alt='Strafe 50: By strafing using both the strafe key and using the strafe toggle, we trick the game into strafing more than once and go just a bit faster.' /><br /><div class='caption'><strong>Strafe 50</strong>: By strafing using both the strafe key and using the strafe toggle, we trick the game into strafing more than once and go just a bit faster.</div></div><p></p>
+<h3 id='fixing_strafe_50'>Fixing strafe 50</h3>
+<p>Even though this bug seems more severe and tricky, it&#39;s far easier to solve than strafe 40. All you need to do is put the code in section <code>2</code> into the else block after section <code>1</code> such that the normal strafe is only considered if strafe toggle is off.</p>
+
+<p>Alternatively, to allow for strafe to be pressed by the dedicated strafe key even if strafe toggle is on, just fix the code in section <code>3</code>. Instead of capping it to the forward movement speed, use the strafe movement speed:</p>
+<pre><code>// Cap speed
+if (side &gt; sidemove[speed])
+  side = sidemove[speed];
+else if (side &lt; -sidemove[speed])
+  side = -sidemove[speed]; 
+</code></pre>
+<p>This will ensure strafe 50 is no longer a problem. You will now not be able to do any better than the original strafe 40.</p>
+<h2 id='your_turn'>Your turn</h2>
+<p>You can try these tricks as well! <a href="http://store.steampowered.com/app/2280">Grab a copy</a> of Doom and try running through the levels. Use the cheat code <code>idclev14</code> to go to the level the screen cap above illustrates. You can find a guide to other strategies <a href="http://doomwiki.org/wiki/E1M4">here</a>.</p>
+
+<p>On Thursday at around 8:45pm EST, the Speed Demos Archive charity will be live speed demoing the entire Doom game while giving further commentary on the techniques. Please, <a href="http://marathon.speeddemosarchive.com/">go watch</a> (right now, in fact, for other games!) and consider donating to Prevent Cancer for prizes and general well-being. Here is a <a href="http://marathon.speeddemosarchive.com/schedule">schedule</a>.</p>
+<h2 id='making_mistakes'>Making mistakes</h2>
+<p>As you can see, these mistakes were made by otherwise great programmers. These bugs are very simple, although a little hard to spot. All of us are capable of writing code and only considering one case at a time (does moving forward work? good. Does moving sideways work? Awesome,) and never considering somebody will mash all of the keys at once. We&#39;re all human.</p>
+
+<p>We must understand one thing: It&#39;s not the end of the world. With every bug we make, we learn. In fact, sometimes our bugs make somebody&#39;s day! Speedrunning is an artform that proves that our code and our mistakes can be turned into a beautiful spectacle that we should never be ashamed of.</p>
+]]></description><pubDate>Tue, 08 Jan 2013 00:00:00 -0500</pubDate><guid>http://blog.davewilkinsonii.com/posts/learning-mistakes-from-doom-masters</guid></item><item><title>Reuleaux Selectors</title><link>http://blog.davewilkinsonii.com/posts/reuleaux-selectors</link><description><![CDATA[<p>Whether you believe gender follows essentialist principles or is constructed, the concept of gender identity is a very complicated subject.
+Contrary to unfortunately popular belief, gender is not chosen from a binary as though it were conjured at the whim of a coin-toss.
+Gender is different for just about every individual and as infinite as our collective imaginations can bear.</p>
+<h2 id='what_is_gender_'>What is gender?</h2>
+<p>In order to describe a method of how to represent gender and allow an individual to select a gender identity, we first will explore the variety of gender we tend to describe, and the variety of gender that exists. Many people may be surprised at the depth of gender that exists. It is perfectly acceptable to be unaware, but as we build social spaces, we should certainly make an attempt to empathize.</p>
+<h3 id='gender_binary'>Gender binary</h3>
+<p></p><div class='image'><img src='/images/reuleaux-selectors/gender-binary.png' title='' alt='The gender binary is enforced by culture' /><br /><div class='caption'>The gender binary is enforced by culture</div></div><p></p>
+
+<p>The prevailing, yet optimistically evolving, perspective of gender throughout society remains mostly that of a binary.
+You are either a man or a woman and if you are not one of those two, you are pushed into situations where you have to choose. Our social networks, dating services, and other online communities should not enforce this broad and unfair generalization.</p>
+
+<p>It is clear that our overall society enforces this concept through its presentation in various societal forms: which bathroom we use, and reinforced through cultural symbols: such as the ones that adorn such bathroom doors and through gendered language such as binary pronouns (he, she) and gendered nouns (blond, blonde in English).</p>
+
+<p>There is no room for diversity here. A person could be on that fuzzy (and ever-changing) line between men and women. What pronouns do we use? Well, we should use what pronouns they prefer, and should ask for such. As it stands, though, we are still pushing this individual to select between two choices, when in fact, they may prefer another option. This is perfectly, and naturally, acceptable.</p>
+<h3 id='gender_scale'>Gender scale</h3>
+<p></p><div class='image'><img src='/images/reuleaux-selectors/gender-scale.png' title='' alt='The gender scale allows for bigender/intersex individuals, but not agender' /><br /><div class='caption'>The gender scale allows for bigender/intersex individuals, but not agender</div></div><p></p>
+
+<p>Given that a binary system is inadequate for individuals not self-identifying at extremes, another option that people have presented to define gender is a sliding scale with male at one end and female at the other. This is better, because we can now represent more feminine men, masculine women, intersex, bigender, and some androgynous people. However, this scale actually still supports the concept of gender binary, and as such does not respect individuals that exist outside of its normative bounds. For instance, where does one go in the scale that have no self-identifiable gender characteristics? Frankly, an individual that is neither man nor woman is not necessarily in the middle of one particular scale.</p>
+<h3 id='gender_spectrum'>Gender spectrum</h3>
+<p></p><div class='image'><img src='/images/reuleaux-selectors/gender-spectrum.png' title='' alt='The gender spectrum is a continuum that allows for a variety of genders and allows for a diversity of non-conformity' /><br /><div class='caption'>The gender spectrum is a continuum that allows for a variety of genders and allows for a diversity of non-conformity</div></div><p></p>
+
+<p>The reason gender is so hard to define as an input method is that, in reality, gender is more of a spectrum of possibility. Male and female are not truly endpoints, but rather simply points in the spectrum.</p>
+
+<p>So, to interpret the spectrum as I have defined it in the image above, we would have male and female on opposite sides of a ring. Starting from female, moving around toward the northwest portion would add male identity and going toward the southeast portion would subtract female identity. Hitting the top-left would give you both gender identities and hitting the bottom-right would be void of both. By no means is this the only proper representation.</p>
+
+<p>We could stop right here and say, &quot;let&#39;s use the spectrum above.&quot; While it does illustrate the idea that in reality gender has no endpoints, it is also a bit problematic about where certain representations are.
+Agender individuals, represented here as &#9898;, are within the broad spectrum of gender options. However, you should be able to move from bigender, &#9893;, to agender without having to pass through male or female.</p>
+
+<p>That is, it is good for representing the qualification of gender, but not very good for comparison.</p>
+
+<p></p><div class='image'><img src='/images/reuleaux-selectors/gender-triangle.png' title='' alt='The gender triangle represents the spectrum yet allows the middle point of agender to be the farthest point from any extreme' /><br /><div class='caption'>The gender triangle represents the spectrum yet allows the middle point of agender to be the farthest point from any extreme</div></div><p></p>
+
+<p>Therefore, a triangle would represent the same idea. It does make certain landmarks clear by placing familiar gender identities in the corners. However, this should help individuals choose by selecting a gender identity relative to those landmarks.
+Also, by placing agender at the midpoint, bigender at the bottom center, and polygender at the top, eschewing gender is always a matter of going toward the center without having to move through genders to be rid of them.</p>
+
+<p>This representation is a 2d input that provides input for a three dimensional point. The point will be calculated as a vector of the distances to each corner. From there, we can create a gender selector using the idea of this triangle such that a fuller representation of the spectrum is available.</p>
+<h2 id='defining_a_comparable_gender_value'>Defining a comparable gender value</h2><h3 id='triangles'>Triangles</h3>
+<p>The intuitive attempt to represent directional values for male, female, and androgynous would be to use a triangle and place each gender at a corner.
+This posed some difficulty in selection.
+Some individuals were quick to place their marker in a corner directly.
+The corners, by being corners, could not capture the fluidity of the spectrum.</p>
+
+<p>Therefore, the corners should be rounded off in a way that did not compromise their position as an extent, but also give the impression of fluidity.</p>
+
+<p>Another design flaw of the triangles is that the relationship between two extremes is a straight line. Although the straight line seems intuitive, the relationship to the center point changes rapidly across such a line. That is, one might believe that the relationship between two gender identities could go through the center point, yet that is not true. Individuals may misjudge the relative nature of two points as a result.</p>
+
+<p>Related, the last design flaw of the triangle is that the center point is nearly invisible and hard to select. Since it represents agender, it seems fitting that the center point be expanded such that defining a point there would position the selector&#39;s knob outside of the bounds of the shape representing a value of gender.</p>
+
+<p>Therefore, the triangle was abandoned.</p>
+<h3 id='reuleaux_triangles'>Reuleaux triangles</h3>
+<p>To revise the triangle to better reflect the gender spectrum, we expanded the center point to better accommodate agender qualities.</p>
+
+<p></p><div class='image'><img src='/images/reuleaux-selectors/gender-reuleaux.png' title='' alt='The Reuleaux ring is the result of considering better representations and visibility for agender/asexual individuals' /><br /><div class='caption'>The Reuleaux ring is the result of considering better representations and visibility for agender/asexual individuals</div></div><p></p>
+
+<p>When you take a triangle and blow out its center point, you produce an interesting piece of geometry. It is essentially a three-sided ring defined by two similar <a href="http://en.wikipedia.org/wiki/Reuleaux_triangle">Reuleaux triangles</a>.</p>
+
+<p>Geometry time! A <strong>Reuleaux triangle</strong> is a three-sided curved polygon with a constant width along any line perpendicular to the tangent of the curve. It is produced by the arcs of three congruent circles with each circle&#39;s center point corresponding to a corner point of the triangle.</p>
+
+<p></p>
+
+<div class="image">
+  <div id="genderTriFieldIllustration" style="width: 430px"></div>
+  <input type="hidden" id="genderValI" value=""></input>
+  <input type="hidden" id="genderXPosI" value=""></input>
+  <input type="hidden" id="genderYPosI" value=""></input>
+  <span class="caption">
+    <strong>Interactive</strong>: Reuleaux coordinates are transformed into triangle coordinates.
+  </p>
+</div>
+
+<p>In order to represent the data in a way that is intuitive, we transform the point the user selects within the Reuleaux to the corresponding point on a triangle. Drag the selector above to get a feel as to how the geometry relates. Notice that as you drag the selector along a curve, it corresponds to a line on the triangle. Also, every point along the boundary of the inner Reuleaux corresponds equally to the center point of the triangle.</p>
+<h2 id='what_input_methods_we_have_now'>What input methods we have now</h2>
+<p>Even though we have a growing awareness of the incorrectness of the notion of a gender binary, the presentation of only two choices is retained in our software systems and social networks.
+The selection is given as a strict choice normally between two different values: male or female.</p>
+<h3 id='dropdown'>dropdown</h3>
+<p>The dropdown is the traditional gender selector. Generally, it seems developers tend to only allot the two familiar choices. Even social services proud to be used by millions of people, such as facebook, have not conceding in offering any amount of choice, even under <a href="http://www.zdnet.com/blog/facebook/nepal-asks-facebook-for-third-sex-option/11117">heavy criticism</a>. Interestingly, facebook does contain internal support for a third gender that users were <a href="http://www.youtube.com/watch?v=rb68sPtblyo">able to enable through a hack</a> which then used non-gendered pronouns to refer to them to friends.</p>
+
+<p></p><div class='image'><img src='/images/reuleaux-selectors/gender-facebook.png' title='' alt='Facebook, a social network with millions of users, fails to represent non-binary genders.' /><br /><div class='caption'>Facebook, a social network with millions of users, fails to represent non-binary genders.</div></div><p></p>
+
+<p>There was a conscious effort of developers in general (facebook avoided this trend), one could insist was merely to retrofit a proactive model with an existing system, to add a third catch-all option usually titled &quot;other.&quot;
+This is an incorrect solution because culturally it paints the image that this third option represents a third gender, when it really collects those strictly outside of the cultural gender-binary.
+It dismisses the gender identity of all of those outside male and female. Furthermore, the term &quot;<em>other</em>&quot; depicts these individuals as abnormal.
+It says, you can be a man, a woman, or something else. This is not equality. This is merely placation without respect for identity.
+Not to mention that some individuals may wish to opt out of the politics of gender and the &quot;other&quot; option unduly oppresses them into that system.</p>
+
+<p>In the end, for a dropdown to be successful in representing the full spectrum of gender options, it would have to continue to add them as they become desired.
+Such an exhaustive list would never-the-less be excluding somebody.
+At the end of the day, the freedom to express one&#39;s gender identity could be better suited for an input method based upon the whole freedom-to-write-whatever mechanic.</p>
+<h3 id='textfield'>textfield</h3>
+<p>With that in mind, we need a way to depict gender that presents equal opportunity to all genders.
+This is, of course, a simple textfield.
+This solution is generally seen as a versatile solution that allows a wealth of choices.
+It is a solution that is used, perhaps slightly strategically, by facebook&#39;s cultural competitor <a href="http://www.sarahmei.com/blog/2010/11/26/disalienation/">Diaspora</a>.</p>
+
+<p></p><div class='image'><img src='/images/reuleaux-selectors/diaspora-gender.png' title='' alt='The change to a text field for gender was a divisive issue for Diaspora, shown here, but not for Metafilter who originally had such a field for the last decade. [1]' /><br /><div class='caption'>The change to a text field for gender was a divisive issue for Diaspora, shown here, but not for Metafilter who originally had such a field for the last decade. [1]</div></div><p></p>
+
+<p>However, it is not without fault. A textfield cannot describe all options because it is limited by language. It also does not represent degrees of gender. That is, one person can say &quot;male&quot;
+and so can the next, yet, we cannot tell if such a set of individuals was presented with a scale, would they then say that they are 80% male and 70% male?
+Does a textfield allow them to too quickly choose to pigeonhole themselves?</p>
+
+<p>Also, a textfield is hard to compare. There are times when a genderqueer individual would like to use a more fluid value for gender identity in comparison to others. For instance, a dating
+service. A textfield, beyond influencing self-pigeonholing, is difficult to quantify as a mathematical value. You could limit the choices to a tagged dropdown, <a href="http://www.sarahdopp.com/blog/2010/designing-a-better-drop-down-menu-for-gender/">which has been proposed</a>,
+however, you would then have to manually assign weights in order to determine how far away one gender is from another.</p>
+
+<p>While the textfield is still invaluable and it is very apt to recommend it (perhaps in conjunction to our proposal), we need a field that can both provide a wealth of gender options that can represent the gender spectrum (qualification) <em>and</em> a field that produces values that can be easily compared with one another (quantification).</p>
+<h2 id='the_selectors'>The selectors</h2>
+<p>We believe the Reuleaux gender selector solves the issues apparent in other approaches. It provides a broad range of gender identities in a way that is fairly easy to use. Furthermore, it results in a quantifiable value, a three-dimensional coordinate, which can be used for comparison.</p>
+
+<p></p><div class='image'><img src='/images/reuleaux-selectors/gender-chart.png' title='' alt='The selector can identify a wide variety of genders independently giving freedom to the degree of strength of the identification.' /><br /><div class='caption'>The selector can identify a wide variety of genders independently giving freedom to the degree of strength of the identification.</div></div><p></p>
+<h3 id='sexual_orientation_selector'>Sexual orientation selector</h3>
+<p>One of the interesting extensions of the gender selector is also using it for sexual orientation.
+This presents some issues and complications, but using the gender selector to also select for orientation works fairly well.
+The one problem is that while gender is a union (I identify with male and female: I am bigender), sexual orientation tends to also be intersectional (I am attracted to those that are both male and female: I am attracted to bigenders).
+That is, the selector allows you to put a point at the bottom of the field. But this indicates a union (bisexual) instead of somebody that happens to only be attracted to the specific bigender identity.</p>
+
+<p></p>
+
+<div class="image">
+  <div style="width: 430px">
+    <div id="genderTriField" style="float: left"></div>
+    <input type="hidden" id="genderVal" value=""></input>
+    <input type="hidden" id="genderXPos" value=""></input>
+    <input type="hidden" id="genderYPos" value=""></input>
+    <div id="sexualityTriFieldSimple"></div>
+    <input type="hidden" id="sexualityValSimple" value=""></input>
+    <input type="hidden" id="sexualityXPosSimple" value=""></input>
+    <input type="hidden" id="sexualityYPosSimple" value=""></input>
+  </div>
+  <span class="caption">
+    <strong>Interactive</strong>: Gender and orientation selectors as Reuleaux triangles.
+  </p>
+</div>
+
+<p>This can be solved by allowing gender to be specified as a single point, and sexual orientation to be a set of points to form areas of selection.
+In this form, if a gender identity that an individual <strong>A</strong> selects falls within the area given by the sexual orientation selector of person <strong>B</strong>, then you could say that <strong>A</strong> would be gender-compatible with <strong>B</strong> from <strong>B</strong>&#39;s perspective.
+This greatly complicates the sexual orientation selector relative to the gender selector in terms of user ease of use.
+However, in cases where this type of input is very useful (such as with dating services,) this complication can be tolerated by users in order to increase the quality of their information.</p>
+
+<p></p>
+
+<div class="image">
+  <div style="width: 430px">
+    <div id="genderTriField2" style="float: left"></div>
+    <input type="hidden" id="genderVal2" value=""></input>
+    <input type="hidden" id="genderXPos2" value=""></input>
+    <input type="hidden" id="genderYPos2" value=""></input>
+    <div id="sexualityTriField"></div>
+    <input type="hidden" id="sexualityVal" value=""></input>
+    <input type="hidden" id="sexualityXPos" value=""></input>
+    <input type="hidden" id="sexualityYPos" value=""></input>
+  </div>
+  <span class="caption">
+    <strong>Interactive</strong>: Sexual orientation selector can select areas that indicate attraction to the given gender identity. Drag the middle circle out, use smaller circle to expand area. To remove a circle, shrink it until very small. As you drag circles out of the middle area, new circles can be added. Add as many as you would like.
+  </span>
+</div>
+
+<p>Please experiment with the selectors above to create your identity profile below.</p>
+<h3 id='describe_yourself'>Describe yourself</h3>
+<p></p>
+
+<div class="image">
+  <div style="width: 470px">
+    <div id="output">
+    </div>
+  </div>
+  <span class="caption">
+    <strong>Interactive</strong>: Use the selectors directly above these to create your identity image.
+  </span>
+</div>
+
+<p>TODO: Allow people to share by url?</p>
+<h2 id='not_an_end_all_solution'>Not an end-all solution</h2><h3 id='genderfuck'>Genderfuck</h3>
+<p>One of the issues with the gender identity selectors is that they represent a static, unchanging representation.
+It could very well be that one&#39;s identity changes over time, perhaps even daily.
+This selector would then have to be changed as the identity changes manually.</p>
+
+<p>One solution would be to use an area selector for identity as well.
+A genderfuck individual, whose identity is not well defined, can then select an area of identity.
+Gender-compatibility can then be defined as whether or not the area of the gender identity intersects with the area of the sexual orientation, although this is not entirely perfect.</p>
+
+<p>However, in the end, this selector is designed to only be effective for well-defined identities.
+It is always best to include both this selector and a textfield for clarification.
+The ability to well-define your identity is still the most practical and most awesome benefit to provide a user.</p>
+<h3 id='physical_characteristics'>Physical characteristics</h3>
+<p>This selector does not, in any way, take into account physical characteristics of the individual.
+One criticism received for this selector is that one cannot specify clearly that they have a particular set
+of genitalia. Also, as far as sexual gender preference goes, some were rather upset that they cannot specify
+that they are attracted only to women with cisgendered reproductive systems.</p>
+
+<p>After all is said and done, this selector is only concerned about gender. Physical characteristics do not correlate with gender identity, and therefore cannot be depicted in this selector.
+That said, some interpret areas of the gender selector as indicating this, however.
+Since no instruction was given, feedback in discussion shows that individuals do see a correlation that does not explicitly exist.
+They may assign their gender identity accordingly, which is fine, and within the bounds of use of the selector.
+However, you cannot reverse engineer that decision to draw any conclusions.</p>
+<h3 id='ease_of_use'>Ease of use</h3>
+<p>It is not clear how intuitive the selector is.
+In open-trials, where no instruction is given, individuals were presented with the simple, single-point gender and sexuality selectors.
+They were able to give feedback, privately and also among a forum.
+I have suppressed the exact feedback due to privacy and due to the fact that the discussion was not fruitful (that is, sometimes a bit hateful) to the discussion on a whole.</p>
+
+<p>However, it is difficult to conceive of a simpler way of inputting a broad range of gender choices.
+It is possible that one could add the ability to use preset points according to a dropdown or determined from a textfield to prepopulate the selectors.
+This would show the intention of the selectors and also help the assumed majority of people make quick decisions, but still allow the genderqueer community the ability to be visible by refining their identity further.</p>
+<h2 id='general_advice_for_usage_of_gender_fields'>General advice for usage of gender fields</h2>
+<p>If you add a gender field to your project, you must ask yourself the question: what do the users gain from being able to report this value?
+The general advice that one can give is to drop it altogether, especially if there is nothing directly related to the service you are providing that benefits from gender.</p>
+
+<p></p><div class='image'><img src='/images/reuleaux-selectors/gender-rdio.png' title='' alt='Imagine you are a person that does not fall cleanly into one of these two categories. You are now presented with a bright red flag that will not let you continue until you choose. How would you feel? (Image is rdio's registration and courtesy of @carols10cents)' /><br /><div class='caption'>Imagine you are a person that does not fall cleanly into one of these two categories. You are now presented with a bright red flag that will not let you continue until you choose. How would you feel? (Image is rdio's registration and courtesy of <a href="https://www.rstat.us/updates/50e8a221aeb89a00020202e4">@carols10cents</a>)</div></div><p></p>
+
+<p>A common reason for including gender, even if only privately stored and never publicly displayed, is to provide humanization through gendered language, such as personalizing text with the correct pronouns.
+If this is the case, then the correct action is to just simply ask the user for their preferred pronouns and allow for a non-gendered form if language permits (which <a href="http://en.wikipedia.org/wiki/Gender-neutral_pronoun#Summary">English does</a>).</p>
+
+<p></p><div class='image'><img src='/images/reuleaux-selectors/gender-rdio-response.png' title='' alt='Rdio only uses their gender information to provide linguistics. We recommend that pronouns be explicitly asked for in place of gender, and that you allow a non-gendered option (his/her/their.)' /><br /><div class='caption'>Rdio only uses their gender information to provide linguistics. We recommend that pronouns be explicitly asked for in place of gender, and that you allow a non-gendered option (his/her/their.)</div></div><p></p>
+
+<p>When you are providing a social service, users may wish to publicly display their gender.
+In these cases, since it directly benefits their ability to express their identity, you should allow for a free range of choice.
+Therefore, in this case, simply use a textfield, and <strong>always</strong> allow them to specify nothing.
+It may benefit to suggest common genders to allow more ease of use to the majority of normative users and to encourage genders that are quantifiable for statistical purposes.
+However, you must look at this from your users&#39; perspective: which method improves <em>their</em> ability to <em>self</em>-describe <em>their</em> identity, because that&#39;s what <em>they</em> want.</p>
+
+<p>As mentioned above, textfields may have some form of societal influence that actually could limit choice.
+In this case, use the Reuleaux gender selector.
+There is nothing that prevents you from using such a selector alongside a textfield.
+This allows both a comparable value for gender and a way to self-label with a finer granularity (or for a user to make it very clear what gender they identify as.)</p>
+
+<p>Such a combination seems most viable on a dating service that is genderqueer friendly where the matching logic is gender-seeking.
+In such a case, it may offer better opportunities to suggest gender labels for the textfield based upon your gender value in the selector.
+That is, using the gender value as a relevancy hint for the keyword search to order the suggestions more properly.</p>
+
+<p>All in all, gender is a complicated subject.
+It is best to avoid collecting that aspect of identity if possible.
+However, we wish to make it clear that there is still room in social places where
+gender is meaningful to also be willing to include individuals that fall outside of gender-normative groups.
+We do not believe this is the end-all solution, but we do believe it is progress in a space that
+lacks new ideas and it is our ultimate goal that it motivates discussion and even fresher solutions.</p>
+<h3 id='references'>References</h3>
+<ol>
+<li>Interesting statistics about textfield usage at Metafilter and relation to Diaspora&#39;s decision in Carina C. Zona&#39;s talk <a href="http://confreaks.com/videos/1120-gogaruco2012-schemas-for-the-real-world">Schemas for the Real World</a>, 2012 Golden Gate Ruby Conference, exact reference is ~17:00.</li>
+</ol>
+]]></description><pubDate>Tue, 27 Nov 2012 00:00:00 -0500</pubDate><guid>http://blog.davewilkinsonii.com/posts/reuleaux-selectors</guid></item><item><title>Conferences Must Be Active to Promote Diversity</title><link>http://blog.davewilkinsonii.com/posts/conference_diversity</link><description><![CDATA[<p>In the spring of 2012, the <a href="http://britruby.com">BritRuby</a> conference presented their speaker lineup. They decide to invite 15 speakers and then
+allot 5 more to select later based on submissions. However, their speaker lineup was later <a href="https://twitter.com/joshsusser/status/269844125363339264">contested heavily on twitter</a> due to consisting of all white men. Due to this,
+the organizers decided to <a href="http://2013.britruby.com/">cancel</a> the conference altogether.</p>
+
+<blockquote>
+<p>Nice speaker lineup for BritRuby. Except for the 100% white guys part.</p>
+
+<div class="citation">&mdash; Josh Susser, organizer of Golden Gate RubyConf, <a href="https://twitter.com/joshsusser/status/269844125363339264">on twitter</a></div>
+</blockquote>
+<h2 id='the_conference_that_is_critical_of_voice'>The conference that is critical of voice</h2>
+<p>It is a very dangerous proposition to suggest that the conversations on Twitter that indeed led to the demise of the conference
+should have been suppressed. To say such a thing, and it has <a href="https://gist.github.com/4106776">been said</a>, would be tantamount to suggesting that the value of
+holding the conference surpasses the value of an expression of equal rights. It would be as though the conference as it stood would be better
+than the ideal function of such a venue to provide a fair and equal platform for being heard. Certainly a venue of communication that
+fails to provide equal voice is devalued over that voice?</p>
+
+<p>Let&#39;s look at the math. The likelihood that a selection process that is blind to gender would select certain combinations of men and women
+is a simple Bernoulli distribution. I&#39;m going to assume a gender binary for simplicity and discuss the notion of not selecting women. They
+are the largest unrepresented group and among underrepresented groups, they enjoy the most privilege. Therefore, anything dismissing women must also be dismissing minority
+groups.</p>
+
+<p><a href="http://cra.org/uploads/documents/resources/taulbee/CRA_Taulbee_2011-2012_Results.pdf">Taubee studies</a> show that women earn 20% of the degrees in computer science. That being my best statistic, I will assume
+that 20% of women are involved in the tech field in some way. That implies the expected number of women speakers would be 3, not 0, although to match the true population we
+would ideally shoot for a 1:1 ratio in all regards (degree awardees, conference speaking, etc) and look for about 7 to 8. With that in mind, the probabilities given a field of 15 speakers are as follows:</p>
+<h3 id='probabilities_of_outcomes_given_random_selection_'>Probabilities of outcomes given random selection:</h3><pre><code>15 men and  0 women =  3.5%  &lt;-- Observed
+14 men and  1 women = 13.1%
+13 men and  2 women = 23.0%
+12 men and  3 women = 25.0%  &lt;-- Expected (Against number of CS degree awardees)
+11 men and  4 women = 18.7%
+10 men and  5 women = 10.3%
+9  men and  6 women =  4.2%
+8  men and  7 women =  1.3%  &lt;-- Ideal (Against world population)
+7  men and  8 women = ~0.3%
+6  men and  9 women = ~0.0%
+</code></pre><h3 id='probability_of_having___'>Probability of having...</h3><pre><code>=0  women:  3.5%  &lt;-- Observed
+&gt;0  women: 96.5%
+&gt;1  women: 83.4%
+&gt;2  women: 60.4%  &lt;-- Expected (Against number of CS degree awardees)
+&gt;3  women: 35.4%  &lt;-- It is more likely to have more than the expected number
+&gt;4  women: 16.7%      than to have exactly no women represented.
+&gt;5  women:  6.4%
+&gt;6  women:  2.2%  &lt;-- Ideal (Against world population)
+&gt;7  women:  0.9%
+&gt;8  women: ~0.0%
+=0  men:   ~0.0%
+</code></pre>
+<p>The probability of such an arrangement, by blind review, suggests one of two things: either women are extremely unqualified to be
+leaders in this area / have no such interest by virtue of genetics due to the fact that their proposals were deemed less interesting or vital
+compared to men. Or <strong>there is no such correlation and women are intellectually equal to men and the system of organization that prevails in this culture
+has oppressed their ability to be visible</strong>. The former claim is preposterous given our scientific knowledge that gender differences are
+not biological, especially in terms of intelligence, problem solving, and interest. They are indeed constructed from a series of social
+factors, such as the well-studied stereotype threat. Therefore, it is far more likely that the social factors that obscure women from
+being represented include the subconscious bias against them represented here by the conference speaker lineup.</p>
+
+<p>The solution is to actively promote such diversity and be proud of supporting it. But affirmative action is bad, they say. It hurts the meritocracy, they say.
+To suggest that a (specifically. as in, the adjective was actually actively <a href="https://gist.github.com/4106776">used in opposition</a>.) token minority would not be acceptable is to suggest that
+no such qualified speaker is available. &quot;How dare we push an African speaker just because of their skin color! They couldn&#39;t possibility have anything of value to
+say! A woman? No, she failed to pass our rigorous test. There is no way her input could ever be valid!&quot; Yes, it is a ridiculous thing to say. I agree. But this
+is a valid interpretation of that argument. It suggests a speaker of quality that happens to be a woman or within a minority group does not exist.</p>
+
+<p>We must acknowledge that
+this is not only false, but a rather dismissive idea that serves only to diminish the voice of an already relatively invisible
+section of our community. We should be taking the effort to help those in this situation to be heard. Look for quality, and you shall find it,
+  and you can promote it with, yes, special focused effort. This conference did not do this, has a statistically significant disparity, and
+was called out upon it rightfully. <strong>If you as a conference are inviting speakers and actively looking for quality yet not actively promoting diversity, then you are not trying hard enough.</strong> Even if you criticize my numbers and suggest that, although 20% of the community are women, more percentage of men than women want to speak. That&#39;s
+still a problem! A problem a conference must be willing to solve by actively promoting voice so that there are more potential voices
+through the dispelling of stereotypes and better, more visible role models.</p>
+
+<p>Considering the effect occurs on the most optimistic of cases (providing a voice for women) and this voice is being suppressed, it only follows that
+other voices of minority communities that are far less represented are being oppressed considerably more. Since the number of active voices in the
+CS community for those of African ethnicity are <a href="http://www.math.buffalo.edu/mad/computer-science/cs-peeps.html">less than 1%</a>, the probability distribution shifts dramatically toward the choosing of just one individual
+in a blind review (just by chance!) becoming nearly a miracle. Therefore, a blind review cannot capture a diversity of voice, and organizers must
+be more active to promote a higher probability and thus opportunity to those voices that go unheard. Is it fair that your system of assessment is devised by
+the least diverse group you can build? Communicate with others and consult with diverse community leaders to bring their knowledge to more people.
+That should be what your conference is about: being heard.</p>
+<h3 id='probability_proofs'>Probability Proofs</h3>
+<p>I have developed a small program that produces the probability distribution of gender selection
+for tech events in a <a href="https://gist.github.com/4114968">gist found here</a>. Included with this is
+a simulation experiment that shows just how unlikely the situation that resulted in this conference
+really is. This simulation should affirm the mathematics as well.</p>
+<h3 id='blind_review_correlation'>Blind Review Correlation</h3>
+<p>Some have pointed out that comparing the handpicking scenario of BritRuby does not compare to the blind evaluation presented here. However, it does indeed compare. If your handpicking process is blind to gender (assuming that intellectual capacities are also gender-neutral) then your process will yield the same gender distribution as a blind review. The point is that their process did not do so, and now we can draw valid conclusions about the bias that exists. We can now say, &quot;their selection process is biased against women.&#39; Furthermore, we can draw some hypotheses that the representation of minorities is also not being considered. This is damning. We must also conclude that bringing awareness to this issue was correct as long as we suggest that bias should not occur in speaker selection at conferences.</p>
+]]></description><pubDate>Mon, 19 Nov 2012 00:00:00 -0500</pubDate><guid>http://blog.davewilkinsonii.com/posts/conference_diversity</guid></item><item><title>Projects I am Involved With</title><link>http://blog.davewilkinsonii.com/posts/projects</link><description><![CDATA[<h2 id='founded'>Founded</h2><h3 id='rstat_us'>rstat.us</h3>
+<ul>
+<li><strong><em>Language</em></strong> ruby</li>
+<li><strong><em>Status</em></strong> gamma</li>
+<li><strong><em>Source</em></strong> <a href="https://github.com/hotsh/rstat.us">github</a></li>
+</ul>
+
+<p>A federated microblogging platform, resembling twitter and status.net, that emphasizes personal use and self-ownership of data. It uses the ostatus protocol.</p>
+<h3 id='xomb'>xomb</h3>
+<ul>
+<li><strong><em>Language</em></strong> D</li>
+<li><strong><em>Status</em></strong> beta</li>
+<li><strong><em>Source</em></strong> <a href="https://github.com/xomboverlord/xomb">github</a></li>
+</ul>
+
+<p>A exokernel-inspired kernel that uses modern hardware to provide a functional, general purpose, secure bare-metal systems layer.</p>
+<h3 id='djehuty'>djehuty</h3>
+<ul>
+<li><strong><em>Language</em></strong> n/a</li>
+<li><strong><em>Status</em></strong> alpha</li>
+<li><strong><em>Source</em></strong> <a href="https://github.com/djehuty/djehuty">github</a></li>
+</ul>
+
+<p>A public domain API infrastructure. This platform will emphasize many implementations, intelligent automated code selection, and encourages a build system that learns from the experience of machines it communicates with.</p>
+<h3 id='ibis'>ibis</h3>
+<ul>
+<li><strong><em>Language</em></strong> n/a</li>
+<li><strong><em>Status</em></strong> alpha</li>
+<li><strong><em>Source</em></strong> <a href="https://github.com/djehuty/ibis">github</a></li>
+</ul>
+
+<p>A set of initial, naive, implementations for djehuty platform.</p>
+<h3 id='gruesome'>gruesome</h3>
+<ul>
+<li><strong><em>Language</em></strong> ruby</li>
+<li><strong><em>Status</em></strong> beta</li>
+<li><strong><em>Source</em></strong> <a href="https://github.com/wilkie/gruesome">github</a></li>
+</ul>
+
+<p>A public domain z-machine implementation capable of playing/displaying many interactive fictions, such as the original Zork.</p>
+<h3 id='propeller'>propeller</h3>
+<ul>
+<li><strong><em>Language</em></strong> ruby</li>
+<li><strong><em>Status</em></strong> alpha</li>
+<li><strong><em>Source</em></strong> <a href="https://github.com/wilkie/propeller">github</a></li>
+</ul>
+
+<p>A system for managing addons and user defined configurations for projects, emphasizing ruby projects currently.</p>
+<h3 id='ostatus_gem'>ostatus gem</h3>
+<ul>
+<li><strong><em>Language</em></strong> ruby</li>
+<li><strong><em>Status</em></strong> beta</li>
+<li><strong><em>Source</em></strong> <a href="https://github.com/hotsh/ostatus">github</a></li>
+</ul>
+
+<p>A gem that helps ruby applications make use of the ostatus protocol.</p>
+<h3 id='papyri'>papyri</h3>
+<ul>
+<li><strong><em>Language</em></strong> ruby</li>
+<li><strong><em>Status</em></strong> gamma</li>
+<li><strong><em>Source</em></strong> <a href="https://github.com/djehuty/papyri">github</a></li>
+</ul>
+
+<p>A program that takes a uniform yaml description of an API and generates consistent html-based documentation.</p>
+<h3 id='socrates'>socrates</h3>
+<ul>
+<li><strong><em>Language</em></strong> ruby</li>
+<li><strong><em>Status</em></strong> gamma</li>
+<li><strong><em>Source</em></strong> <a href="https://github.com/wilkie/socrates">github</a></li>
+</ul>
+
+<p>A static-site-generator for generating course webpages. It allows for timed releases of resources, assignments, and solutions. It supports media formats for resources and generates an intuitive, but highly customizable, interface to access them.</p>
+<h2 id='occasional_contribution'>Occasional Contribution</h2>
+<ul>
+<li><a href="https://github.com/shoes/shoes">shoes</a></li>
+<li><a href="https://github.com/hacketyhack/hacketyhack">hackety-hack</a></li>
+<li><a href="https://github.com/seangeo/ratom">ratom</a></li>
+<li><a href="https://github.com/ldc-developers/ldc">ldc</a></li>
+<li><a href="https://github.com/intridea/redfinger">redfinger</a></li>
+</ul>
+]]></description><pubDate>Sun, 11 Nov 2012 00:00:00 -0500</pubDate><guid>http://blog.davewilkinsonii.com/posts/projects</guid></item><item><title>The Djehuty Project - For The Technical Lot</title><link>http://blog.davewilkinsonii.com/posts/djehuty-technical</link><description><![CDATA[<p><a href="/posts/who-am-i">I</a> have a dream that we can solve the current crisis that is software. To do this, and this might seem ambitious but bear with me, we must burn every piece of structure we have to the ground. We must replace the structure around our software with a new infrastructure that gives us more sustainability and versatility. In the process we gain various technological and socialogical advantages.</p>
+<h2 id='what_we_have_now'>What we have now</h2>
+<p>What are we burning to the ground, you ask? Well, a system of organization that ignores the decentralized world we built out of it.
+We build software in a centralized manner. It has one blessed location where it exists, the pieces used to build it (libraries, frameworks) are all built in a centralized manner and exist in generally one place, and we generally hold a relationship between a set of a few people as being in control of that code (and we bless them, perhaps religiously in some cases.)</p>
+
+<p></p><div class='image'><img src='/images/djehuty-technical/apocalypse.jpg' title='' alt='Ok. It's not *that* bad, but we can do better. [1]' /><br /><div class='caption'>Ok. It's not *that* bad, but we can do better. [1]</div></div><p></p>
+
+<p>This has resulted in a tolerable, yet inefficient ecosystem where we tend to rewrite instead of reuse.
+This is due to spirited debates about abstractions, expression, and simply how likable a set of people are.
+This system inherits the lack of diversity of its whole and by being so centralized to ego, it leaves out a rather
+large yet invisible section of humanity.</p>
+
+<p>You may disagree with the prior paragraph since it may come across too harsh. However, ask yourself if this model of development of projects, especially in a world of opensource ideals and an increasingly decentralized network, is really appropriate, efficient, or if anything could be better if designed with these technical considerations in mind. My argument hinges on it being both a technical <strong>and</strong> social gain.</p>
+<h2 id='a_new_infrastructure'>A new infrastructure</h2>
+<p>I have <a href="/posts/apples">discussed previously</a> the lack of a distinction between computation and abstraction. Our new infrastructure must promote computation first. How we invoke a behavior should simply be by telling the machine to perform that behavior. Anything beyond that (the human component) is beyond the scope.</p>
+
+<p>What we end up with is a list of behaviors. Each behavior has a common name that is used to invoke it. Each behavior has a well-defined input and will have a well-defined output. Each behavior has a specification that details how the computation should take place; it is a description of input and output. I discuss this component of the infrastructure in <a href="/posts/infrastructure">more detail here</a>.</p>
+
+<p>Beyond these basic descriptions of computation, at the software level, we have something on either side of this thin interface. On the left, is the implementation of the behavior. This can be a piece of code, in whatever language, that takes the input and yields the appropriate output. It could also be a piece of hardware that upholds the specification. In either respect, the implementation is a black box, and regardless of how a behavior is implemented, it is compared against the specification and all other implementations.</p>
+
+<p>On the right of the interface is the abstraction. In this area we have the parts that are for human consumption. These are languages that glue together behaviors to produce something meaningful, artistic, useful, etc. They could be frameworks that make rapid development possible. Some programming languages are more meaningful on this side of the interface, such as scripting and/or dynamic languages.</p>
+
+<p>This is the software component. It is driven by the notion that we select code by what it does, not by what it is called, what language it is written in, or who maintains it. We keep the benefits of abstractions, but they no longer inhibit or obscure performance gains in other parts of the system. I will continue to strengthen these points.</p>
+<h2 id='the_hardware'>The hardware</h2>
+<p>Regarding the left side of the interface which implements well-defined behavior, it is interesting that since such an implementation is a black box, it may be implemented as hardware. We live in a world where 3d-printed hardware is increasingly available. Now, we can find a bottleneck in our software and have our computers print a hardware implementation to solve the performance issue. We can plug in a hardware solution and have it transparently affect any software which uses that interface immediately.</p>
+
+<p></p><div class='image'><img src='/images/djehuty-technical/printer.jpg' title='' alt='Although not feasible yet, printable conductive gels exist and could make circuit printing available in the home. [2]' /><br /><div class='caption'>Although not feasible yet, <a href="http://news.stanford.edu/news/2012/june/printable-electrical-hydrogel-062712.html">printable conductive gels</a> exist and could make circuit printing available in the home. [2]</div></div><p></p>
+
+<p>By using this software infrastructure, we make 3d-printed hardware more meaningful and easier to use for less technical users. We allow anybody with hardware knowledge the ability to contribute to opensource hardware communities by giving them the ability to easily solve any computational problem at any granularity (write a hardware implementation for a yaml parser, or maybe just write a hardware tokenizer, hardware string routines... you decide.) All in all, we will promote the much needed involvement from the electrical/computer/etc engineers and makers.</p>
+<h2 id='the_network'>The network</h2>
+<p>We currently make use of a huge, barely centralized network of networks we call the internet. This network currently allows you to own a name &#39;davewilkinsonii.com&#39; or &#39;github.com&#39; and then use that name to map resources: &#39;davewilkinsonii.com/posts/djehuty&#39; and &#39;github.com/wilkie/blog&#39;. We then communicate using well-defined methods in order to retrieve and make sense of those resources: &#39;http&#39; or &#39;git&#39; respectively.</p>
+
+<p>Alright, say what you want about hardware and copyright, but the network implications here are the real political meat and bones. We want to provide these elements of computation without the interference of a central authority, government, or malicious organization. We want to ensure both the availability and integrity of the code. We may need to devise a new network infrastructure to support this in a minimal fashion, or craft it out of the parts we already have, namely the internet and world wide web as it is now.</p>
+
+<p>Frankly, the internet as it stands strengthens the argument for this style of encapsulation of interfaces.
+It supports a decentralized model where we can ask a question and get an answer. &quot;I need a way to compute a sort of a list of numbers&quot; can retrieve an implementation for quicksort, or maybe on another day will retrieve an implementation of insertion sort. Who knows. All we have to have here, as a basic minimum, is the ability to get <em>any implementation</em> that fulfills the specification, of which you retrieve once.</p>
+
+<p></p><div class='image'><img src='/images/djehuty-technical/peer-to-peer.png' title='' alt='A peer-to-peer network should be the base model of the infrastructure. [3]' /><br /><div class='caption'>A peer-to-peer network should be the base model of the infrastructure. [3]</div></div><p></p>
+
+<p>Now, with clever use of DNS and frontend servers, we can have a single name resolve to different resources. This is typically done to route resources to the nearest server geographically in order to balance demand and increase responsiveness on popular websites. However, here, we want to get an implementation of a behavior. We can co-opt the internet to get this behavior the same way that bittorrent does in order to create a network without an owner or central authority.</p>
+
+<p>At the end of the day, we can ask for an implementation and get one from a server in belize or our neighbor at the coffee shop, along with any technical data about how performant that implementation is. We can get many implementations and compare them and publish our data as well. What we want to create is something a bit more flexible than the web, but still within its foundational spirit, more like a network of mesh networks.</p>
+
+<p>To sum up, unlike the normal use of the internet and hypermedia, we want to retrieve something that fulfills a behavior through a specification, not retrieve something of a particular name. This network is peer-driven and content-driven, although the specifics of how this would be done are beyond my expertise.</p>
+<h2 id='technical_merit'>Technical merit</h2>
+<p>Through the design and implementation of such an infrastructure, we can achieve many technical goals that are far more difficult otherwise. This is due to the emphasis on benchmarking and scientific measurement over human expression and abstractions.</p>
+<h3 id='science_to_automate_optimizations_of_software_structure'>Science to automate optimizations of software structure</h3>
+<p>This type of design will allow for competing implementations based upon facts related to performance and separates those concerns from how computation is expressed, which is relegated to higher level languages. This will promote code reuse across all languages and remove the need for a <em>standard library</em> that reimplements basic functionality other languages already have. New languages can be created and supported by an existing wealth of code, and only need to bind to these interfaces to be able to use it. Languages may want to provide better abstractions and perhaps push policies to allow for better expression or analysis, but can do so around the code that already exists instead of rewriting everything.</p>
+<h3 id='availability_of_code'>Availability of code</h3>
+<p>Since useful code will exist on many machines, implementations can be retrieved from a great number of sources. This improves availability of code and ensures that code cannot be removed (<a href="#social_merit">see social merit</a>.) Machines may also pass performance details and metrics that it has gathered among the machines it knows to help the destination machine make decisions about which implementation to use. We can effectively crowdsource science about our code. Detailing this type of information would be a big win in optimizing the entire code base on our machines toward specific performance goals. Also, no authority would have a practical method of deleting code or subjecting laws against its use or proliferation.</p>
+<h3 id='increased_feasibility_of_hardware_printing'>Increased feasibility of hardware printing</h3>
+<p>This infrastructure, as mentioned, promotes hardware implementations that may increase the performance in terms of speed and possibly power when the machine suggests that it could benefit. Hardware implementations will abide by the same specifications as software components, and can therefore be tested against them in already existing applications. This should promote hardware as an optimization of software which in turn can create hardware with less bugs and have the hardware become useful immediately after production. Drivers for hardware are no longer platform specific as they are simply implementations of behavior, and operating system behaviors are also described in the infrastructure.</p>
+<h2 id='social_merit'>Social merit</h2>
+<p>Computation is important to all people. There are cultures that could benefit from equal access to technology and computation. With this infrastructure, society serves to benefit due to the promotion of solutions without attribution and an ecosystem where code propagates across the world without interference.</p>
+<h3 id='ubiquitous_code'>Ubiquitous code</h3>
+<p>By greatly modularizing code, implementations can exist anywhere. This has a beneficial side-effect: code is much harder to censor or delete. You can build a dependency graph for any application and simply ask any machine in the world for some code that implements those behaviors. Any implementation can be retrieved and then tested for correctness. We can get code reliably from our neighbors, for instance. This better ensures that a single centralized location for code is not the norm, and therefore reduces the ability for centralized authorities to remove or restrict access to computation. Useful code will exist on many machines, and these implementations can be retrieved (along with performance information, <a href="#technical_merit">see technical merit</a>) from any machine in a network.</p>
+<h3 id='lower_cost_of_entry'>Lower cost of entry</h3>
+<p>This has another benefit of greatly reducing the cost of entry for using technology. We only need to provide simple hardware with network capability, network driver, and a simple buildtool and dependency grapher to determine what code we need to build the rest of the system. From there it can acquire that code, verify its correctness, and compile the rest of the system. This means 3d-printed hardware can become more feasible as it would have less software requirements out of the box to get it working and deployed on a large scale. As mentioned, we require a better, more specialized network infrastructure to support the peer-to-peer nature of the system where new (untrusted) nodes can enter at anytime, perhaps toward a mesh network or some hybrid mesh-network and typical centralized structure. The social benefit of not using the internet is that we can minimize the technical barrier of entry to create a new system.</p>
+<h3 id='machines_that_build_themselves'>Machines that build themselves</h3>
+<p>The prospect of hardware printing means that such solutions are potentially available to all people who can manufacture a 3d-printer, or acquire one that can print itself. At the end of the day, we can provide a minimal subset of components that can be used to generate the rest of the machine from information in the network. This should reduce the physical costs of the machine. Upgrades to the machine would be as easy as acquiring the machine, and furthermore would be available to all through the network. Hence, this infrastructure, when implemented at all three components (software, hardware, and network) create a sustainable computational platform for all of humanity and firmly place the power of computation freely in the hands of the people.</p>
+<h3 id='references'>References</h3>
+<ol>
+<li>Artist&#39;s depiction of apocalypse from <a href="http://pierremassine.deviantart.com/art/Apocalypse-145369171">here</a>.</li>
+<li>Discussion of affordable 3d printing <a href="http://www.engadget.com/2012/09/26/form-1-delivers-high-end-3d-printing-for-an-affordable-price/">here</a>, which the image was taken.</li>
+<li>The minimalistic image of a peer-to-peer network and a simple description of what that is can be found <a href="http://www.freelan.org/">here</a>.</li>
+</ol>
+]]></description><pubDate>Thu, 25 Oct 2012 00:00:00 -0400</pubDate><guid>http://blog.davewilkinsonii.com/posts/djehuty-technical</guid></item><item><title>The Antirez Principle</title><link>http://blog.davewilkinsonii.com/posts/the-antirez-principle</link><description><![CDATA[<p>On Saturday, October 13th 2012, Salvatore Sanfilippo, also known as antirez,
+an influential hacker who maintains redis, published a blog entry entitled
+&quot;<a href="http://oldblog.antirez.com/post/different-take-sexism-it.html">A different take on sexism in IT</a>.&quot;
+It made its way onto <a href="http://news.ycombinator.com/item?id=4648625">Hacker News</a>, and received, according to his own website, over 20,000 views.</p>
+
+<p>This post received a divisive reaction on twitter leading Salvatore to quit the
+social network <a href="https://twitter.com/antirez/status/257618545410723840">altogether</a>.
+However well-intentioned Salvatore may have believed himself to be, his post
+on the topic of tech-related sexism has some major flaws. Shanley gives a
+good rundown of his entry <a href="http://blog.prettylittlestatemachine.com/blog/2012/10/14/antirez-on-sexism/">on her blog</a> as well.</p>
+
+<p>I want to break down this article and explain the different fallacies of
+his argument and also some strategies employed that create an illusion of
+correctness and distract from contradictions in the rest of the article.
+I&#39;ve added some comments in brackets to correct some of Salvatore&#39;s English
+(he is not a native speaker) just for the benefit of easy reading.</p>
+
+<hr>
+
+<blockquote>
+<p>More than ten years ago I started to understand that sexism in IT was not an easy topic. Talking with my female coworkers I discovered they were deeply upset and offended by other women that were too [read: found it] easy to ask for respect using sexism as a flag. At first I was a bit shocked about that, but then I realised how obvious it is. </p>
+</blockquote>
+<h2 id='anecdote_provides_epiphany'>Anecdote Provides Epiphany</h2>
+<p>Salvatore starts out explaining that sexism is not an easy topic. He is correct, of course. The history of oppression of any kind is long and complicated.
+However, he sidesteps this history by discussing his personal conversations with his female coworkers. He suggests that these women were offended at
+the usage of sexism as a means of gaining undue respect.</p>
+
+<p>This is the crux of his argument; that is, the problem statement. Women should not be getting special treatment on the terms of their gender. I want
+to emphasize this. Everything else that is said relates to this idea: women are gaining too much. What does this mean? It suggests that he believes
+oppression does not exist, because this is contradicted with the response to this supposed oppression leading to a gain for women.
+The problem with this statement is that it presents a cause is effect argument which he expands upon later.</p>
+
+<p>This argument is further unfounded since it makes exclusive use of an anecdote. An anecdote is a situation, and inherits any situational cause to its reported
+effect. However, this serves to further hurt Salvatore&#39;s ability to empathize considering this anecdote is based on his observations of women, and thus uses this
+as the genesis of his argument as a suggestion that he is relating what women want and what women feel. That is, that the argument that follows is an explanation
+of how women see this issue, not just him.</p>
+
+<hr>
+
+<blockquote>
+<p>As a woman you want respect because you are capable and smart. Not because you are a woman. </p>
+</blockquote>
+<h2 id='the_indisputable_claim'>The Indisputable Claim</h2>
+<p>Salvatore then follows it with the goal. If this is achieved, the situational problem he discussed is eraticated. This is true since he is claiming
+essentially that women are gaining unfairly, so equality based upon merit would solve this unfairness. Note, however, it is the same solution
+to the problem where women are being oppressed and discriminated against based solely on gender, such as the very real <a href="http://www.iwpr.org/publications/pubs/the-gender-wage-gap-2009">gender wage gap</a>.</p>
+
+<p>The usage of an indisputable claim in a debate or argument is a classic technique. You suggest something that your opponent must agree with
+so that an attack on a side-issue or side-claim can be called out as an attack on the shared goal. This goal of equality without regard to
+gender on issues such as intelligence and creativity is the general goal of feminism. Therefore, he has created an obstacle (the means of
+building a strawman) for those that disagree with his assertions of the allotment of power and oppression.</p>
+
+<p>It is such a powerful technique that he received support from women based solely on this one statement. New York Times Assistant Editor
+Jacqui Maher gives <a href="https://twitter.com/jacqui/status/257479804570439680">her support</a> by quoting this phrase exactly and nothing more. This
+is quickly retweeted by Salvatore. It is unclear whether or not Jacqui supports the rest of the article, and she has not answered the questions
+<a href="https://twitter.com/wilkieii/status/257283943714394112">I have sent her</a> asking for elaboration, but it stands to reason that an editor would not skim, and that she supports the entire text.</p>
+
+<hr>
+
+<blockquote>
+<p>In the course of my life I started to develop an higher and higher intolerance for topics like politically correctness and protection of minorities unless this was clearly put in general terms. If you are an human being you need to be respected because you deserve respect like any other. I don&#39;t care if you are black, white, yellow or woman, you are an individual. </p>
+
+<p>Similarly, I will not care who you are if you do something silly at work. Nothing is more offensive for you than me being too easy with you because you are part of some minority. This is, basically, a masked form of reverse-sexism, and is deeply offensive. This is what my female coworkers meant when they were so upset against other women talking about sexism too easily. </p>
+</blockquote>
+<h2 id='blaming_the_victims'>Blaming the Victims</h2>
+<p>This is where the proposed argument made in the first paragraph becomes explicit. Salvatore suggests the the protection against discrimination is
+overzealous political correctness. He makes the notion that people deserve equal respect, a noble mindset, and again asserts that no special treatment
+should be considered, even with regard to protection, for any attribute that doesn&#39;t relate to merit.</p>
+
+<p>He then, in the second paragraph above, suggests that it is offensive to women for anyone to abide by this political correctness. The implication is
+that women do not need protection and that women can overcome any social obstacles in their way on their own. He suggests that to do the contrary and
+provide some measure of protection against discrimination and policing oppression and privilege in this situation would amount to &quot;reverse-sexism,&quot;
+where he relates to the original anecdote being a situation where a woman oppresses others (including women) through the undue respect she gained.</p>
+
+<p>This amounts to blaming the victims, and furthermore it puts the burden of the argument on those individuals who are oppressed and have experienced
+sexism in the tech field to prove that they do not gain from it. Also, by placing the burden of argument on these individuals, it attempts to
+illegitimize the progress women and minorities have made.</p>
+
+<hr>
+
+<blockquote>
+<p>In general if there is a problem at the work place between individual A and B, I think it is always an error to talk about sexism, even when the root cause is some asshole not respecting you because you are a woman. Instead the problem should be addressed in a sexual agnostic way. Why is A not payed [read: paid] like B even if they have similar responsibilities and tasks? Why A is not respected by B as she deservers as an individual?</p>
+
+<p>Trying to protect women in tech since they are women is like moving a cultural problem (the sexism) into an individual domain. A woman in tech has nothing less than a male in tech, as such does not need special care or protection. She needs to be respected as everybody else. </p>
+
+<p>Another naive way to consider the problem is to think that sexism is a state of mind of men. Actually the problem is more complex than that, and a lot of women don&#39;t consider themselves or other women as capable as men.</p>
+
+<p>Blog posts about this topic that try to make people aware of sexism or try to send the message &quot;we should be all kind so that women will feel great in our industry&quot; are not the solution, nor to stress politically correctness is going to help at all. As a proof in the United States where politically correctness and protection of minority is a topic always over-discussed, the condition of women is worse than in North Europe, where such an obsession does not exist. </p>
+</blockquote>
+<h2 id='effect_is_cause'>Effect is Cause</h2>
+<p>Here, Salvatore talks about how to better handle claims of sexism in an environment that should promote merit. He suggests here that
+we should not look at the claim of sexism as being about gender oppression, but rather about why there is a lack of equality when
+a woman and a man are effectively equal.</p>
+
+<p>Again, this is a shared goal. It is obviously desired to end gender oppression to end biases made based upon gender. However, Salvatore&#39;s main
+claim in this section is that by highlighting sexism as being about gender oppression, we are actually causing such oppression to take
+place. This is a very typical false-cause argument used in these discussions by anti-political-correctness proponents.</p>
+
+<p>In the end, however, he suggests that we do not look at gender at all to address issues related to gender. This is a bizarre contradiction. It
+also suggests that the only way to combat sexism is to erase gender, which sidesteps the notion that gender is a component of an individual
+that should be able to exist alongside other attributes of a person&#39;s identity, such as strength, character, skill, and intelligence.</p>
+
+<hr>
+
+<blockquote>
+<p>It&#39;s silly to try to protect all the minorities [simply] because they are minorities. We should protect individuals as they have equal dignity, without resort[ing] to sex, race, and other discriminatory attributes.</p>
+</blockquote>
+
+<p>He then contributes a conclusion that sums up the idea that any attempt to curb the discrimination, or affirmative action, is immoral and itself discrimination.
+This completely ties together his theme of the post.</p>
+<h2 id='my_response'>My Response</h2>
+<p>I do not agree with the theme that Salvatore hinges his argument upon nor his general conclusion.
+I agree with the goal but not the propositions of the argument. Remember, the goal
+is to provide an environment where gender is not considered when measuring merit. Everybody should agree with this.</p>
+
+<p>I disagree with the idea that discussing the topic of sexism leads to oppression, and I disagree with the idea that political
+correctness has led to a state where it is common for women to profit undue respect. There have been centuries of oppression based
+upon not only sex and gender, but race and sexual orientation, even in a country as young as the United States, which will be
+my focus here.</p>
+
+<p>Anti-political-correctness advocates normally stress the rise of political correctness as a trend that is slowly eradicating the
+right to free speech. For Salvatore&#39;s comments about the nature of oppression correlating to the political correctness to be true,
+PC must have come first to create the cause-effect relationship he suggests. Common belief is that this relationship is reversed, and
+PC is caused by the acknowledgement of oppression.</p>
+
+<p>However, the oppression of women is historically, and commonly known. Women&#39;s Suffrage was an issue throughout many nations.
+Specifically, in the US, suffrage was given and taken away several times by states. Only by
+the year 1919 through 1920 did federal support and a <a href="http://www.archives.gov/education/lessons/woman-suffrage/ratification-tn.html">constitutional amendment</a> provide the right to vote to all women regardless
+of land ownership or resident state (although minority women were still discriminated against in this area for years to come.) It wasn&#39;t until around 1958, however, until all states officially ratified the amendment.
+Gender gap statistics give factual insight into the effect of social oppression, and have seen <a href="http://www3.weforum.org/docs/WEF_GenderGap_Report_2011.pdf">worldwide positive progress</a> alongside this presumed trend
+in political correctness, although are still far from equal. Therefore, the oppression of women (I&#39;ve only highlighted one example of many!) predates the notion of political correctness
+and even within the environment of political correctness, the gender gap has gotten better, not worse. We are indeed, I am happy to report, making some movement toward equality.
+Talking about these issues does <em>not</em> interfere with progress, which should sound completely obvious.</p>
+
+<p>As for systemic oppression, it affects all genders and it is a subconscious process. That is, in our society there exists an ingrained bias toward one gender over another and this bias affects women as well as men. An experiment by New York University psychology
+professor Madeline Heilman showed that a male leader seemed <a href="http://www.theage.com.au/national/how-the-sex-bias-prevails-20100514-v4mv.html">more likeable than a female leader</a>
+when the descriptions and facts presented for them were exactly the same. This supports the biases that cause the lack of female CEOs of fortune 500 companies, which only as of 2012 <a href="http://postcards.blogs.fortune.cnn.com/2012/07/18/fortune-500-women-ceos-2/">hit a record 4%</a> with only 1 representing the top ten. The lack of women holding higher positions is a force that could cause the gender gap, as these positions would generally pay more and gain access to more opportunities.</p>
+
+<p>How about access to skilled labor? Salvatore&#39;s argument is rooted in the technology industry. This is a field wrought with problems
+of gender discrimination. Sapna Cheryan, professor of psychology specializing in cultural stereotypes at the University of Washington, wrote
+a paper published in the Journal of Personality and Social Psychology thoroughly entitled &quot;Why do women consider a future in computer science to a lesser extent than men?&quot;
+In this paper she discusses the effects of the <em>stereotype threat</em> where the false ideas and perceptions of the computer scientist and
+the field itself correlate to the disinterest women have in pursuing that career. Sapna gives an excelent <a href="http://www.youtube.com/watch?v=TYwI-qM20x4">TEDx talk</a> on the subject.</p>
+
+<p>This idea is supported by several other studies such as Spencer, Steele, and Quinn&#39;s
+<a href="http://www.leedsmet.ac.uk/carnegie/learning_resources/LAW_PGCHE/SteeleandQuinnStereotypeThreat.pdf">&quot;Stereotype Threat and Women&#39;s Math Performance.&quot;</a>
+In this study, they have participants take a difficult math test. In one case, they reproduced an earlier result of women performing worse than men on
+difficult tests, but perform equally well on easy ones. Then, they take a similar group and told them that there were no gender differences to be
+expected, which defies the stereotype. The women in this group do equally well as the men. The conclusion is that it is the presence of the stereotype
+that affects their performance. All in all, the stereotype of the geek promotes disinterest, which prevents women from ever considering the tech
+field. If they do, then the stereotype that provides the notion that women
+are worse at math and science actually causes women to perform worse in the educational settings, and may cause them to drop out.</p>
+
+<p>These are issues worth discussing. There is ingrained, systemic oppression that cause these issues. They will not be solved by ignoring these
+facts. We cannot, as Salvatore suggests, simply close our eyes and base everything on merit, because we will be betrayed by our biases. We cannot
+promote more diversity if the conditions of the field and the perceptions of our field to others are not equipped to deal with combatting these
+stereotypes.</p>
+
+<p>We must provide solutions, and that solution, in a broad brush stroke, is education. We must push gender equality in math and science as early
+<a href="http://www.sciencedaily.com/releases/2011/03/110314091642.htm">as second grade</a>, which includes introductions to computer science. We must
+offer our support to mentorships that are inclusive to women and minorities such as <a href="http://www.cs.pitt.edu/tli/">TLI</a>, <a href="http://railsgirls.com/">RailsGirls</a>,
+<a href="http://girldevelopit.com/">GirlDevelopIt</a> along with many others. Yes, they select by gender and age. This is ok. Early education can
+eliminate the stereotype threat, but for those of us living in this society, the stereotype threat can lead to a <a href="http://tigger.uic.edu/%7Emcmpsych/documents/MurphySteeleGross2007.pdf">lack of belonging</a>
+in groups that underrepresent women.</p>
+
+<p>We are not creating these groups because women need the extra support and consideration. On the contrary, we create and support these groups because they
+prove the obvious <em>without</em> erasing one&#39;s gender: that women are equal to men. They are not without their own problems, but they are a solution to a severe issue that I&#39;m sure
+people 100 years ago expected us to solve by now. We don&#39;t discuss these issues because we are &quot;whiners&quot;, &quot;complainers&quot;, &quot;white knights&quot;, or &quot;political correctness
+police.&quot; We bring these things up over and over again because these <a href="http://geekfeminism.wikia.com/wiki/Category:Incidents">issues simply keep occurring</a>, because the
+facts support our claim, and because we know that if the issue is dropped or becomes less visible, it will not be solved. And because, at the end of the day, women <em>indeed</em> deserve respect because they are capable and smart, and furthermore
+they deserve respect because they are women.</p>
+]]></description><pubDate>Wed, 17 Oct 2012 00:00:00 -0400</pubDate><guid>http://blog.davewilkinsonii.com/posts/the-antirez-principle</guid></item><item><title>Coding Naturally: How to Achieve Sustainable Software</title><link>http://blog.davewilkinsonii.com/posts/apples</link><description><![CDATA[<p></p><div class='image'><img src='/images/apples/corgi.png' title='' alt='Corgi wants to be tall. [1]' /><br /><div class='caption'>Corgi wants to be tall. [1]</div></div><p></p>
+
+<p>Here is a <a href="https://imgur.com/r/corgi">corgi</a>. It&#39;s a puppy. And it is the absolute cutest thing. Ever. I&#39;m only slightly pandering.
+But seriously, puppies are far superior to kittens. Dogs are more loyal than cats. I&#39;m not sure why the
+internet has given cats so much attention. They suck.</p>
+<h2 id='which_is_better_'>Which is better?</h2>
+<p>Alright. I may be biased. This happens. Throughout our lives we very often find ourselves in the situation where we are presented two items and
+expected to choose between them. So much so, that no matter how much we actually know about something, we
+have decided ourselves experts.</p>
+
+<p></p><div class='image'><img src='/images/apples/apples.png' title='' alt='A braeburn and a pippin, which is better?' /><br /><div class='caption'>A braeburn and a pippin, which is better?</div></div><p></p>
+
+<p>Don&#39;t act all high-and-mighty. Look, we all know at the grocery store in the
+produce section, you, like everybody else, are there squeezing all of the fruit. What exactly are you
+looking for? What makes one apple better than the other?</p>
+
+<p>We look at the color, the shininess and luster, the size, and the smoothness. Why? Because we believe these
+to be all great indicators of the quality of taste. They are all qualities that we see and perhaps feel.
+However, are these the qualities of a great apple? It is a matter of perspective.</p>
+<h2 id='what_is_an_apple_'>What is an apple?</h2>
+<p>The attributes of an apple which we find pleasing are not indicative of what makes a great apple. These
+traits do not concern the apple and its role and its function. The perception of an apple with respect to
+these qualities ignores what an apple actually is. We just want to eat them.</p>
+
+<p></p><div class='image'><img src='/images/apples/apples_full_small.png' title='' alt='Taking a step back, how different can they be? [2]' /><br /><div class='caption'>Taking a step back, how different can they be? [2]</div></div><p></p>
+
+<p>However, an apple, being a fruit and a <a href="http://en.wikipedia.org/wiki/Pome">pome</a>, is a container for seeds. They
+are designed to perform one function: <em>to create new trees</em>. If you start to look at the bigger picture,
+the differences among the apples become meaningless. Shininess does not make one apple a better container than
+another.</p>
+
+<p>All of those inconsequential features we tend to look at are very much masking what is truly important, which
+is the seed. These seeds are fundamentally the same in all apples and serve the same purpose and do so equally
+well regardless of outer shell and presentation.</p>
+<h2 id='learning_from_nature'>Learning from Nature</h2>
+<p>In the software and engineering world, the concept of discussing irrelevant details that do not pertain to the
+function of a system is called <em>bikeshedding</em>. That is, nobody argues over the function of the bike shed but
+rather insist on its color.</p>
+
+<p>In the software world, such discussion is only avoidable if we separate human opinion from computation, which is based upon fact. In
+other words, if it were clear where the computation ended and the abstractions began, we could argue about the
+expressive aspects of the code since changing them does not impact the choices on how the behavior is implemented.
+In fact, it is the opposite, we argue precisely because we cannot see the line between computation and abstraction.</p>
+
+<p></p><div class='image'><img src='/images/apples/apples_full_smallest.png' title='' alt='Can the number of apples in the wild become overwhelming?' /><br /><div class='caption'>Can the number of apples in the wild become overwhelming?</div></div><p></p>
+
+<p>That is, in the case of the apple, there is always some seed that is fundamentally the same in every argument. There
+is a level where you cannot argue against the behavior of some functionality. Array sort <em>must</em> take some set of data
+and arrange it <em>some well-defined</em> way. How you sort the array, well.</p>
+
+<p>If we again consider the apple, we would have seeds and skins. To make the metaphor a bit more concrete: <em>Seeds</em> would be 
+strictly computation. This is code that
+is written for performance and behavior. Its interface is unchangeable and well-known. You cannot argue about
+the interface without making factual comparisons about performance or correctness. You must
+prove you are correct with a metric or test.</p>
+
+<p>Then you have the <em>skin</em>, or your abstraction layer. It is simply a language that maps expressions to the interface of the seed.
+Since the seeds are well-known, many competing skins can exist. Since the interface is strict, many seeds can exist as well.
+Both sides of the interface become interchangeable. And thus, bikeshedding becomes irrelevant to providing computation
+since anyone can implement
+a new skin without interfering with others.</p>
+
+<p>If competing technologies would standardize to an interface (create a seed), then we could use either or both depending
+on our needs without any effort. We could use the abstraction of one with the implementation of the other, in fact. I call
+this <em>sustainable design</em>.</p>
+<h2 id='sustainable_design'>Sustainable Design</h2>
+<p>To promote sustainable design, a software developer must consider the line drawn between expressing behavior and allowing
+human expression through abstraction. To transform existing projects, collaboration between competitors (odd concept, eh?)
+to define a seed is necessary. For instance, the back-ends for QT and GTK could be consolidated into a new project which implement
+the same interface (seed) and then QT and GTK become the abstractions (skins) around it. In this case you could say C and C++ are then the
+abstractions we choose. That&#39;s fine. In this world, the languages we choose are to better allow us to use existing code and get applications
+written. We do not inherit a policy or a set of standard libraries that may or may not work well.</p>
+
+<p></p><div class='image'><img src='/images/apples/apples_drawing.svg' title='' alt='Behaviors are what we care about in the end.' /><br /><div class='caption'>Behaviors are what we care about in the end.</div></div><p></p>
+
+<p>To provide such a design when writing new projects, write them as libraries with functions that are very specifically tied to behavior. This way, alternative
+implementations may exist. Use abstractions in a separate layer (create that skin with all the luster you want) that makes using the library cleaner. You benefit
+by allowing for better experimentation with new abstractions while isolating core behaviors. You also gain the audience of many languages.
+You also benefit from a much easier and more intuitive ability to refactor implementations while isolating them from their abstractions. To do this, simply
+reimplement the interface and link in the new code.</p>
+
+<p>If you are writing a library, determine if prior work exists and implement your library using that interface (make use of an existing seed.) You will gain quick
+adoption by being able to assert facts about performance gains over existing implementations, while also being able to be
+quickly used by existing programs that already make use of the other implementations. If you are writing an abstraction, you can leverage
+existing implementations and focus only on refining the language (implement for humans without hindering performance facts.) Existing programs may not easily adopt your new abstraction,
+but they do not need to in order to benefit from performance improvements. When you write abstractions, you are worried about new, that is non-existing, programs.</p>
+
+<p>Once we have such modularity in place, we can write an infrastructure that manages the code. It can do objective analysis on whatever
+benchmarks are deemed important and throw out code that doesn&#39;t perform and replace it with same random implementation that fares well.
+This system will push good implementations over the bad and can even collectively rate them among machines. Code can be verified as
+working before it is used to ensure bugs are limited. You as a developer may develop with one module, but in the future, without your
+awareness, a bug was caught, patched, and automatically retrieved to build your software. Fantastic.</p>
+
+<p>For an introduction to the language we need to describe behaviors, <a href="/posts/infrastructure">read on</a>.</p>
+<h3 id='references'>References</h3>
+<ol>
+<li>Corgi picture adorably used from <a href="http://www.coloradocorgi.org">here</a>.</li>
+<li>Pictures shamelessly used from <a href="http://www.foodsubs.com/Apples.html">here</a>.</li>
+</ol>
+]]></description><pubDate>Sat, 06 Oct 2012 00:00:00 -0400</pubDate><guid>http://blog.davewilkinsonii.com/posts/apples</guid></item><item><title>An Infrastructure to Promote Sustainable Software</title><link>http://blog.davewilkinsonii.com/posts/infrastructure</link><description><![CDATA[<p>We have long promoted the idea of the re-usability of our code. After an era of writing for our machines instead of ourselves, we discovered that human literacy was preferred over performance. From this notion, we developed higher level languages that started to abstract and even completely obscure the underlying machine. A beautiful era emerged where the Turing machine was our model, and humans our audience.</p>
+
+<p>However, these methods of human expression are not compatible. Although they all express and run upon the same theoretical basis, they cannot collaborate effectively. This is due, ironically, to the constraints set upon the languages at the machine level. For instance, {Rust, D, Java} implies a garbage collector to allow object expressions that ignore allocations and to better analyze the lifetimes of these objects. When the language constrains the type of garbage collector policy, this constrains the languages that can be used together.</p>
+
+<p>However, it is true that these constraints are not necessary to be Turing complete. For instance, languages that force constraints can still utilize languages that make less (or no) constraints. This is why C is currently preferred for optimizations across languages. We can do slightly better than C, but we must respect the aspects (or lack thereof?) of C that have made it so ubiquitous.</p>
+
+<p>Frankly, computation is simply the transform of information from one phase to another dependent on state. This is the model of the Turing Machine. Such a transformation is hereby called a <em>behavior</em>. If behaviors are cleanly described and specified without interpretation, they can be used within any language that has the means to describe that they wish a behavior to be used.</p>
+<h2 id='we_must_have_a_language_that_describes_behavior_void_of_policy'>We must have a language that describes behavior void of policy</h2>
+<p>In order to cleanly reuse code, we must reuse it at the behavioral level. There shall be no policy about allocations, threading, or architecture unless this is necessary to define the behavior. The implementations of behavior may choose a policy when it benefits that implementation. Behaviors may depend on policy when they are behaviors related to policy (such as describing a memory pool system or threading library in terms of behaviors.)</p>
+
+<p>Only basic language capabilities to describe a name, a set of inputs, and a set of outputs are necessary. Since computation is a mapping of inputs to outputs, providing mutability constraints to both inputs and outputs becomes necessary, including any defined data types such as structs. Generally, inputs will be immutable, but this must be described by the behavior and thus by the language that one writes the interface to the behavior.</p>
+<pre><code>function String.concat(immutable char[] input) : char[]
+
+function MutableString.concat(immutable char[] input) : void
+</code></pre><h2 id='behaviors_are_an_interface_and_a_specification'>Behaviors are an interface and a specification</h2>
+<p>To thoroughly describe how computation is performed, you must describe both the interface and the mapping of inputs to outputs as invariants. There must be a single way to invoke the behavior, and a determined outcome described by a formal model (and informally enforced through a set of tests.) The model is hereby called the <em>specification</em>.</p>
+<pre><code>function Array.sort(immutable int[] input) : int[]
+
+describe Array.sort {
+  it &quot;sorts in ascending order&quot; {
+    // Randomly generate a list
+    // Go through list and check that each item is &lt;= the prior
+    // Test gives us a certain amount of confidence that the behavior is
+    //  performed by an implementation.
+  }
+}
+</code></pre><h2 id='implementations_of_behavior_must_be_flexible'>Implementations of behavior must be flexible</h2>
+<p>Implementing a behavior (such as sorting a list of non-unique items) can be done various ways. Therefore, since performance of a behavior relates to the distributions of its input, the agent choosing how a behavior is performed should have the ability to switch the implementation. Since the behavior does not change, neither does the interface to invoke that behavior. Therefore, nothing must change in the higher level expression to perform the behavior.</p>
+
+<p>The above description of behavior for the Array.sort specifies the outcome of the computation. Notice, however, that it does not assert performance goals such as wall-time, energy-usage or memory-usage as a factor of the input. That is the responsibility of the implementation. And many implementations could satisfy the interface and the specification.</p>
+<pre><code>function Array.sort(immutable int[] input) : int[] {
+  // Insertion sort
+}
+
+function Array.sort(immutable int[] input) : int[] {
+  // Quick sort
+}
+
+function Array.sort(immutable int[] input) : int[] {
+  // Quick sort + Insertion sort
+}
+</code></pre>
+<p>Which one of these implementations is best? Who knows. Use all of them, or perform a benchmark to determine which is the best to use, and link it in. This can be done over a period of time where the program can rerun benchmarks and switch the implementations, or done at the developer&#39;s discretion. However, it does not interfere with the expression of &#39;performing a sort&#39; which means the application code does not need to change to switch the implementation.</p>
+
+<p>We don&#39;t need to allow multiple implementations to be defined in our languages. We will assume that implementations are largely unknown to begin with. You &#39;discover&#39; them over time, through other machines, though people, through applications that beg for a particular one. We discover how good they are through a community: the machine next to you swears that its applications run using 40% less energy with this implementation instead of the one you are using. We can do these things once we start to respect behavioral definitions.</p>
+<h2 id='technical_merit'>Technical merit</h2>
+<p>This type of design will allow for competing implementations based upon facts related to performance and separates those concerns from how computation is expressed, which is relegated to higher level languages. This will promote code reuse across all languages and remove the need for a <em>standard library</em> that reimplements basic functionality other languages already have. New languages can be created and supported by an existing wealth of code, and only need to bind to these interfaces to be able to use it. Languages may want to provide better abstractions and perhaps push policies to allow for better expression or analysis, but can do so around the code that already exists instead of rewriting everything.</p>
+
+<p>Since useful code will exist on many machines, implementations can be retrieved from a great number of sources. This improves availability of code and ensures that code cannot be removed (<a href="#social_merit">see social merit</a>.) Machines may also pass performance details and metrics that it has gathered among the machines it knows to help the destination machine make decisions about which implementation to use. We can effectively crowdsource science about our code. Detailing this type of information would be a big win in optimizing the entire code base on our machines toward specific performance goals.</p>
+<h2 id='social_merit'>Social merit</h2>
+<p>By greatly modularizing code, implementations can exist anywhere. This has a beneficial side-effect: code is much harder to censor or delete. You can build a dependency graph for any application and simply ask any machine in the world for some code that implements those behaviors. Any implementation can be retrieved and then tested for correctness. We can get code reliably from our neighbors, for instance. This better ensures that a single centralized location for code is not the norm, and therefore reduces the ability for centralized authorities to remove or restrict access to computation. Useful code will exist on many machines, and these implementations can be retrieved (along with performance information, <a href="#technical_merit">see technical merit</a>) from any machine in a network.</p>
+
+<p>This has another benefit of greatly reducing the cost of entry for using technology. We only need to provide simple hardware with network capability, network driver, and a simple buildtool and dependency grapher to determine what code we need to build the rest of the system. From there it can acquire that code, verify its correctness, and compile the rest of the system. This means 3d-printed hardware can become more feasible as it would have less software requirements out of the box to get it working and deployed on a large scale. We may require a better network infrastructure to support the peer-to-peer nature of the system where new (untrusted) nodes can enter at anytime, perhaps toward a mesh network or some hybrid mesh-network and typical centralized structure.</p>
+
+<p>I must defer to the hardware and network communities for their input, as it is not my area of expertise.</p>
+]]></description><pubDate>Sat, 06 Oct 2012 00:00:00 -0400</pubDate><guid>http://blog.davewilkinsonii.com/posts/infrastructure</guid></item><item><title>You want freedom? Build it.</title><link>http://blog.davewilkinsonii.com/posts/you-want-freedom-build-it</link><description><![CDATA[<p>There has been <a href="http://bytbox.net/blog/2012/08/leaving-github.html">many</a> a <a href="http://news.ycombinator.com/item?id=4220353">debate</a> about the recent, somehow surprising discovery that github is a company with <a href="http://peter.a16z.com/2012/07/09/software-eats-software-development/">interests</a> that are perhaps beyond our own. Whatever. Honestly, github is replaceable. The real issue is the one we as developers, creatives, and people who like difficult problems should be talking about: WTF is a centralized website doing wrapping a distributed protocol?</p>
+<h2 id='the_problem'>The Problem</h2>
+<p>I propose a simple, real-world problem: make code as available as possible and ensure that it is correct when retrieved and from the source you desire it. You may give up confidentiality and consistency since this is <a href="http://en.wikipedia.org/wiki/Information_security">impos</a>-<a href="http://en.wikipedia.org/wiki/CAP_theorem">sible</a> given our goal. Can you provide this with high probability that code cannot be destroyed permanently?</p>
+
+<p>We want it quickly, so we shouldn&#39;t reinvent. Therefore, let&#39;s look at what we have.</p>
+<h2 id='what_is_git'>What is Git</h2>
+<p><a href="http://git-scm.com/">Git</a> is a ridiculously simple protocol. The design is made up of blocks and bridges like most distributed systems. The blocks are commits and the bridges are simple links between them. Follow the bridges from any point, you get a snapshot of the codebase. Easy.</p>
+
+<blockquote>
+<p>In many ways you can just see git as a filesystem — it&#39;s content-addressable, and it has a notion of versioning, but I really really designed it coming at the problem from the viewpoint of a filesystem person (hey, kernels is what I do), and I actually have absolutely zero interest in creating a traditional SCM system.
+<div class="citation">&mdash; <cite>Linus Torvalds, designer of git and Linux kernel, <a href="http://marc.info/?l=linux-kernel&amp;m=111314792424707">available</a></cite></div></p>
+</blockquote>
+
+<p>Git projects can be distributed anywhere. Either as a link to the git project through some sort of URI or by duplicating most or all of the structure on a separate system. Consistency is maintained through hashes serving as unique identifiers to target specific commits (when named, this is a code branch) and internal delta objects lighten the load of replication.</p>
+
+<p>Git preserves the integrity of the code (it would be rather worthless if it didn&#39;t) with simple hashes and availability through manual replication. The point of a service that uses git would be to strengthen the availability and simply relax and fall in love with the parts that ensure integrity.</p>
+
+<p>Too much hand waving for you? Sweet, read <a href="http://ftp.newartisans.com/pub/git.from.bottom.up.pdf">Git from the bottom up</a>.</p>
+<h2 id='what_is_github'>What is Github</h2>
+<p><a href="http://github.com">Github</a> is a centralized website. It serves to host a git project. It is centralized in that it promotes a culture where code is available on their servers and nowhere else. The fact that you <em>can</em> distribute your code easily on different sites is a property of <em>git</em>, not github. If their servers go down (and they <a href="https://github.com/blog/744-today-s-outage">do</a>) then your code only exists locally in the common case where you do not manually replicate it.</p>
+
+<blockquote>
+<p>By orienting around people rather than repositories, GitHub has become the de facto social network for programmers
+<div class="citation">&mdash; <cite>Peter Levine, affiliated with the $100 million backing of github, <a href="http://peter.a16z.com/2012/07/09/software-eats-software-development/">available</a></cite></div></p>
+</blockquote>
+
+<p>Full disclosure: <a href="https://github.com/wilkie">All</a> <a href="https://github.com/hotsh">of</a> <a href="https://github.com/xomboverlord">my</a> <a href="https://github.com/djehuty">code</a> is hosted there because people expect it to be. That&#39;s not a very good reason. Github does not solve the given problem.</p>
+<h2 id='why_should_we_be_mad_'>Why Should We Be Mad?</h2>
+<p>The thing is... git allows us to have high availability and a known point of access. Hell, we can have known points of access to particular commits. If we replicate and go through a peer-to-peer system, we can have a known point of access to many points of access.</p>
+
+<blockquote>
+<p>[CS is] just such an amazing field, and it&#39;s changed the world, and we&#39;re just at the beginning of the change.
+<div class="citation">&mdash; <cite>Frances E. Allen, compiler and systems researcher, Turing Award winner</cite></div></p>
+</blockquote>
+
+<p>Yet... github makes the whole availability thing a bit more difficult in the general case. This should absolutely infuriate us. That&#39;s a backward step to solving the given problem. It is a lack of substantial progress. Should we accept the concept of <em>social coding</em> that github gives us even though it hinders or obscures the socially beneficial prospects of a distributed system? Can a diverse set of people use our code <em>because</em> github exists? Nothing prohibits this for <em>git</em>, but nothing promotes it either.</p>
+<h2 id='what_is_a_federated_system'>What is a Federated System</h2>
+<p>Let&#39;s discuss an alternative to the centralized autonomy that github provides. A <em>federated system</em> is one that is distributed but acts within a common ecosystem. For example, a federated version of twitter would consist of many separately maintained machines (perhaps one is maintained by you) each serving a website. Each server is responsible for a subset of the content, but access to all public content is shared equally and assumed.</p>
+
+<p>A non-federated distributed system would simply be these machines communicating within some set of pipes. A user on one machine would be a user of that machine. You would have a subset of capabilities which are local to that machine. Users would be detached from the whole, but able to interact with users of other systems through a protocol.</p>
+
+<p>For example, a user of a federated twitter system would be a user on all machines. No matter which machine you use, you would have the same functionality available to you (tweet, reply, direct message). If any one machine knows you exist, you will be seen as a user on that machine even though you physically <em>exist</em> on another. They might even announce you to neighboring systems or replicate your content. Conversely, you will use your machine to interact with others as though they are on your server.</p>
+
+<blockquote>
+<p>Status.net exists to fulfill a need of a lot of people, both on the public web and private web, to have a microblogging server that they can control.
+<div class="citation">&mdash; <cite>Evan Prodromou, founder of status.net and identi.ca, <a href="http://www.building43.com/videos/2010/04/29/opening-up-microblogging-with-founder-of-status-net/">available</a></cite></div></p>
+</blockquote>
+
+<p>You may have used a federated system such as this thing called <em>email</em>.</p>
+
+<p>Of course, the federated twitter exists. It is a solved problem. It is both <a href="http://status.net">status.net</a> which powers <a href="https://identi.ca">identi.ca</a> and <a href="https://rstat.us">rstat.us</a>, which do indeed talk to each other and other entities.</p>
+
+<p>You build federated systems on top of distributed ones. Federation is a subset. It allows one to contribute to a global view, but retain ownership, control, and integrity of their content.</p>
+<h2 id='the_solution'>The Solution</h2>
+<p>We need a system that promotes the features of git that are of both practical and social importance: availability and integrity. We need a system that does not allow code to be destroyed or censored. This is something github cannot do. Such a system is only possible through the exposing and leveraging of the distributed nature of git. A git repository is a shared view of a set of commits. A true web-based client of git is by nature already distributed.</p>
+
+<p>To federate the system, all git repositories would be visible and accessible through any system. This could be done very much the way your twitter followers would be distributed leaving a system where all users interact equally. The origins of social interactions (notifications, messages, comments) would be abstracted as well. This is, of course, the same as twitter status updates. A federated twitter is a solved problem, as I stated. The protocol is <a href="http://ostatus.org/sites/default/files/ostatus-1.0-draft-2-specification.html">OStatus</a>, replication is through <a href="https://code.google.com/p/pubsubhubbub/">PuSH</a> and untrusted notifications are through <a href="http://salmon-protocol.googlecode.com/svn/trunk/draft-panzer-salmon-00.html">salmon</a>. So we just need a <a href="https://github.com/gitlabhq/gitlabhq/">git web client</a>. (Spoilers: we have one.)</p>
+
+<p>Encouraging replication is fairly simple, but certainly second-iteration. I mean, replication is intuitive to git. Any local copy should be able to be pulled from in a peer-to-peer fashion. The commits are preserved (all history is linked) and have a point of access (hash) as a matter of design. So anybody that installs your code or forks it will be able to host it. Optional, of course, but cooperation can be incentivized. Peer-to-peer protocols are becoming rather commonplace already, for instance, in <a href="http://en.wikipedia.org/wiki/BitTorrent#Software">video game patching</a> and package management, although typically not well-marketed perhaps due to a negative association with piracy. Using p2p here can ensure that one cannot locate all copies of code easily and therefore preserve them from accident or maliciousness.</p>
+
+<p>Determining that the origin of some information is who you think it is, and furthermore that one&#39;s attribution can be ensured through private keys and self-hosted identity (through something like <a href="http://code.google.com/p/webfinger/">webfinger</a>, Blaine Cook reminds me that it is encouraged to <a href="http://blog.romeda.org/2011/03/private-webhooks-private-feeds.html">separate authenticity</a> and I&#39;ll add it is important to be able to self-host and control one&#39;s identity).</p>
+
+<p>Put all of these in the same bowl. Mix. Enjoy.</p>
+]]></description><pubDate>Sun, 12 Aug 2012 00:00:00 -0400</pubDate><guid>http://blog.davewilkinsonii.com/posts/you-want-freedom-build-it</guid></item><item><title>Who Am I?</title><link>http://blog.davewilkinsonii.com/posts/who-am-i</link><description><![CDATA[<p>My life has not been perfect, prestine, or predictable. From youth to adulthood, I have not been what most would consider normal or everyday. I believe strongly in myself and I have spent a lot of effort meditating and reflecting upon my life. I generally understand where I come from.</p>
+
+<p>I am a hacker and computer scientist. I am considered quite a heretic from the experts in my field. My mentors and idols have luckily convinced me to follow my heart. However, I need the help of many, and that burden upon you requires trust. So, I&#39;d like to have a conversation about who I am and what motivates me.</p>
+<h2 id='my_father'>My Father</h2>
+<p>In the beginning, I had it fairly good. In the past, my father was an alcoholic. Because of this, he did not get to raise my (half) brother and sister. That job went to my grandparents and the mother of my siblings. Eventually, in what can be seen as a tribute to my father&#39;s strength, he turned his life around. However, he traded one addiction for another, and as a result of his overworking, he did not get to raise me.</p>
+
+<p>Currently, he has relapsed and is currently struggling to stay off the homeless front. He has support and is healthy, however, which is good. He has a non-cancerous tumor in his brain that causes his many medical issues, but as a veteran, he has excellent healthcare and services. He is not quite able to take care of himself anymore, and has never really been able to take care of me.</p>
+
+<p>But, I said I had it good, right? My father successfully fulfilled his goal to put us in the upper middle class. We lived a good life. We had the two story house with the pool in the backyard. Yet, this was not his dream. When the opportunity to take over the family business presented itself, my father jumped. He quit his upper management job and uprooted my mother and my five year-old self from our suburban D.C. home to an old house in Johnstown, Pennsylvania.</p>
+<h2 id='youth_and_code'>Youth and Code</h2>
+<p>Although my family made some drastic changes, we were still doing quite well relative to most people. My family had security, money, and an upscale lifestyle. My father expanded our modest home to something twice the size. I had good friends. I was popular and social, as much as a 6 year-old could be, at least. I wonder, with some awe and fear, what my life would have been like--- who I would have become if my life had continued to follow that path.</p>
+
+<p>I was introduced to code at around 6 years old with Basic, QBasic, and Visual Basic. It was a means of competition between me and my brother who is ten years older. Our competitions would consist of us writing a program called &quot;Change the Letters&quot; which demoed a technique that we had learned. The only rule was the program had to update the text in the title bar dynamically. We would go back and forth (incrementing the version number every time) trying to outdo the other. We wrote applications spanning from a simple calculator, to a simple renderer, to a word processor, to a media player. At some point, my brother asked me to code something for him. That&#39;s when I knew. I had won.</p>
+
+<p></p><div class='image'><img src='/images/who-am-i/qbasic.jpg' title='' alt='This doesn't call me names unless I tell it to.' /><br /><div class='caption'>This doesn't call me names unless I tell it to.</div></div><p></p>
+
+<p>Meanwhile, my father kept attempting to live his dream of starting a restaurant. He started a sandwich shop called the &quot;Dilly Delly&quot; (Yep. That&#39;s what it is called. I just can&#39;t make that stuff up, although my father apparently can.) It was in a terrible part of town: a poor residential area with no businesses around it. The venture turned out to be a complete failure. What did my father do? He turned it into a bar. Yep. My previously alcoholic father... owns a bar.</p>
+
+<p>There is a lot of stress that comes with running multiple businesses, half of which are constantly failing (seriously. bars do not work unless you, oh, also own a club and sell some ecstacy on the side. do not buy one.) This caused a rift in the marriage of my parents. After a dive in their relationship, my father left my mother for a woman he met at his own bar. I was 9 years old when I learned the ultimately political nature of human relationships. It would not sink in until much later how unfair it was that my father got the house and my mother got me and the bar to live in. Yet, that is how it ended up. This is how I ended up living above a bar, a far less glamourous idea than many of you might be thinking.</p>
+<h2 id='berets__waitresses__and_hockey_players'>Berets, Waitresses, and Hockey Players</h2>
+<p>In the West End Saloon, I am thankful to have met a wide variety of people. I swept the floors as they drank. I washed their glasses when they were done. They would see my inability to judge and tell me their stories. They would see my youth and note caution with their fates.</p>
+
+<p>An old man in a beret who never spoke a word. He sat alone. A waitress struggling on her own to raise a child. A mill worker named Shadow who cannot get out of his job. He eagerly cautions me about not making the same mistakes. A minor league hockey player who strives for his big break only manages to break his last ten on a beer. A martial artist whose daughter was murdered found it compelled to teach me weekly, but only skills related to self-defense. He had lost the will to fight. I look back, I can see their impact on my life. I love them.</p>
+
+<p>The people from the hills, who look down upon us all, wandered in from time to time. You get a strong sense of the inequality. These people had no idea what plagued this part of town. They could not empathize with individuals who are hopelessly trapped in a job they cannot afford to leave, even though they can barely afford to live. Some people just did not seem to have the issues and concerns of the community that surrounded me. I wondered why.</p>
+
+<p>Yet, I stayed happy. I stayed sane. I owe it to a girl: the janitor&#39;s daughter. She and I would escape into fantasy. We would make up stories where we could fix the world. Stories where we could divert natural disasters. Where we could save people in need. Distractions from the poverty, drugs, drunks, stabbings, and shootings. I foolishly promised her mother that I would protect her, knowing that she would protect me.</p>
+
+<p>But you cannot protect everybody. There is always a day when you have to leave them to fend for themselves. I was 10 years old when I moved out of the bar. There were days later where I needed her strength, and it was not there. It made me wonder if she ever needed mine, and I was not there to help. It bothers me to this day. But, I owe something to her. She taught me the world is malleable. I could indeed use my imagination to fix the things that are wrong.</p>
+<h2 id='zero_tolerance'>Zero Tolerance</h2>
+<p>My mother, her boyfriend, and I moved to a mill town called Sebewaing in Michigan. We moved into a small little house on an island off of Lake Huron. Again, it is not as glamourous as it sounds.</p>
+
+<p>We moved half-way through the school year, and while I was in elementary school in Pennsylvania, different starting grades meant I was in middle-school in Michigan. It was an abrupt change in my life. Everybody was much older and my classmates were already accustomed to the harsh environment of grades 5 through 8. In a town of only 2,000 one&#39;s personal life could be a weapon. So by accustomed, I mean hiding in plain sight.</p>
+
+<p>My parents, having taken such a passive role in raising me, never explained cultural assumptions such as gender, sex, and preference to me. When I was young, I never understood the division of people into the two lines for recess: boys and girls. Never could I understand why dresses put you in one line and short hair put you in another. Although having and being alone with female friends demonstrated alternative anatomy, I was not prepared for the general assumption that anatomy was tied to gender. I was 11 when I was taught that girls have vaginas and boys have penises. I fought with that idea for a while. I&#39;m glad I did.</p>
+
+<p>When I hit puberty and my libido developed, I found myself attracted to boys and girls. I had no idea that this was culturally shunned. Gender just is not important in who I wanted to spend my private time with. In 6th grade, I found myself in my male friend&#39;s bed. Nothing explicit could really happen. We never discussed it openly. We were afraid. Let me explain, because it is not completely apparent to all. The world is harsh. The world is violent. At that age, in that type of environment, nobody can find out about this. That&#39;s what I learned in middle school. And I suppose I learned some algebra.</p>
+
+<p>I was beaten by the others in the school. I was called names. The feminine mannerisms I developed by having female friends condemned me. My small stature certainly did not help. They asserted themselves in order to be ahead of me. So that it was me and not them. I was beaten for looking at someone&#39;s girlfriend, a friend of mine, the wrong way. I was beaten for just standing around. When this is what you expect from people, you are not exactly loose-lipped about how different you are compared to everybody else. Thanks to zero tolerance rules, I was penalized often. In one case, a boy cornered me and pinned me against the wall. I stabbed him with a pencil (not a deep wound, honestly) in my attempt to get away. Our punishment was detention together in an unsupervised room. My punishment also included forced psychriatric appointments.</p>
+
+<p>At home, it was no better. We had little money and sometimes food was hard to get. My mother went through one abusive relationship after another. I was assaulted there as well. In one case, one was brought up on domestic abuse charges and got 24 hours time served and 20 hours community service. I figured hitting my mother was worth more, but alas, that is not how the world works. But by a combination of going through garbage for recyclables and sharing meals with friends, I made it through ok.</p>
+
+<p></p><div class='image'><img src='/images/who-am-i/sailboats.jpg' title='' alt='An optimistic artist's rendition of the Bay that spat out Madonna' /><br /><div class='caption'>An optimistic artist's rendition of the Bay that spat out Madonna</div></div><p></p>
+
+<p>It was not long until we were being threatened by her first boyfriend that my mother and I had to move to Bay City out of fear. I slept with a knife under my pillow. I moved to yet another school. I decided to be popular instead of a pincushion and sat at the popular table. I cracked a few jokes and quickly realized how fake the world really is. It all felt wrong. I was not at all comfortable. I moved back to Johnstown for high school, but ultimately I didn&#39;t feel comfortable until college. This seems to be rather typical.</p>
+<h2 id='why_i_code'>Why I Code</h2>
+<p>Throughout this entire period, I pursued the love for code. For years it was an escape. The machine does what I tell it to do. Its mistakes were really mine. The power of computation is something that I realized everybody could use: the people of this world that are different. The individuals that want to improve their lives and their communities. The reality is that the majority of people on this planet are at a disadvantage. We indeed have the power to fix that.</p>
+
+<blockquote>
+<p>It seems like your heart is in it, and that&#39;s all that matters.
+<div class="citation">&mdash; <cite>Frans Kaashoek, personal conversation, 2011</cite></div></p>
+</blockquote>
+
+<p>I write code because I am aware of adversity and the lack of diversity. Understand that I had it good. I really did. I believe that by utilizing code, and with the immense help of others, we can curb any societal disadvantages. We can, for instance, free information such that education is available at little cost to all of the world. We can build what I call sustainable operating systems where computation is provided to all without the need for centralized maintenance. I will later attempt to describe how these systems work from the perspective of my specialization: software systems.</p>
+
+<p>That&#39;s where each and every one of you come in. Obviously, I can&#39;t build these myself. All of your skills, regardless of ability, regardless of who you are or what people say of you, regardless of who I am and what I can do, can aid in the creation of a world where technology allows an evolution of society. Where my expertise fails, somebody else must contribute. I cannot build these within the bounds of the institutions, academic or otherwise, that exist. These aren&#39;t products; they are environments that provide technology as a healthy lifestyle. So, I will devote all of my energy to defining these systems and implementing them on my own if necessary. I will devote my time to this because I feel I must. I hope you will help me.</p>
+]]></description><pubDate>Sat, 07 Jul 2012 00:00:00 -0400</pubDate><guid>http://blog.davewilkinsonii.com/posts/who-am-i</guid></item><item><title>tmux Configuration for Great Good</title><link>http://blog.davewilkinsonii.com/posts/tmux-configuration-for-great-good</link><description><![CDATA[<p>The tmux (terminal multiplexor) tool is a great way to manage the hellspawn of
+computational evolution and TERMINFO hurdling that is the <em>modern</em> terminal. If
+you spawn multiple terminals, or even multiple terminal tabs, to manage your
+terminal space... stop that immediately.</p>
+
+<p>I just want to jot down some quick configuration fu to set up a decent tmux environment.
+We want one with 256 color support, a more than decent amount of scrollback, utf8, etc.</p>
+<h2 id='_bash_profile'>.bash_profile</h2>
+<p>To have 256 colors, we need to set the TERM variable to xterm-256color by adding an
+export to our bashrc. Put this line at the end:</p>
+<pre><code>export TERM=xterm-256color
+</code></pre>
+<p>Alternatively, (if you don&#39;t want to do that for some reason) we can just alias the tmux command
+to set that variable only for tmux:</p>
+<pre><code>alias tmux='TERM=xterm-256color tmux'
+</code></pre>
+<p>Now, to support 256 colors <strong>within</strong> tmux, we add the following line to the end
+of our bashrc:</p>
+<pre><code># for tmux: export 256color
+[ -n &quot;$TMUX&quot; ] &amp;&amp; export TERM=screen-256color
+</code></pre><h2 id='_tmux_conf'>.tmux.conf</h2>
+<p>Throw whatever subset of these features you&#39;d like into the .tmux.conf file in your
+home folder. Create one if it doesn&#39;t exist.</p>
+<h3 id='256_colors'>256 Colors</h3><pre><code>set -g default-terminal &quot;screen-256color&quot;
+</code></pre><h3 id='scrollback_history'>Scrollback History</h3><pre><code>set -g history-limit 30000   # 30,000 lines of scrollback
+</code></pre><h3 id='utf8'>UTF8</h3><pre><code>set -g utf8 on               # utf8
+</code></pre><h3 id='mouse'>Mouse</h3><pre><code>setw -g mode-mouse on        # Mouse useful in copy-mode
+set  -g mouse-select-pane on # Mouse can select the current pane
+</code></pre><h3 id='vi_style_commands'>Vi-Style Commands</h3><pre><code>setw -g mode-keys vi         # vi-style commands in copy-mode
+</code></pre><h3 id='ui_color_scheme'>UI Color Scheme</h3>
+<p></p><div class='image'><img src='/images/tmux-configuration-for-great-good/256-color-palette.png' title='' alt='256-color terminal palette' /><br /><div class='caption'>256-color terminal palette</div></div><p></p>
+
+<p>While refering to the palette above, set each of these
+values to something you find appealing but not distracting. Here
+is an example using greens and grays you can add to your .tmux.conf:</p>
+<pre><code># statusbar colors
+set -g status-fg colour236
+set -g status-bg colour70
+
+# active window title on statusbar
+set-window-option -g window-status-current-fg colour192
+set-window-option -g window-status-current-bg default
+
+# inactive window title on statusbar
+set-window-option -g window-status-fg colour236
+set-window-option -g window-status-bg default
+
+# border around window
+set-window-option -g pane-border-fg colour236
+set-window-option -g pane-active-border-fg colour70
+</code></pre><h2 id='loading_the_configuration'>Loading the configuration</h2>
+<p>You do not need to quit tmux to alter the configuration. Just detach and type</p>
+<pre><code>tmux source ~/.tmux.conf
+</code></pre>
+<p>And then reattach:</p>
+<pre><code>tmux attach
+</code></pre>
+<p>And you&#39;re all set.</p>
+]]></description><pubDate>Mon, 06 Feb 2012 00:00:00 -0500</pubDate><guid>http://blog.davewilkinsonii.com/posts/tmux-configuration-for-great-good</guid></item><item><title>Traditional Mistakes in C Programming</title><link>http://blog.davewilkinsonii.com/posts/traditional-mistakes-in-c-programming</link><description><![CDATA[<p>When you approach a procedural language from an object-oriented, (mostly) type-safe language such as Java, there are certain concepts that do not make the best translation. Of course, the main topic is that of pointers. Frankly, the memory model being exposed to you, unlike the memory abstractions of Java, is a daunting thing at first. It does not have to be!</p>
+<h2 id='pointers_in_java'>Pointers in Java</h2>
+<p>In Java, we have pointers. In the Java world, they are called references. However, they come with rules that stem from their role as referrers for <em>objects</em>. Since there exists a relationship among objects, the compiler can enforce rules that govern how such a pointer may be used or dereferenced. For instance, you cannot (typically) use a Scanner reference as though it were a FileReader reference. Such a thing would be disastrous as much as it is useless! If there is an is-a relationship created via inheritance, then such a pointer cast is possible. A BufferedFileReader can be used as a FileReader, for instance.</p>
+<h2 id='breaking_the_rules'>Breaking the Rules</h2>
+<p>In Java, however, it is not completely safe. You can cast to Object and back. Why? Because, under a non-strict compilation, you can cast <strong>to Object</strong> and you can essentially treat any object as any other. Ponder about the implications and object tree that is built from this. Ouch. Java has since created <strong>generics</strong> to get around the need for such an exception. C on the other hand is fundamentally designed to work this way. Why? Because C is a systems language, it runs natively, and it is meant to manipulate the underlying memory model directly (no abstractions, no garbage collector, no virtual machine.)</p>
+<h2 id='memory_model'>Memory Model</h2>
+<p>So, what is the underlying memory model? It&#39;s an array of bytes starting from 0x00000000 and going as far up as 0xFFFFFFFFFFFFFFFF on some systems. Each byte has an address, which is simply a number within the acceptable range of the machine. On a 32-bit addressable machine, that number is 32 bits wide, etc. Within this space are regions of memory dedicated to particular tasks. The regions that are common in an average program are the <strong>code-space</strong>, <strong>data-space</strong>, <strong>readonly-space</strong>, <strong>stack-space</strong>, and <strong>heap-space</strong>. There is also usually nothing allocated at 0x00000000 (NULL) so that using NULL will crash the program with an access violation.</p>
+
+<p>The code-space is for code; data-space is for writable, preallocated data for the program; readonly-space as for read-only, preallocated data for the program; stack-space is the region designated for the stack; heap-space is designated for dynamic allocations. Now, the stack and heap are not preallocated, and as such can grow to any size. A common way to mitigate the two colliding is to virtualize the address space and have the stack grow down and the heap grow up.</p>
+
+<p>Now, in C, you can manipulate both regions. To use the stack, just allocate variables. They will be placed on the activation frame, and thus be placed upon the stack. So, just as an example:</p>
+<pre><code>cint x;
+</code></pre>
+<p>This will place x in the stack frame for the function. This means it will be different for concurrent or consecutive calls of the function.</p>
+<pre><code>cstatic int x;
+</code></pre>
+<p>This will place x in the data region, meaning it is shared by all calls of the function.</p>
+<pre><code>cstruct node new_node;
+</code></pre>
+<p>If you define a struct, it will be on the stack as well. This means, once the function returns, the contents of the struct <strong>are destroyed</strong>.</p>
+<h2 id='mistake__1___using_a_dangling_pointer'>Mistake #1 - Using a dangling pointer</h2>
+<p>Ok. You have a pointer. You know it should point to some... stuff.</p>
+<pre><code>cchar* str;
+strcpy(str, &quot;Hello World&quot;);
+</code></pre>
+<p>Pointers are just variables, much like ints, shorts, or doubles. They store a particular value. Much like a reference in Java, they can be declared, yet not be useful. That is, they can point (refer) to nothing (null / NULL). When you declare a variable, it receives an undefined value in C. So, technically, the pointer above points... somewhere. It might point to your code. Or to a valid string elsewhere. Or absolutely, positively, freaking, nothing!</p>
+
+<p>The strcpy function, much like any function that expects some data or a place to put data, expects that the pointer it receives actually refers to a buffer large enough to do the job at hand. It <strong>cannot</strong> allocate anything for you the way it stands. Why? Well, look at the strcpy function:</p>
+<pre><code>cchar* strcpy(char *dest, const char *source) {
+  while(*source != '\0') {
+    *dest = *source;
+    source++;
+    dest++;
+  }
+  *dest = '\0';
+  return dest;
+}
+</code></pre>
+<p>It takes a char pointer. Now, you pass it absolute garbage in the code above that calls strcpy, right? So, even if it wanted to, say, ignore the value you gave it and allocate it itself... it cannot tell you what that pointer is. It could return it, but that defeats the point of passing it in the first place. Typically, the responsibility to free allocated data is done in the same scope as the allocation itself. A function should never allocate for you and require you to explicitly delete it. Since the function requests a pointer, it expects the reference to be valid.</p>
+<pre><code>cchar* str = (char*)malloc(12);
+strcpy(str, &quot;Hello World&quot;);
+free(str);
+</code></pre><h2 id='mistake__2___using_a_stack_allocated_struct_to_change_a_global_data_structure'>Mistake #2 - Using a stack-allocated struct to change a global data structure</h2><pre><code>cstruct node* head;
+
+void* my_bestfit_malloc(size_t amount) {
+  if (head == NULL) {
+    head = sbrk(amount + sizeof(struct node));
+
+    // initialize head
+
+    return head + 1;
+  }
+
+  // find best fit
+  struct node best;
+  best = *head;
+
+  while (best.next != NULL) {
+    // check best
+    best = *best.next;
+  }
+
+  // update best
+  best.free = 0;
+  return (void*)best.next - best.size;
+}
+</code></pre>
+<p>No no no no no! :) Here, the code has done a <strong>deep copy</strong> of the data in the data structure. This is good when you want to copy the data and preserve it before destroying the data in the global data structure. However, if you mutate the data in the copy, it will obviously not persist in the real thing. In this case, the highlighted line (best.free = 0;) will update the local copy and set it to allocated. The data structure itself will not see that. It might allocate this space again, which is pretty terrible!</p>
+
+<p>What you want here is a <strong>shallow copy</strong> of the data. That is, don&#39;t copy the data... copy the value that indicates where the data lives. Which, of course, is a pointer. Always refer to the data via indirection so that when you mutate it, it updates both the copy you are reading and the global data structure at the same time. There is no excuse for this mistake. If you are doing this to avoid the -&gt; syntax, I empathize, but that notation is common and should be used.</p>
+<h2 id='mistake__3___pointer_arithmetic'>Mistake #3 - Pointer Arithmetic</h2>
+<p>Ok. Pointer math is weird. Enough said.</p>
+
+<p>Well, let&#39;s go over it. It&#39;s weird not difficult. A char* is a pointer to a character, which is a single byte. Pointer arithmetic is when I take a pointer variable and add an integer to it. For instance:</p>
+<pre><code>cchar* a = &quot;hey&quot;;
+char* foo = a;
+foo = foo + 2;
+printf(&quot;%c\n&quot;, *foo);
+</code></pre>
+<p>Alright. As you might expect, this will print out &quot;y&quot; on a line. Why? A string is an array of characters. An array is simply a pointer. foo initially points to the first character of the string (&#39;h&#39;). foo contains the address of that character in memory. For instance, it is probably something huge like 0x12345678 or something, which means it is the 305,419,896th byte in the memory space... that&#39;s not incredibly important. What is important is that it is just a number, like the one on my mailbox or the number on your house or apartment, that tells the machine where data should eventually go. Let&#39;s assume foo contains the value 56, so that the string starts at byte 56 in memory.</p>
+
+<p>When I add 2 to foo, I push the address further in the address space. 56 becomes 58. Because the string is stored contiguously in memory, we are now looking at the third character in the string. Neat. Direct manipulation of memory is really powerful. It gives you full range of the memory space. That is, it is horribly unsafe. Which means... we can do things like the following:</p>
+<pre><code>cchar* a = &quot;hey&quot;;
+char* b = &quot;you&quot;;
+char* foo = a;
+foo = foo + 5;
+printf(&quot;%c\n&quot;, *foo);
+</code></pre>
+<p>You might be surprised to learn that this will (generally) print out &#39;o&#39; on a line. Whaaaaa?!?! Actually, it is quite simple. The strings are allocated one after another. So memory looks like this:</p>
+<pre><code>[ h][ e][ y][\0][ y][ o][ u][\0]
+ 56  57  58  59  60  61  62  63
+</code></pre>
+<p>The second line is the address associated to these bytes. As you can see, 56+2 indeed points to a &#39;y&#39; character. And, sure enough, 56 + 5, or 61, points to an &#39;o&#39; character. As you can see, pointers directly map to the underlying memory. They lose all association to their original data structure. They are just numbers. Pretty tame, and extremely simple.</p>
+
+<p>To aid programmers, the designers of C decided that pointer math is special. Why would anyone want to address something within an int? or within a struct? You wouldn&#39;t generally need to do this. So, when an integer is added to a pointer, the address is incremented in steps of the size of the type the pointer refers. Let&#39;s just look at examples:</p>
+<pre><code>cchar* foo = 56; foo + 1;        // foo == 57
+short* foo = 56; foo + 1;       // foo == 58 assuming shorts are 2 bytes
+int* foo = 56; foo + 1;         // foo == 60 assuming ints are 4 bytes
+struct node* foo = 56; foo + 1; // foo == 56 + sizeof(node)
+</code></pre>
+<p>Interesting. And confusing. And prone to error. But, ultimately more useful than simply adding to the address itself, right? So, it makes sense.</p>
+
+<p>In the malloc assignment, it is bad to do this:</p>
+<pre><code>cstruct node* foo = sbrk(sizeof(node) + size);
+return foo + sizeof(node);
+</code></pre>
+<p>Good to do this:</p>
+<pre><code>creturn (char*)foo + sizeof(node);
+</code></pre>
+<p>Or this:</p>
+<pre><code>return foo + 1;
+</code></pre><h2 id='style'>Style</h2>
+<p>Pft. Style? How can style be a legitimate programming issue? Because reading code is the most important facet of programming. If your code is not legible, your code is next to worthless.</p>
+
+<blockquote>
+<p>Programs must be written for people to read, and only incidentally for machines to execute.</p>
+
+<div class="citation">&mdash; <cite>Abelson & Sussman</cite>, <a href="http://www.amazon.com/Structure-Interpretation-Computer-Programs-Engineering/dp/0262011530/sr=8-1/qid=1163785017?ie=UTF8&s=books">Structure and Interpretation of Computer Programs</a></div>
+</blockquote>
+
+<p>That pretty much sums it up. Programs are for people. I mean, that&#39;s the entire point of a programming language, after all. Just as it is with a natural language, such as English, there are conventions that, when used, make the writing easier to consume. You have all read different writing styles, and understand that certain styles appeal to you more than others. In the programming world, just as the literary world, these styles are debated. One thing is true: by sticking to the correct convention for your audience, you are more easily understood.</p>
+
+<p>That said, each language has its own standard for conventions. This has to do with tab spacing, hard or soft tabs, function naming, brace position, file structure... you name it. In Java, for instance, functions are written in <strong>camelCase</strong>, while classes are named in the uppercase variant or <strong>UpperCamelCase</strong> (aka <strong>PascalCase</strong>). Constants are in <strong>ALLCAPS</strong>. Typically these conventions are not defined as part of the language. That is, the parser (technically the lexer) does not look for, treat differently, or cause an error when these conventions go unused. Other languages, such as Ruby, give these conventions semantic meaning. For instance, defining a variable name in all caps will create a constant.</p>
+
+<p>C works like Java (Java is, after all, a <strong>C-family language</strong>... ok fine... they are both <strong>Algol-family</strong> for you programming-language-smartypants out there.) That is, the conventions are not enforced by the language, they are social. That said, after 40 years, the conventions are very rigid and surprisingly common. This is a testament to how necessary they truly are.</p>
+
+<ul>
+<li><strong>Function names</strong>: void these_lowercase_things_have_underscores(int a, int b, int c, void *p) { }</li>
+<li><strong>Constants</strong>: ALL_CAPITAL_LETTERS</li>
+<li><strong>Tabs</strong>: There isn&#39;t a preference. Hard or soft (that is, just using spaces instead). Spaces are generally more consistent, and your editors can generally emit them when you press &#39;tab&#39;.</li>
+<li><strong>Tab Size</strong>: nowadays 2 or 4 spaces.</li>
+</ul>
+<h2 id='mistake__4___dropping_void_off_of_functions'>Mistake #4 - Dropping void off of functions</h2>
+<p>ALWAYS put the void before a function that returns nothing. It has meaning. For the same reason an implied subject is weird in English writing... don&#39;t drop nouns in your programs. In fact, by not putting void in front, it&#39;s actually a function that returns int. So, now you have an int-function that has no return. Eww! Always specify the return type; enough said. :)</p>
+<pre><code>c/* A */ void f(void);
+/* B */ f(void);
+
+/* A and B have VASTLY different return types! */
+</code></pre><h2 id='mistake__5___wrong_conventions_for_functions'>Mistake #5 - Wrong conventions for functions</h2>
+<p>Why is myBestFitMalloc() confusing when you expect to see a C function call? Because that does not look like a C function call. So, the code does not flow very well when you are trying to read through it. It does not register as a function call immediately. That slows everything down. If you use a library that names its functions a different way than you, your code will look fairly ugly due to the inconsistency. Another good reason to commit to the <em>standard conventions</em>. Guess what... everybody conforms to this out in the wild. Lowercase with underscore delimiters. It may not look good to you, but it looks beautiful to everybody else.</p>
+<h2 id='mistake__6___indentation'>Mistake #6 - Indentation</h2>
+<p>Why is this important? Because of how nice it is to quickly identify scope. I generally read code and know that a variable declared in a certain column will be alive as long as the indentation is at least that wide. I know where a while loop begins and ends just by skimming. If you misplace one tab or space, your code becomes drastically harder to read. Also, ensure that your brackets are always positioned the same way. If you put them on the same line as the <strong>if</strong>, then do that always. Overall, consistency is what matters. It is so important, that there is a standard UNIX program (indent) that will correct and switch indentation styles.</p>
+
+<p>So, by all means, decide among yourselves whether you will choose tabs or spaces, <strong>vim</strong> or emacs, <a href="http://en.wikipedia.org/wiki/Indent_style">K&amp;R or Allman</a> (K&amp;R K&amp;R <strong>K&amp;R!!!</strong>). If you choose <em>Whitesmiths</em>... I... I just can&#39;t save you.</p>
+<h2 id='mistake__7___functions_that_do_not_take_arguments'>Mistake #7 - Functions that do not take arguments</h2>
+<p>People really do not understand this, and you see this often.</p>
+<pre><code>c/* A */ void f();
+/* B */ void f(void);
+</code></pre>
+<p>I do not blame you. In C++ or Java, (A) would be the correct choice to describe a function that has no arguments. However, in C, it is actually choice (B). Why? Because (A) is a function that takes any number of arguments. So, if you used (A) in C, you could call it with foo(2, 4, &quot;hello&quot;) and it would fire and maybe this has consequences you do not expect. Therefore, you use construction (B). I will <em>not see any of you make this mistake</em>. Resist the temptation, and you are now better than 80% of all C programmers ever. :)</p>
+<h2 id='mistake__8___the_one_letter_variable_name'>Mistake #8 - The one-letter variable name</h2>
+<p>Hey! HEY! Do not use one-letter variable names. Names are there for you. The human being in front of the keyboard. The computer throws them away. So, why make them so cryptic? It&#39;s only acceptable in certain conventional places, like using &#39;i&#39; for a loop counter. (Even then, that&#39;s weird. Because some people use &#39;i&#39; as a pure counter and <em>not as an index</em>. Confusing.)</p>
+<h2 id='mistake__9___the_all_powerful_function'>Mistake #9 - The all powerful function</h2>
+<p>Congratulations on reading this far. This part is about a common problem a lot of new programmers face: the megalomanical function. It&#39;s a function that believes it is an infallible god that was created to do all. It cooks AND cleans. It accelerates AND brakes. It grows the plants, sows the fields, and harvests the produce at the end of the season. Here&#39;s the thing... functions should do <strong>one</strong> thing. Absolutely nothing more. That&#39;s its purpose: to provide <strong>a</strong> function. The technical term for what a function does is its <strong>behavior</strong>. Isn&#39;t it hard enough to get it to behave in one particular way, let alone many?</p>
+
+<p>When a function does just one thing, it is easier to write, easier to understand, easier to maintain, easier to throw away and start over (<strong>refactor</strong>), easier to debug, and easier to test manually or write automated tests (<strong>specifications</strong>) to ensure its correctness.</p>
+
+<p>How do you detect a runaway, malevolent function? You can... smell it. You can tell when something... smells a little fishy. So, look for <strong>code smells</strong>! (Yes... that&#39;s the technical term. I didn&#39;t invent it; don&#39;t look at me that way.)</p>
+
+<ol>
+<li><p><strong>Variable declarations halfway down a function</strong></p>
+
+<p>You know that code you write where you do something and then you declare a bunch of new things about halfway through a function body? Yeah. Don&#39;t do that. Why? It&#39;s a <em>smell</em>. It says &quot;Hey. I&#39;m switching jobs here... putting on this new hat.&quot; That means you have written two functions and given it the same name and put it in the same body. Have you ever seen Siamese twins where one wanted to go into show business but the other was camera shy? Not. Good. People.</p></li>
+<li><p><strong>Many returns</strong></p>
+
+<p>When you have many exits for your little function highway, it can seem extremely useful. And, sure, it is useful. This function gleefully reacts to many different situations and conditionally responds to many different stimuli. But, in the end, this can be an indication that this function is doing <strong>far far</strong> too much. Think about drawing your function out as a flow chart. It should really be able to fit neatly on a small piece of paper and roughly be linear. If it is not... well, draw it out anyway. What are you looking for? Small isolated pockets of activity. These pockets should have been functions... and now you can pull them out and simply call them appropriately. It could very well be that each return in your original function represents a separate behavior and therefore should just be its own function.</p>
+
+<p>As my grandmother used to say, &quot;One function too many is better than one function too mangy.&quot;</p></li>
+<li><p><strong>Finding yourself adding something within a function</strong></p>
+
+<p>You know that thing that isn&#39;t broken? What do you do with that thing... oh right. You <strong>don&#39;t fix it</strong>. If you are ever like... &quot;this function should do more,&quot; lick a battery and stop yourself from believing that&#39;s true. That function is <strong>just fine</strong>. What you want is a new function to perform that new behavior. If that means breaking up the function you have into two pieces... so be it. If you can&#39;t add the behavior you want without breaking a function up... then that function <em>needed</em> to be broken apart. Let&#39;s not create big functions. If we make too many of them, they might lobby Congress to be considered people.</p>
+
+<p>There are other smells, for instance the trivial &quot;It doesn&#39;t fit on a single page in my text editor,&quot; but generally it&#39;s obvious when you&#39;ve gone <strong>too far</strong>.</p></li>
+</ol>
+
+<p>As you can see. Style is serious business. It is why there are points for it on the assignments, and it is why I&#39;m so critical about it. It&#39;s for your own good! :)</p>
+
+<p>Happy Hacking,
+wilkie</p>
+]]></description><pubDate>Mon, 16 Jan 2012 00:00:00 -0500</pubDate><guid>http://blog.davewilkinsonii.com/posts/traditional-mistakes-in-c-programming</guid></item></channel></rss><to_s/>
