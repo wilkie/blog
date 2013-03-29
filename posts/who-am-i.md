@@ -3,6 +3,7 @@ title: Who Am I?
 author: Dave Wilkinson
 summary: "I am an androgynous, pansexual, agender individual that survived a series of unknowns and violence called childhood. I didn't have it completely bad. I've crawled up using privilege and luck. I want to write code that benefits all of society and free computation. I need help to do so."
 tags: [personal]
+date: 2012-07-07
 ---
 
 My life has not been perfect, prestine, or predictable. From youth to adulthood, I have not been what most would consider normal or everyday. I believe strongly in myself and I have spent a lot of effort meditating and reflecting upon my life. I generally understand where I come from.
