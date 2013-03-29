@@ -6,6 +6,7 @@ require_relative 'tags'
 
 class Blog < Sinatra::Base
   TITLE = "wilkie writes a thing"
+  DESCRIPTION = "wilkie's blog on tech and diversity"
   GITHUB_USERNAME = "wilkie"
   TWITTER_USERNAME = "wilkieii"
   RSTATUS_USERNAME = "DaveWilkinsonII"
@@ -104,5 +105,15 @@ class Blog < Sinatra::Base
 
     # render
     haml :post
+  end
+
+  # RSS
+  get '/rss.xml' do
+    send_file 'feeds/rss.xml', :type => "application/rss+xml"
+  end
+
+  # Atom 2.0
+  get '/atom.xml' do
+    send_file 'feeds/atom.xml', :type => "application/atom+xml"
   end
 end
