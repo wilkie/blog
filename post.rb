@@ -122,6 +122,7 @@ class Post
   attr_reader :outline
   attr_reader :slug
   attr_reader :url
+  attr_reader :hidden
 
   def self.latest
     Dir["posts/*.md"].first[/^posts\/(.*)\.md$/, 1]
@@ -157,6 +158,10 @@ class Post
       @scripts = meta_data["scripts"] || []
       @summary = meta_data["summary"]
       @date = meta_data["date"]
+      @hidden = meta_data["hidden"]
+      if @hidden.nil?
+        @hidden = false
+      end
     else
       return
     end

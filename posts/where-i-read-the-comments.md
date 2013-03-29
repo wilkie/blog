@@ -2,6 +2,7 @@
 title: "Where I Read the Comments"
 author: wilkie
 date: 2013-03-26
+hidden: true
 ---
 
 ***Warning:*** This post will contain comments posted publicly exactly as they were written. That is, without edit. They contain highly dismissive language and derogatory statements against women with an occasional slur. They also contain a frustratingly poor understanding of science and statistics.
