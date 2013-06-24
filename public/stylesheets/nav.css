@@ -1,12 +1,13 @@
 .container {
 	background-color: #f0e8f0;
+  border-right: 1px solid #979;
+  border-left: 1px solid #979;
+  border-bottom: 1px solid #a8a;
 }
 
-  .container {
-    border-right: 1px solid #979;
-    border-left: 1px solid #979;
-    border-bottom: 1px solid #a8a;
-  }
+nav .nav-content .nav-title a {
+  color: black
+}
 
 nav .hidden {
   display: none;
