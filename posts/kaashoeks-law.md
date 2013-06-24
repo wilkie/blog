@@ -1,6 +1,7 @@
 ---
 title: Stop Benchmarking Your Software Design
-author: "wilkie, wolfwood"
+author: ["wilkie", "wolfwood"]
+gittip: ["wilkie", "wolfwood"]
 date: 2013-06-23
 tags: ["programming", "programming/design"]
 summary: ""

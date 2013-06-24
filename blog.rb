@@ -96,6 +96,7 @@ class Blog < Sinatra::Base
     @content = source.content
     @title = source.title
     @author = source.author
+    @gittip = source.gittip
     @date = source.date
     @summary = source.summary
     @outline = source.outline

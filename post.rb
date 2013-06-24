@@ -115,6 +115,7 @@ class Post
   attr_reader :content
   attr_reader :title
   attr_reader :author
+  attr_reader :gittip
   attr_reader :summary
   attr_reader :date
   attr_reader :tags
@@ -154,8 +155,11 @@ class Post
 
       @title = meta_data["title"]
       @author = meta_data["author"]
+      @author = [@author] unless @author.is_a? Array
       @tags = meta_data["tags"] || []
       @scripts = meta_data["scripts"] || []
+      @gittip = meta_data["gittip"] || ["wilkie"]
+      @gittip = [@gittip] unless @gittip.is_a? Array
       @summary = meta_data["summary"]
       @date = meta_data["date"]
       @hidden = meta_data["hidden"]

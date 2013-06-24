@@ -5,7 +5,7 @@
   :preserve
     #{@content}
   %p.footer
-    First published on #{@date} by #{@author}.
+    First published on #{@date} by #{@author.join(", ")}.
   %hr
   - if @tags.length > 0
     %p
@@ -28,9 +28,11 @@
   %p
     %strong
       Donations:
-    %iframe{:style=>"vertical-align:bottom; border: 0; margin-top: 0px; padding: 0;",
-            :src=>"https://www.gittip.com/wilkie/widget.html",
-            :width=>"48pt", :height=>"21pt"}
+    - @gittip.each_with_index do |tippee, i|
+      Support #{@author[i]}:
+      %iframe{:style=>"vertical-align:bottom; border: 0; margin-top: 0px; padding: 0;",
+              :src=>"https://www.gittip.com/#{tippee}/widget.html",
+              :width=>"48pt", :height=>"21pt"}
 
   %p
     All content off of this domain is licensed as
