@@ -9,7 +9,7 @@ class Blog < Sinatra::Base
   DESCRIPTION = "wilkie's blog on tech and diversity"
   GITHUB_USERNAME = "wilkie"
   TWITTER_USERNAME = "wilkieii"
-  RSTATUS_USERNAME = "DaveWilkinsonII"
+  RSTATUS_USERNAME = "wilkieii"
 
   helpers Sinatra::ContentFor
 

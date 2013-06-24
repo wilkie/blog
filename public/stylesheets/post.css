@@ -7,10 +7,31 @@ body, html {
 
 .post hr {
   margin-bottom: 13px;
+  border: none;
+  border-top: 1px solid rgb(164,164,164);
+  height: 1px;
+}
+
+.post hr + p {
+  margin-bottom: 15px;
+}
+
+.post h1 + hr {
+  margin-bottom: 23px;
+  width: 90%;
+  border: none;
+  background-image: url('/images/divider.png');
+  background-position: 50%;
+  height: 25px;
 }
 
 .container {
 	min-height: 100%;
+  max-width: 960px;
+  margin-left: auto;
+  margin-right:auto;
+  padding-left: 15px;
+  padding-bottom: 15px;
 }
 
 .post {
@@ -18,7 +39,7 @@ body, html {
 	min-height: 100%;
 
 	padding-left: 20px;
-	padding-top: 15px;
+	padding-top: 30px;
 	padding-right: 22px;
 	padding-bottom: 20px;
 
@@ -35,20 +56,24 @@ body, html {
 	color: #d9d;
 }
 
-.post h1 {
-	font-family: 'Forum', serif;
+.post h2 {
+	font-family: 'Source Sans Pro', serif;
+  font-weight: 400;
 }
 
-.post h2, .post h3 {
-	font-family: 'Archivo Narrow', serif;
+.post h3 {
+	font-family: 'Source Sans Pro', 'Archivo Narrow', serif;
+  font-weight: 400;
 }
 
 .post h1, .post h1 a {
-	color: rgb(72, 74, 171);
-	font-size: 36px;
-	font-weight: bold;
+	font-family: 'Cinzel', serif;
+  text-align: center;
+	color: rgb(148, 148, 228); //rgb(72, 74, 171);
+	font-size: 64px;
+  font-weight: 700;
 	line-height: 1.0em;
-	margin-bottom: 0;
+	margin-bottom: 18px;
 }
 
 .post h1 + p {
@@ -57,19 +82,23 @@ body, html {
 
 .post h2, .post h2 a, .post h2 a:visited {
 	color: rgb(88, 90, 209);
+	color: rgb(118, 118, 228); //rgb(72, 74, 171);
 	font-size: 28px;
-	margin-bottom: 3px;
+	margin-bottom: 13px;
 }
 
 .post h3 {
 	color: rgb(73, 76, 230);
 	font-size: 18px;
-	margin-bottom: 3px;
+	margin-bottom: 13px;
+  margin-left: 1px;
 }
 
 .post p {
 	margin-top: 3px;
-	margin-left: 1px;
+	margin-left: 2px;
+
+  color: rgb(68,68,68);
 
 	font-size: 16px;
 	font-family: 'Metrophobic', sans-serif;
@@ -263,17 +292,19 @@ body, html {
 
 .post ul, .post ol {
 	margin-left: 25px;
-	font-weight: bold;
+  margin-bottom: 23px;
 	font-family: 'Metrophobic';
 }
 
-.post li {
+.post * li {
 	margin-bottom: 10px;
 	font-weight: normal;
 	font-size: 14px;
+  color: rgb(68,68,68);
 }
 
-.post li p {
+.post * li p {
+	margin-bottom: 10px;
 	font-weight: normal;
 	font-size: 14px;
 }
@@ -332,3 +363,9 @@ body, html {
   width: 100%;
   height: 100%;
 }
+
+  .post {
+    border-right: none;
+    border-top: 1px solid #cac;
+  }
+

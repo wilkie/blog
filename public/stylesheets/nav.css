@@ -1,11 +1,26 @@
 .container {
 	background-color: #f0e8f0;
-	border-right: 3px solid #a8a;
-	border-left: 3px solid #a8a;
 }
+
+  .container {
+    border-right: 1px solid #979;
+    border-left: 1px solid #979;
+    border-bottom: 1px solid #a8a;
+  }
 
 nav .hidden {
   display: none;
+}
+
+.header {
+	max-width: 960px;
+  border-right: 1px solid #979;
+  border-left: 1px solid #979;
+  margin-left:auto;
+  margin-right:auto;
+  padding-left: 15px;
+  padding-bottom: 15px;
+	background-color: #f0e8f0;
 }
 
 nav {
@@ -16,8 +31,6 @@ nav {
 }
 
 nav .nav-content {
-	position: fixed;
-	width: 230px;
 }
 
 nav .nav-section {
@@ -93,3 +106,20 @@ nav ul.toc {
 nav a.image {
 	margin: 24px;
 }
+
+  nav .nav-content > h3 { display: none; }
+  nav .hidden {
+    display: inline;
+  }
+  nav .nav-section { display: none; }
+  nav .nav-title { display: inline; float: left; margin-left: -1px; }
+  nav {
+    position:relative;
+  }
+  nav .nav-title + .nav-section {
+    display: block;
+    position: absolute;
+    right: 3px;
+    margin-left: auto;
+    top: 18px;
+  }
