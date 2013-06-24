@@ -107,12 +107,14 @@ two operating systems will be invalidated. Only an ongoing comparison can ever b
 at the developer effort (the rate of improvement) can we draw any conclusions about the effectiveness of
 system design.
 
-### References
+### Footnotes
 
 * \* We, and not Kaashoek himself, call it Kaashoek’s Law, because it was inspired by his talk at CMU during the
 ASPLOS 2011 PC meeting.
 
 * &dagger; Similarly, this statement was inpired by a private communication with Greg Ganger.
+
+### References
 
 1. S. Boyd-Wickizer, A. Clements, Y. Mao, A. Pesterev, M. F. Kaashoek, R. Morris, and N. Zeldovich. An analysis of linux scalability to many cores. In *Proceedings of the 9th USENIX
 Symposium on Operating Systems Design and Implementation* (OSDI ’10), Vancouver, Canada, October 2010.
