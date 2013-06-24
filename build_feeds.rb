@@ -18,9 +18,10 @@ files.lines.each do |f|
   post = Post.new(f)
 
   if post.date.to_s.empty?
-    puts "Post without a date: [will not be included]"
+    puts "Post without a date: #{post.title} [will not be included]"
     puts post.slug
   elsif post.hidden
+    puts "Hidden: #{post.title}"
   else
     posts << post
   end
