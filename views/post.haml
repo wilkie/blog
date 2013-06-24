@@ -4,36 +4,35 @@
   %hr
   :preserve
     #{@content}
-  %p.footer
-    First published on #{@date} by #{@author.join(", ")}.
-  %hr
   - if @tags.length > 0
+    %h3 Tags
     %p
-      This is a post regarding
       - @tags.each_with_index do |tag, i|
         - if i < @tags.length - 1
           = succeed ',' do
             %a{:href=>"/tags/#{tag}", :title=>tag, :alt=>"List topics relating to #{tag}"}=tag
         - else
-          = succeed '.' do
-            %a{:href=>"/tags/#{tag}", :title=>tag, :alt=>"List topics relating to #{tag}"}=tag
+          %a{:href=>"/tags/#{tag}", :title=>tag, :alt=>"List topics relating to #{tag}"}=tag
+  %p.footer
+    First published on #{@date} by #{@author.join(", ")}.
     %hr
+  %h3 Comments
   %p
     If you'd like to comment, just send me an email at wilkie@xomb.org or on either
     %a{:href=>"http://twitter.com/wilkieii", :title=>"Twitter Profile", :alt=>"Twitter Profile"} Twitter
     or via my
     %a{:href=>"https://rstat.us/users/DaveWilkinsonII", :title=>"rstat.us Profile", :alt=>"rstat.us Profile"} rstat.us
     profile. I will love to hear from you! Any opinions, criticism, etc are welcome.
-
-  %p
-    %strong
-      Donations:
+  %h3 Donations
+  %ul{:style => "list-style:none"}
     - @gittip.each_with_index do |tippee, i|
-      Support #{@author[i]}:
-      %iframe{:style=>"vertical-align:bottom; border: 0; margin-top: 0px; padding: 0;",
-              :src=>"https://www.gittip.com/#{tippee}/widget.html",
-              :width=>"48pt", :height=>"21pt"}
+      %li
+        %iframe{:style=>"vertical-align:middle; border: 0; margin-top: 0px; padding: 0;",
+                :src=>"https://www.gittip.com/#{tippee}/widget.html",
+                :width=>"48pt", :height=>"21pt"}
+        Support #{@author[i]}
 
+  %h3 Copyright
   %p
     All content off of this domain is licensed as
     %a{:href=>"http://creativecommons.org/publicdomain/zero/1.0/", :title=>"CC0 License", :alt=>"Creative Commons Zero 1.0 License"}
