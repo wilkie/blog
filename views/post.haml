@@ -4,6 +4,9 @@
   %hr
   :preserve
     #{@content}
+  %p.footer
+    First published on #{@date} by #{@author.join(", ")}.
+    %hr
   - if @tags.length > 0
     %h3 Tags
     %p
@@ -13,9 +16,6 @@
             %a{:href=>"/tags/#{tag}", :title=>tag, :alt=>"List topics relating to #{tag}"}=tag
         - else
           %a{:href=>"/tags/#{tag}", :title=>tag, :alt=>"List topics relating to #{tag}"}=tag
-  %p.footer
-    First published on #{@date} by #{@author.join(", ")}.
-    %hr
   %h3 Comments
   %p
     If you'd like to comment, just send me an email at wilkie@xomb.org or on either
