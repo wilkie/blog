@@ -1,27 +1,26 @@
 .post
-  %h1 Hi. I want to design and build things to create a unified world.
+  %h1 We Are a Distributed People, Let's Build Distributed Systems
+  %hr
   %p
   %p
     %div{:style => "background-color: #f0e8f0;padding:10px;margin-right:12px;margin-bottom:2px;float:left;border: 1px solid #a8a;"}
       %img{:src => "/images/wilkie2.jpg", :style => "display:block;width: 200px;margin:0; border: 1px solid black"}
-  %p
-    My name is Dave. There are too many Daves in the world, so call me <strong>wilkie</strong>. I write <a href="http://github.com/wilkie">code</a>.
-  %p
-    I do research on OS design and maintain a small
-    <a href="http://github.com/xomboverlord/xomb">kernel</a>.
-  %p
-    I believe in a free and open internet and am one of the founders of the federated microblogging software <a href="http://rstat.us">rstat.us</a>.
-  %p
-    I assert that an OS can be designed in such a way that it adapts and learns. It is the design that is most important. I am developing such an <a href="http://github.com/djehuty">adaptable system</a> in the public domain.
-  %p
-    The most important facet of computation is that is can be used and leveraged by all people. I do not believe that we, as a society, are allowing the correct amount of diversity it terms of gender, sex, ethnicity, and other socially constructed values such as race.
-  %p
-    As such, my hobbies include pursuits such as gender studies so that I can better understand how to develop an adaptable system that can overcome this adversity and truly reach all of humanity.
-  %p
+  :markdown
+    Hi. My name is Dave. There are too many Daves in the world, so call me **wilkie**. I write [code](https://github.com/#{GITHUB_USERNAME}). Feel free to follow
+    me on [twitter](http://twiter.com/#{TWITTER_USERNAME}) or [rstat.us](http://rstat.us/users/#{RSTATUS_USERNAME}). This is a place for me to write about systems, programming, diversity, and technology. Particularly how it affects society and how society affects what we build. Here is the [collection](/archive) of my writing by topic.
+
+    My research interest lies in **systems and operating system design**. I maintain a small [kernel](http://github.com/xomboverlord/xomb) designed, much like the exokernel before it, on the principle of only exposing [interfaces](/posts/a-language-for-interfaces) and never abstracting. I have the opinion, albeit heretical, that systems research has run askew of designing systems that function to a meaningless pursuit of benchmarks and that [performance doesn't matter](/posts/kaashoeks-law).
+
+    Furthermore, I assert that an operating system can be [designed](/posts/djehuty-technical) in such a way that it adapts and learns from its environment. It can grow, alter, and change over time. Essentially, it can cooperate with software it finds and collects from others. Combined with a content-centric network, **code and thus information can be freely and widely available** as a result. I am developing such an [adaptable system](https://github.com/djehuty) in the public domain.
+
+    Tied in to my belief in the freedom of computation, I am greatly interested and active in developing for the federated web. That is, the notion that the network you participate in and create content within is designed in the open and distributed such that you **control your content and even the means to propagate that content**. To that end, I am one of the founders of the federated microblogging software [rstat.us](https://rstat.us). I have founded and am heavily contributing to the development of a whole range of applications and libraries to produce a framework called [lotus](https://github.com/hotsh) for easily building and deploying federated applications.
+
+    The **overall narrative of my work is that the most important facet of computation is that it should be available to all people**. I do not believe that we, as a society, are allowing the correct amount of diversity it terms of gender, sex, race, ethnicity, and other heavily socially constructed attributes. That is, we are [allowing](/posts/the-antirez-principle) these otherwise insignificant features to [bias](/posts/conference_diversity) access to technology. As such, I am also very interested in gender, queer, and race studies so that I can better understand how to develop an adaptable system that can overcome this adversity and truly reach all of humanity.
+
     I will write on topics such as software design, copyright and other legal issues that pertain to software, gender and diversity issues, information freedom, and perhaps random things I find neat.
-  %p
-    I am loosely or strongly associated with awesome people you should also become acquainted with:
-  %p
+  %p.webring
+    Cool Person Webring
+  %p.coolpeople
     %a{:href=>"http://jocelynmonahan.com/"}Jocelyn Monahan
     |
     %a{:href=>"http://blog.steveklabnik.com"}Steve Klabnik
