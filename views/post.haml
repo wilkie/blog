@@ -23,14 +23,16 @@
     or via my
     %a{:href=>"https://rstat.us/users/DaveWilkinsonII", :title=>"rstat.us Profile", :alt=>"rstat.us Profile"} rstat.us
     profile. I will love to hear from you! Any opinions, criticism, etc are welcome.
-  %h3 Donations
-  %ul{:style => "list-style:none"}
-    - @gittip.each_with_index do |tippee, i|
-      %li
-        %iframe{:style=>"vertical-align:middle; border: 0; margin-top: 0px; padding: 0;",
-                :src=>"https://www.gittip.com/#{tippee}/widget.html",
-                :width=>"48pt", :height=>"21pt"}
-        Support #{@author[i]}
+  - if @gittip.count > 0
+    %h3 Donations
+    %ul{:style => "list-style:none"}
+      - @gittip.each_with_index do |tippee, i|
+        - next if tippee == "no"
+        %li
+          %iframe{:style=>"vertical-align:middle; border: 0; margin-top: 0px; padding: 0;",
+                  :src=>"https://www.gittip.com/#{tippee}/widget.html",
+                  :width=>"48pt", :height=>"21pt"}
+          Support #{@author[i]}
 
   %h3 Copyright
   %p

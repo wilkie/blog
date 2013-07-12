@@ -93,7 +93,7 @@ Geometry time! A **Reuleaux triangle** is a three-sided curved polygon with a co
 
 In order to represent the data in a way that is intuitive, we transform the point the user selects within the Reuleaux to the corresponding point on a triangle. Drag the selector above to get a feel as to how the geometry relates. Notice that as you drag the selector along a curve, it corresponds to a line on the triangle. Also, every point along the boundary of the inner Reuleaux corresponds equally to the center point of the triangle.
 
-## What input methods we have now
+## Input methods we have now
 
 Even though we have a growing awareness of the incorrectness of the notion of a gender binary, the presentation of only two choices is retained in our software systems and social networks.
 The selection is given as a strict choice normally between two different values: male or female.

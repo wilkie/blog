@@ -160,6 +160,9 @@ class Post
       @scripts = meta_data["scripts"] || []
       @gittip = meta_data["gittip"] || ["wilkie"]
       @gittip = [@gittip] unless @gittip.is_a? Array
+      if @gittip.count == @gittip.select{|a| a=="no" }.count
+        @gittip = []
+      end
       @summary = meta_data["summary"]
       @date = meta_data["date"]
       @hidden = meta_data["hidden"]

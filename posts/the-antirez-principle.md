@@ -2,6 +2,7 @@
 title: The Antirez Principle
 date: 2012-10-17
 author: wilkie
+gittip: "no"
 tags: ["diversity", "diversity/gender", "diversity/sexism"]
 summary: "Redis hacker, antirez, wrote an article on sexism that promoted the notion that discussion of sexism and any special treatment of women in technology constituted oppression and sexism toward women. He states we should simply treat everybody as human, instead of focusing on gender. Although an obvious goal, he ignores the cause and history of oppression and its psychological affects on our reasoning."
 ---
