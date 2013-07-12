@@ -57,13 +57,20 @@ body, html {
 }
 
 .post h2 {
-	font-family: 'Source Sans Pro', serif;
+	font-family: 'Judson', 'Oswald', 'Sansita One', 'Source Sans Pro', serif;
   font-weight: 400;
+	font-size: 28px;
+	margin-bottom: 13px;
 }
 
 .post h3 {
 	font-family: 'Source Sans Pro', 'Archivo Narrow', serif;
   font-weight: 400;
+	color: rgb(73, 76, 230);
+	color: rgb(118, 118, 228); //rgb(72, 74, 171);
+	font-size: 18px;
+	margin-bottom: 13px;
+  margin-left: 1px;
 }
 
 .post h1, .post h1 a {
@@ -83,15 +90,6 @@ body, html {
 .post h2, .post h2 a, .post h2 a:visited {
 	color: rgb(88, 90, 209);
 	color: rgb(118, 118, 228); //rgb(72, 74, 171);
-	font-size: 28px;
-	margin-bottom: 13px;
-}
-
-.post h3 {
-	color: rgb(73, 76, 230);
-	font-size: 18px;
-	margin-bottom: 13px;
-  margin-left: 1px;
 }
 
 .post p {
@@ -315,16 +313,21 @@ body, html {
 }
 
 .post .image > img, .post .image > div {
-	background-color: #f0e8f0;
-	border: 1px solid #a8a;
 	padding: 7px;
   max-width: 100%;
   margin: 0 auto;
 }
 
+.post .image > div.border {
+	background-color: #f0e8f0;
+	border: 1px solid #a8a;
+}
+
 .post .image .caption {
-	font-family: 'Forum', sans-serif;
+	font-family: 'Judson', sans-serif;
   font-size: 13px;
+  line-height: 1.3em;
+  color: rgb(84,84,84);
   font-style: italic;
   width: 80%;
 }
@@ -372,4 +375,15 @@ body, html {
 h3#footnotes ~ ul {
   list-style: none;
   margin-left: 7px;
+}
+
+p + p.webring {
+  margin-top: 30px;
+  text-align:center;
+  font-weight: 800;
+}
+
+p.webring + p.coolpeople {
+  text-align:center;
+  margin-top:0;
 }
