@@ -19,7 +19,7 @@
     %hr
     %h2
       %a{:href=>post.url, :title=>post.title, :alt=>post.title}
-        #{post.title}
+        #{post.subtitle ? "#{post.title}: #{post.subtitle}" : post.title}
     - if post.summary
       %p
         #{post.summary}
