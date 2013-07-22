@@ -18,7 +18,7 @@ In order to describe a method of how to represent gender and allow an individual
 
 ### Gender binary
 
-![The gender binary is enforced by culture](gender-binary.png)
+![border|The gender binary is enforced by culture](gender-binary.png)
 
 The prevailing, yet optimistically evolving, perspective of gender throughout society remains mostly that of a binary.
 You are either a man or a woman and if you are not one of those two, you are pushed into situations where you have to choose. Our social networks, dating services, and other online communities should not enforce this broad and unfair generalization.
@@ -86,9 +86,9 @@ Geometry time! A **Reuleaux triangle** is a three-sided curved polygon with a co
   <input type="hidden" id="genderValI" value=""></input>
   <input type="hidden" id="genderXPosI" value=""></input>
   <input type="hidden" id="genderYPosI" value=""></input>
-  <span class="caption">
+  <div class="caption">
     <strong>Interactive</strong>: Reuleaux coordinates are transformed into triangle coordinates.
-  </p>
+  </div>
 </div>
 
 In order to represent the data in a way that is intuitive, we transform the point the user selects within the Reuleaux to the corresponding point on a triangle. Drag the selector above to get a feel as to how the geometry relates. Notice that as you drag the selector along a curve, it corresponds to a line on the triangle. Also, every point along the boundary of the inner Reuleaux corresponds equally to the center point of the triangle.
@@ -102,7 +102,7 @@ The selection is given as a strict choice normally between two different values:
 
 The dropdown is the traditional gender selector. Generally, it seems developers tend to only allot the two familiar choices. Even social services proud to be used by millions of people, such as facebook, have not conceding in offering any amount of choice, even under [heavy criticism](http://www.zdnet.com/blog/facebook/nepal-asks-facebook-for-third-sex-option/11117). Interestingly, facebook does contain internal support for a third gender that users were [able to enable through a hack](http://www.youtube.com/watch?v=rb68sPtblyo) which then used non-gendered pronouns to refer to them to friends.
 
-![Facebook, a social network with millions of users, fails to represent non-binary genders.](gender-facebook.png)
+![border|Facebook, a social network with millions of users, fails to represent non-binary genders.](gender-facebook.png)
 
 There was a conscious effort of developers in general (facebook avoided this trend), one could insist was merely to retrofit a proactive model with an existing system, to add a third catch-all option usually titled "other."
 This is an incorrect solution because culturally it paints the image that this third option represents a third gender, when it really collects those strictly outside of the cultural gender-binary.
@@ -121,7 +121,7 @@ This is, of course, a simple textfield.
 This solution is generally seen as a versatile solution that allows a wealth of choices.
 It is a solution that is used, perhaps slightly strategically, by facebook's cultural competitor [Diaspora](http://www.sarahmei.com/blog/2010/11/26/disalienation/).
 
-![The change to a text field for gender was a divisive issue for Diaspora, shown here, but not for Metafilter who originally had such a field for the last decade. [1]](diaspora-gender.png)
+![border|The change to a text field for gender was a divisive issue for Diaspora, shown here, but not for Metafilter who originally had such a field for the last decade. [1]](diaspora-gender.png)
 
 However, it is not without fault. A textfield cannot describe all options because it is limited by language. It also does not represent degrees of gender. That is, one person can say "male"
 and so can the next, yet, we cannot tell if such a set of individuals was presented with a scale, would they then say that they are 80% male and 70% male?
@@ -158,9 +158,9 @@ That is, the selector allows you to put a point at the bottom of the field. But 
     <input type="hidden" id="sexualityXPosSimple" value=""></input>
     <input type="hidden" id="sexualityYPosSimple" value=""></input>
   </div>
-  <span class="caption">
+  <div class="caption">
     <strong>Interactive</strong>: Gender and orientation selectors as Reuleaux triangles.
-  </p>
+  </div>
 </div>
 
 This can be solved by allowing gender to be specified as a single point, and sexual orientation to be a set of points to form areas of selection.
@@ -180,9 +180,9 @@ However, in cases where this type of input is very useful (such as with dating s
     <input type="hidden" id="sexualityXPos" value=""></input>
     <input type="hidden" id="sexualityYPos" value=""></input>
   </div>
-  <span class="caption">
+  <div class="caption">
     <strong>Interactive</strong>: Sexual orientation selector can select areas that indicate attraction to the given gender identity. Drag the middle circle out, use smaller circle to expand area. To remove a circle, shrink it until very small. As you drag circles out of the middle area, new circles can be added. Add as many as you would like.
-  </span>
+  </div>
 </div>
 
 Please experiment with the selectors above to create your identity profile below.
@@ -195,9 +195,9 @@ Please experiment with the selectors above to create your identity profile below
     <div id="output">
     </div>
   </div>
-  <span class="caption">
+  <div class="caption">
     <strong>Interactive</strong>: Use the selectors directly above these to create your identity image.
-  </span>
+  </div>
 </div>
 
 TODO: Allow people to share by url?
@@ -247,12 +247,12 @@ This would show the intention of the selectors and also help the assumed majorit
 If you add a gender field to your project, you must ask yourself the question: what do the users gain from being able to report this value?
 The general advice that one can give is to drop it altogether, especially if there is nothing directly related to the service you are providing that benefits from gender.
 
-![Imagine you are a person that does not fall cleanly into one of these two categories. You are now presented with a bright red flag that will not let you continue until you choose. How would you feel? (Image is rdio's registration and courtesy of <a href="https://www.rstat.us/updates/50e8a221aeb89a00020202e4">@carols10cents</a>)](gender-rdio.png)
+![border|Imagine you are a person that does not fall cleanly into one of these two categories. You are now presented with a bright red flag that will not let you continue until you choose. How would you feel? (Image is rdio's registration and courtesy of <a href="https://www.rstat.us/updates/50e8a221aeb89a00020202e4">@carols10cents</a>)](gender-rdio.png)
 
 A common reason for including gender, even if only privately stored and never publicly displayed, is to provide humanization through gendered language, such as personalizing text with the correct pronouns.
 If this is the case, then the correct action is to just simply ask the user for their preferred pronouns and allow for a non-gendered form if language permits (which [English does](http://en.wikipedia.org/wiki/Gender-neutral_pronoun#Summary)).
 
-![Rdio only uses their gender information to provide linguistics. We recommend that pronouns be explicitly asked for in place of gender, and that you allow a non-gendered option (his/her/their.)](gender-rdio-response.png)
+![border|Rdio only uses their gender information to provide linguistics. We recommend that pronouns be explicitly asked for in place of gender, and that you allow a non-gendered option (his/her/their.)](gender-rdio-response.png)
 
 When you are providing a social service, users may wish to publicly display their gender.
 In these cases, since it directly benefits their ability to express their identity, you should allow for a free range of choice.

@@ -76,6 +76,26 @@ class Post
         link = "/images/#{@slug}/#{link}"
       end
 
+      options = alt_text.match(/^(.*)\|/)
+      options = options[1] if options
+
+      alt_text.gsub!(/^.*\|/, "")
+
+      classes = "image"
+
+      if options
+        options.split('|').each do |option|
+          case option
+          when "border"
+            classes << " border"
+          when "right"
+            classes << " right"
+          when "left"
+            classes << " left"
+          end
+        end
+      end
+
       caption = ""
       caption = alt_text unless alt_text.start_with? "!"
       alt_text = Nokogiri::HTML(alt_text).xpath("//text()").remove
@@ -89,7 +109,7 @@ class Post
       end
 
       caption = "<br /><div class='caption'>#{caption}</div>" unless caption == ""
-      "</p><div class='image'>#{img_source}#{caption}</div><p>"
+      "</p><div class='#{classes}'>#{img_source}#{caption}</div><p>"
     end
 
     def header(text, header_level)
