@@ -39,9 +39,9 @@ My name is Dave Wilkinson, better known as ***wilkie***. I have a strong desire 
 
 ## Work Experience
 
-* ***Vocollect*** - Software Engineer - Summer of 2008 - Worked on their flagship product, a hand-held, voice-activated, programmable device typically used for warehouse workers or carriers for hands-free inventory. Embedded C/C++. Rewrote very low-level, core pieces of code to optimize and reduce initialization time by around 60 percent, a significant feat.
+* ***Software Engineer*** - Vocollect - Summer of 2008 - Worked on their flagship product, a hand-held, voice-activated, programmable device typically used for warehouse workers or carriers for hands-free inventory. Embedded C/C++. Rewrote very low-level, core pieces of code to optimize and reduce initialization time by around 60 percent, a significant feat.
 
-* ***Freelance*** - Developer - Summer of 2009 - Implemented a contract work within the period of two weeks to develop an iPhone application generator for the syndication of RSS/Atom feeds of audio/video podcasts into a custom styled app used to play the various episodes.
+* ***Freelance Work*** - Summer of 2009 - Implemented a contract work within the period of two weeks to develop an iPhone application generator for the syndication of RSS/Atom feeds of audio/video podcasts into a custom styled app used to play the various episodes.
 
 * ***Student Researcher*** - University of Pittsburgh - 2009-2012 - Researched operating system designs and distributed systems with an emphasis on building new systems.
 
