@@ -246,16 +246,16 @@ body, html {
 .post blockquote > p {
 	font-family: 'Wire One', sans-serif;
 	font-style: normal;
-	font-size: 28px;
+	font-size: 22px;
+  letter-spacing: 0.063em;
 }
 
 .post blockquote {
 	font-style: normal;
 	margin-bottom: 20px;
 	background-color: #ddd;
-	padding: 5px;
 	color: #808080;
-	padding: 0.5em 2em .5em 2.1em;
+	padding: 0.5em 2em .5em 2.3em;
 	position: relative;
 }
 
