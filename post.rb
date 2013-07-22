@@ -134,6 +134,7 @@ end
 class Post
   attr_reader :content
   attr_reader :title
+  attr_reader :subtitle
   attr_reader :author
   attr_reader :gittip
   attr_reader :summary
@@ -174,6 +175,7 @@ class Post
       meta_data = YAML.load(meta_data)
 
       @title = meta_data["title"]
+      @subtitle = meta_data["subtitle"]
       @author = meta_data["author"]
       @author = [@author] unless @author.is_a? Array
       @tags = meta_data["tags"] || []

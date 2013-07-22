@@ -12,11 +12,18 @@ body, html {
   height: 1px;
 }
 
+.post h2.subtitle {
+	font-family: 'Cinzel', serif;
+	color: rgb(148, 148, 228); //rgb(72, 74, 171);
+  text-align: center;
+  font-size: 30px;
+}
+
 .post hr + p {
   margin-bottom: 15px;
 }
 
-.post h1 + hr {
+.post h1 + hr, .post h2.subtitle + hr {
   margin-bottom: 23px;
   width: 90%;
   border: none;
@@ -312,6 +319,7 @@ body, html {
 .post .image {
   text-align: center;
   margin-right: 10px;
+  padding-top: 10px;
 }
 
 .post .image.border img {
