@@ -65,7 +65,7 @@ body, html {
 
 .post h2 {
   clear: both;
-	font-family: 'Judson', 'Oswald', 'Sansita One', 'Source Sans Pro', serif;
+	font-family: 'Judson', serif;
   font-weight: 400;
 	font-size: 28px;
 	margin-bottom: 13px;
@@ -73,7 +73,7 @@ body, html {
 
 .post h3 {
   clear: both;
-	font-family: 'Source Sans Pro', 'Archivo Narrow', serif;
+	font-family: 'Source Sans Pro', serif;
   font-weight: 400;
 	color: rgb(73, 76, 230);
 	color: rgb(118, 118, 228); //rgb(72, 74, 171);
@@ -244,10 +244,11 @@ body, html {
 }
 
 .post blockquote > p {
-	font-family: 'Wire One', sans-serif;
+	font-family: 'Marcellus', serif;
 	font-style: normal;
-	font-size: 22px;
-  letter-spacing: 0.063em;
+	font-size: 16px;
+  letter-spacing: 0.033em;
+	color: #808080;
 }
 
 .post blockquote {
