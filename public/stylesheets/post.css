@@ -248,15 +248,15 @@ body, html {
 	font-style: normal;
 	font-size: 16px;
   letter-spacing: 0.033em;
-	color: #808080;
+	color: #606060;
 }
 
 .post blockquote {
 	font-style: normal;
 	margin-bottom: 20px;
-	background-color: #ddd;
-	color: #808080;
-	padding: 0.5em 2em .5em 2.3em;
+	background-color: #e3e3e3;
+	color: #606060;
+	padding: 0.5em 2em 0.6em 2.3em;
 	position: relative;
 }
 
