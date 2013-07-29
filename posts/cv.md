@@ -5,7 +5,7 @@ date: 2012-11-11
 tags: ["personal"]
 ---
 
-My name is Dave Wilkinson, better known as ***wilkie***. I have a strong desire to develop technology that can be accessed by anybody and push progress of a public commons without constraint. I specialize and develop low-level distributed systems that reduce barriers of entry and push more control, authority, and rights to those that use the system. My overall goal is to provide a system that guarantees the freedom to compute.
+My name is Dave Wilkinson, better known as ***wilkie***. I develop large scale distributed systems and am looking for a position that will allow me to use that specialization to make better the open web. I have a strong desire to develop technology that can be accessed by anybody and push progress of a public commons without constraint. I specialize in the research and development of low-level distributed systems that reduce barriers of entry and push more control, authority, and rights to those that use the system. My overall goal is to provide a system that guarantees the freedom to compute.
 
 ## Education
 
