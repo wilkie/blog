@@ -9,7 +9,7 @@ source code: [github](https://github.com/wilkie/rust-testing-microframework) - l
 
 ## What is rust?
 
-As a systems researcher, I really enjoy the in-development systems language [rust](http://rustlang.org). Over the years, we have made substantial systems progress in spite of languages and tools that have been insufficient in their analysis of forms of safety. That is, C and C++ have prevailed as systems languages even though, due to technological constraints and even social convention, they largely fail to create reliable systems without substantial manual effort to predict defects.
+As a systems researcher, I really enjoy the in-development systems language [rust](http://rust-lang.org). Over the years, we have made substantial systems progress in spite of languages and tools that have been insufficient in their analysis of forms of safety. That is, C and C++ have prevailed as systems languages even though, due to technological constraints and even social convention, they largely fail to create reliable systems without substantial manual effort to predict defects.
 
 ![The rust programming language is a experimental systems language maintained by Mozilla](rust.png)
 
