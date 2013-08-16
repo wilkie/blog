@@ -168,8 +168,15 @@ body, html {
 	font-size: 14px;
 }
 
-.post code {
+.post p code {
 	font-family: 'Inconsolata', monospace;
+  background-color: rgb(220, 220, 220);
+	color: rgb(108, 108, 188); //rgb(72, 74, 171);
+  padding: 1px;
+  padding-left: 3px;
+  padding-right: 3px;
+  border-radius: 5px;
+	border: 1px solid #a8a;
 }
 
 .post pre > code > .ref_line {
