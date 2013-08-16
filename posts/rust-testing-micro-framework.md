@@ -1,5 +1,6 @@
 ---
 title: "Rust Testing</br>Micro-framework"
+subtitle: "Exploring rust Macros"
 author: "wilkie"
 tags: ["programming", "projects"]
 ---
