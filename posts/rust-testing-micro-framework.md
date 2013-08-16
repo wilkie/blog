@@ -72,11 +72,11 @@ describe!("math", {
 })
 ```
 
-The `must!` macro is complemented by a `wont!` macro, which reverses the logic of the assertion. Also, there is, beyond `eq` which simply compares, a floating-point specific compare `near` that will allow a deviation of a particular amount to account for inaccuracies inherent in floating-point math. For instance, `must!(math::add(3.1415, 4.1235) near 7.265 within 0.00001);` will check that the result is within +/- 0.00001 of the given value.
+The `must!` macro is complemented by a `wont!` macro, which reverses the logic of the assertion. Also, there is, beyond `eq` which simply compares, a floating-point specific compare `near` that will allow a deviation of a particular amount to account for inaccuracies inherent in floating-point math. For instance, `must!(math::add(3.1415, 4.1235) near 7.265 within 0.00001);` will check that the result is within +/- 0.00001 of the given value. The example in the repo is more feature inclusive.
 
 ## Running
 
-First I compile the code into a library (you can directly import as well by removing the `extern` in the test code):
+To run the tests, first I compile the original code into a library (you can directly import as well by removing the `extern` in the test code):
 
 ```
 rustc --lib math.rs
@@ -101,6 +101,8 @@ And I get:
 If something were to fail, you'd see this:
 
 ![border|A failed test shows the expected and given values.](rust-testing-new-failure.png)
+
+Cool!
 
 ## Macros
 
@@ -150,7 +152,7 @@ In the case of `should!`, I have it take as inputs a `expr` called `$prompt` and
 
 I then expand the macro out to push a struct called `Test` which contains the string and a closure to an array already established (with the `test!` macro) of tests called `_tests`. The closure contains the block of test code surrounded by variables that check and respond to failure. The block returns an array reflecting how many assertions passed or failed.
 
-The power of rust is revealed here. In fact, macros are far more involved. Here is the [full documentation](http://static.rust-lang.org/doc/tutorial-macros.html) When you type out `should!` in your code, the compiler will expand the macro and place the result in the AST. It can do this without giving up any of those nice features we talked about earlier and it can do this without stalling in the compilation process. With this, you can add syntax extensions to the language without having to worry about the specification for the language becoming too bloated or stubborn.
+The power of rust is revealed here. In fact, macros are far more involved. Here is the [full documentation](http://static.rust-lang.org/doc/tutorial-macros.html). When you type out `should!` in your code, the compiler will expand the macro and place the result in the AST. It can do this without giving up any of those nice features we talked about earlier and it can do this without stalling the compilation process. With this, you can add syntax extensions to the language without having to worry about the specification for the language becoming too bloated or stubborn.
 
 ## Feature Requests
 
