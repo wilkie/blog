@@ -18,8 +18,8 @@
   - @posts.each do |post|
     %hr
     %h2
-      %a{:href=>post.url, :title=>post.title, :alt=>post.title}
-        #{post.subtitle ? "#{post.title}: #{post.subtitle}" : post.title}
+      %a{:href=>post.url, :title=>post.stripped_title, :alt=>post.stripped_title}
+        #{post.subtitle ? "#{post.stripped_title}: #{post.stripped_subtitle}" : post.stripped_title}
     - if post.summary
       %p
         #{post.summary}

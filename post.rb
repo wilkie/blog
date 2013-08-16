@@ -203,4 +203,12 @@ class Post
     @outline = renderer.outline.child
     @url = "/posts/#{slug}"
   end
+
+  def stripped_title
+    self.title.gsub(/\<.*?\>/, " ")
+  end
+
+  def stripped_subtitle
+    self.subtitle.gsub(/\<.*?\>/, " ")
+  end
 end

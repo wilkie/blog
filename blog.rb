@@ -16,7 +16,7 @@ class Blog < Sinatra::Base
   helpers do
     def title
       return TITLE if @title.nil?
-      "#{@title} - #{TITLE}"
+      "#{@title.gsub(/\<.*?\>/, " ")} - #{TITLE}"
     end
 
     def tags
