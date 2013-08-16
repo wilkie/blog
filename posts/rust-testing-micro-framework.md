@@ -149,9 +149,9 @@ macro_rules! name(
 )
 ```
 
-In the case of `should!`, I have it take as inputs a `expr` called `$prompt` and a 'expr' called '$func'. The `$prompt` and `$func` are variables and `expr` is a type of token, which is any expression. I intend for `$prompt` to be a string containing something like `"add two numbers"` and the `$func` to be a block.
+In the case of `should!`, I have it take as inputs a `expr` called `$prompt` and a 'expr' called '$func'. The `$prompt` and `$func` are placeholders for what the programmer writes when the macro is used and `expr` is a type of token, which means that each of these should be expression. Notice there is a comma between them. There can be practically any unambiguous characters there and it is expected that those characters will be typed by the programmer to use the macro. I intend for `$prompt` to be a string containing something like `"add two numbers"` and the `$func` to be a block. They will be essentially copy/pasted in with the tokens passed to it.
 
-I then expand the macro out to push a struct called `Test` which contains the string and a closure to an array already established (with the `test!` macro) of tests called `_tests`. The closure contains the block of test code surrounded by variables that check and respond to failure. The block returns an array reflecting how many assertions passed or failed.
+I then expand the macro out to push a new struct called `Test` (defined elsewhere) which contains the string and a closure to an array already established (with the `test!` macro) of tests called `_tests`. The closure contains the block of test code surrounded by variables that check and respond to failure. The block returns an array reflecting how many assertions passed or failed.
 
 The power of rust is revealed here. In fact, macros are far more involved. Here is the [full documentation](http://static.rust-lang.org/doc/tutorial-macros.html). When you type out `should!` in your code, the compiler will expand the macro and place the result in the AST. It can do this without giving up any of those nice features we talked about earlier and it can do this without stalling the compilation process. With this, you can add syntax extensions to the language without having to worry about the specification for the language becoming too bloated or stubborn.
 
