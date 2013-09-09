@@ -37,11 +37,40 @@ class Post
       @outline = Node.new :root
       @last = @outline
       @slug = slug
+      @list_item_number = 0
+
       super *args
     end
 
     def codespan(code)
       "<code>#{CGI::escapeHTML(code).gsub(/\-/, "&#8209;")}</code>"
+    end
+
+    def link(link, title, content)
+      klass = ""
+      if content.match /^\d+$/
+        link = "#ref_#{content}"
+        klass = "reference"
+      end
+      "<a #{klass == "" ? "" : "class='#{klass}'"} href='#{link}' title='#{title}'>#{content}</a>"
+    end
+
+    def list(content, type)
+      @list_item_number = 0
+      if type == :ordered
+        "<ol>#{content}</ol>"
+      else
+        "<ul>#{content}!!</ul>"
+      end
+    end
+
+    def list_item(content, type)
+      @list_item_number += 1
+      if type == :ordered and @last.text == "References"
+        "<a id='ref_#{@list_item_number}'></a><li>#{content}</li>"
+      else
+        "<li>#{content}</li>"
+      end
     end
 
     def block_code(code, language)

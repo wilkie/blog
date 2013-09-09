@@ -1,5 +1,6 @@
 /* zenburn scheme ported from vim to google prettify */
 pre { display: block; background-color: #3f3f3f }
+p code { display: block; background-color: #3f3f3f }
 pre .nocode { background-color: none; color: #000 }
 pre .str { color: #cc9393 } /* string */
 pre .kwd { color: #f0dfaf }

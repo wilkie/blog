@@ -63,6 +63,12 @@ body, html {
 	color: #d9d;
 }
 
+.post a.reference {
+  font-size: 75%;
+  line-height: 75%;
+  vertical-align: super;
+}
+
 .post h2 {
   clear: both;
 	font-family: 'Judson', serif;
@@ -108,11 +114,13 @@ body, html {
   color: rgb(68,68,68);
 
 	font-size: 16px;
-	font-family: 'Metrophobic', sans-serif;
+	font-family: 'News Cycle', 'Metrophobic', sans-serif;
 
   text-align: justify;
 
 	line-height: 1.4em;
+
+  letter-spacing: 0.033em;
 }
 
 .post h1 + p {
@@ -169,14 +177,16 @@ body, html {
 }
 
 .post p code {
+	font-size: 14px;
+  display: inline-block;
 	font-family: 'Inconsolata', monospace;
-  background-color: rgb(220, 220, 220);
-	color: rgb(108, 108, 188); //rgb(72, 74, 171);
+  color: #dcdccc;
   padding: 1px;
   padding-left: 3px;
   padding-right: 3px;
+  padding-top: 0px;
   border-radius: 5px;
-	border: 1px solid #a8a;
+	border: 1px solid #777;
 }
 
 .post pre > code > .ref_line {
