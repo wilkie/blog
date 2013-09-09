@@ -242,13 +242,16 @@ handling network access on behalf of applications and cannot access or
 manipulate any other part of the system.
 
 The central component, the kernel itself, only needed to facilitate very
-low-level access. This meant it was very small and more easily shown to be
-correct. With a small kernel, the system could be made far more reliable.
+low-level access and communication between applications and these specialized
+components. With a small kernel, the system could be made far more reliable.
+For instance, such kernels were so unspecialized that it has been possible to
+formally verify their correctness, such as the seL4 system. [10]()
 
 In fact, the initial motivation for such a design over a monolithic kernel was for
 reliability. If one section of the system failed or was incorrect, it could not
 affect certain parts of the system. In fact, it could be restarted without
-having to consider the ramifications to other systems components. The principle
+having to consider the ramifications to other systems components. With this in mind,
+the principle
 of least privilege was eventually considered an essential component for
 providing fault tolerance. [8]()
 
@@ -302,7 +305,7 @@ the pieces of an exokernel.
 
 In terms of reliablity, the exokernel not only provides the microkernel's
 principle of
-least privilege, but also the principle of least common mechanism. This states
+least privilege, but also the **principle of least common mechanism**. This states
 that
 a common, widely shared component of a system is more likely to widely
 compromise security. [7]() The exokernel increases its reliability over a microkernel
@@ -312,11 +315,17 @@ even replace system components with their own implementations.
 
 In terms of performance, the exokernel has been shown to be better than stock
 monolithic kernels. For instance, the Cheetah exokernel asks the question
-"How can you serve files from disk and eliminate ever copying the information?"
-Such a task is impossible on conventional monolithic kernels. However, with
+"How can you serve files from disk over a network without copying the information?"
+Such a task is extremely common on the internet, yet it is
+impossible on conventional monolithic kernels. However, with
 the flexibility of the exokernel, an application developer could take the disk
-driver library and store the file to disk already separated into packets. These
-packets are, of course, not filled in completely. They could then simply read
+driver library and store the file to disk already separated into packets, which
+are the bite-sized pieces of the information preferred for transmitting
+over a network. These
+packets are, of course, not filled in completely. This is like taking something and
+dividing it up into many boxes with blank posting labels to make shipping
+easier.
+With this representation, the application could then simply read
 these packets off of disk into a buffer, set the empty fields in the packets,
 and have a network driver library send them off.
 
@@ -335,7 +344,7 @@ the ability to do this*.
 
 That brings us to the most important point, yet again: the exokernel provides a better
 social platform for systems. In this design, the kernel has been reduced to
-a tiny sliver. Applications can bypass the kernel's rules altogether and
+its smallest size. Applications do not require the kernel's permission to
 directly access hardware. Application developers can completely rewrite
 drivers if they so wish. That is, they have complete influence over the
 system and thus have complete control over their own hardware.
@@ -355,7 +364,15 @@ provide a very extensible, flexible and efficient system. In fact, exokernel
 systems are shown to more easily provide greater efficiency than monolithic
 designs.
 
-What we can take away from this discussion toward the creation of new systems
+Therefore, we must reject the technical argument in our inspection as to why
+these monolithic systems persist. We must look at how society affects the
+technical design of our systems. For instance, the development ease of
+implementing monolithic systems and the unjustified societal impetus for
+authority over centralized systems. And from this new perspective, we must come
+to a stronger consensus as to why certain systems designs fail.
+
+Futhermore, what we can take away from this discussion toward the creation of
+new systems
 is that it is becoming clearer that minimal interfaces are superior to
 unified abstractions. An **interface** being a thin layer that describes
 exactly what occurs on the other side, whereas an **abstraction** is a description
@@ -388,3 +405,4 @@ hands of those that hold it.
 7. [Online, pdf](http://zoo.cs.yale.edu/classes/cs422/2010/bib/saltzer75protection.pdf). *The Protection of Information in Computer Systems*. Jerome H. Saltzer and Michael D. Schroeder. 1975.
 8. [Online, pdf, self-hosted](/images/kernels_without_abstractions_general/ftos.pdf). *Fault Tolerant Operating Systems*. Peter Denning. August 1976.
 9. [Online, html](http://pdos.csail.mit.edu/papers/exo-sosp97/exo-sosp97.html). *Application Performance and Flexibility on Exokernel Systems*. M. Frans Kaashoek, Dawson R. Engler, Gregory R. Ganger, Héctor M. Briceño, Russell Hunt, David Mazières, Thomas Pinckney, Robert Grimm, John Jannotti, and Kenneth Mackenzie. 1997.
+10. [Online, html](http://ertos.nicta.com.au/research/sel4/). *Secure Microkernel Project (seL4)*. UNSW. 2008.
