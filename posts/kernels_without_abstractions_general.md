@@ -36,7 +36,8 @@ The fact of the matter here, and *alarmingly so*, is that the kernel design we
 make use of nearly every day without protest is very outdated. It reflects a
 series of decisions that in turn reflect a time long passed, especially
 considering the speed technology develops. It is important to ask not only what
-types of designs are better, but **why outdated designs persist**.
+types of designs are better, but **why outdated designs persist** and **how
+designs affect people**.
 
 To answer both of those questions, we have to look back.
 
@@ -56,9 +57,10 @@ published a specification that defines the system's behavior. [1]()
 
 ![border|Dennis Ritchie and Ken Thompson were the instrumental designers of UNIX](people_and_ritchie_thompson.png)
 
-UNIX became widely successful through its efforts at standardization that
-were necessary at the time. This allowed its use among stricter agencies such
-as governments and corporations. Overall, such a process allowed hardware to
+UNIX became widely successful through this standardization that
+was necessary at the time. This allowed stricter agencies such
+as governments and corporations to make use of it. Overall, such a process
+allowed hardware to
 compete more freely, albeit crippling the competition of software.
 Nevertheless, the managing group for UNIX called it a "critical enabler for
 a revolution in information technology." [2]()
@@ -67,8 +69,9 @@ Another measure of its success is how it inadvertently ushered the way for the
 first open source movement. Although designed and implemented by Bell Labs, the
 parent company, AT&T, was restricted by law known as the "1956 Consent Decree"
 due to anti-trust violations; they could never sell a product unrelated to
-telephony such as software. They were forced to give away the source and the
-system itself. [3]() As an aside, this also ensured that AT&T put the transistor, the
+telephony. Software fell under that rule, so they were forced to give away the
+source and the
+system itself. [3]() As an aside, this same decree put the transistor, the
 electrical component that is essential to all modern computing,
 in the public domain as well.
 
@@ -87,13 +90,14 @@ a product. [4]()
 
 Overnight, an environment that was fueled by open source and free availability
 was reduced to commercial enterprise. UNIXes must be licensed. UNIX must be
-bought. Thousands of tools designed on UNIX promised to work on a multitude of
-hardware could now not be used without licensing the UNIX operating system.
+bought. Thousands of tools designed on the UNIX that promised to work on a
+multitude of hardware could no longer be used without licensing the UNIX
+operating system.
 
 To counter this increasingly antagonistic environment, the second open source
-movement spawned simultaneously from multiple, independent groups:
-[GNU](http://www.gnu.org/), [BSD](http://bsd.org/) and
-[Linux](https://www.kernel.org/). These groups established a set of legal
+movement spawned almost simultaneously from multiple, independent groups:
+[GNU](http://www.gnu.org/) and [BSD](http://bsd.org/).
+These groups established a set of legal
 principles that would be attached to their code to ensure that such a condition
 would not arise again.
 
@@ -123,14 +127,16 @@ The merit of such an abstraction is substantial. Programs could be written to
 merely expect and handle such an object. It just reads and writes freely knowing
 that certain behaviors will occur predictably regardless of how the operating
 system is actually performing the operations behind the scenes. Now, you can
-write one small application to hash from a data stream in, say, a variant of
-SHA2. This one program can hash from a network, from keyboard input, from a
-file-- all without changes in its code. You simply supply it a "*file*."
+write, for example, one small application to hash from a data stream in, say,
+a variant of SHA2. This one program can hash from a network, from keyboard
+input, from disk-- all without changes in its code. You simply supply it a
+"*file*."
 
-This reduces program complexity noticeably, yet does not add too much user
+This reduces program complexity noticeably without adding considerable user
 complexity. The **shell**, a program that provides *the* human interface
-between person and machine, offers to ability to **pipe**, that is direct output,
-one program into another with a single character. For instance,
+between person and machine, offers to ability to **pipe**, that is direct output
+from one program into the input of another. It does this by adding the operation
+as a single character: `|` the pipe operator. For instance,
 `cat music.mp3 | mplayer` will play the music file as a stream to mplayer. One
 could just as easily piped a program to pull that stream from a website or have
 a program randomly generate input
@@ -314,7 +320,7 @@ systems components to be diverse since application developers can patch or
 even replace system components with their own implementations.
 
 In terms of performance, the exokernel has been shown to be better than stock
-monolithic kernels. For instance, the Cheetah exokernel asks the question
+monolithic kernels. For instance, the Xok exokernel asks the question
 "How can you serve files from disk over a network without copying the information?"
 Such a task is extremely common on the internet, yet it is
 impossible on conventional monolithic kernels. However, with
@@ -322,7 +328,8 @@ the flexibility of the exokernel, an application developer could take the disk
 driver library and store the file to disk already separated into packets, which
 are the bite-sized pieces of the information preferred for transmitting
 over a network. These
-packets are, of course, not filled in completely. This is like taking something and
+packets are, of course, not filled in completely. This is like taking something
+large and
 dividing it up into many boxes with blank posting labels to make shipping
 easier.
 With this representation, the application could then simply read
@@ -330,15 +337,17 @@ these packets off of disk into a buffer, set the empty fields in the packets,
 and have a network driver library send them off.
 
 This eliminates all copying of memory. It is simply read from disk with a
-DMA transfer (fast) and sent. This improvement required no changes in the
-underlying kernel and resulted in an increase in performance by 400-800%. [9]()
+DMA transfer (fast) and sent. Xok developed the Cheetah webserver with this
+technique. The development of this application required no changes in the
+underlying kernel and resulted in an increase in performance by 400-800%
+over abstractions available to typical monolithic kernels. [9]()
 
 Of course, monolithic kernels could just add a separate and specialized path
 to perform the same optimization. In conversation with Greg Ganger, who worked
 on Cheetah, he suggested that a corporation had indeed done this and got the
 same performance result. The idea, however, is not that an exokernel allows a
 piece of software to do this, but rather it *gives any application developer
-the ability to do this*.
+the ability to do so*.
 
 ![The elements of an exokernel are controlled by any application developer.](people_and_exokernel.png)
 
