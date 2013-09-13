@@ -219,7 +219,12 @@ He berates his own kernel developers for not reviewing code the exact
 
 I will not accept any notion that Linus does this to ensure quality, or
 discourage bad code, or in any way increases the quality of Linux by
-acting this way. That is a fallacy, yes, but also irrelevant. It is pointing
+acting this way. That is a fallacy, yes, and a double standard as my
+friend Tim
+[points out](http://geekfeminism.org/2013/09/05/tone-policing-a-tool-for-protecting-male-power/)
+with the founder of GNU
+[commenting in approval](http://geekfeminism.org/2013/09/05/tone-policing-a-tool-for-protecting-male-power/comment-page-1/#comment-65708),
+but ultimately his behavior is also irrelevant. It is pointing
 out that we will go out of our way to placate behavior of a single person
 because we somehow naively believe that one person can single-handedly
 control the quality of a system that has over
