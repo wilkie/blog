@@ -263,7 +263,7 @@ reliability. If one section of the system failed or was incorrect, it could not
 affect certain parts of the system. In fact, it could be restarted without
 having to consider the ramifications to other systems components. With this in mind,
 the principle
-of least privilege was eventually considered an essential component for
+of least privilege was eventually considered essential for
 providing fault tolerance. [8]()
 
 ![The microkernel pushes more control to individual developers.](people_and_microkernel.png)
