@@ -60,7 +60,7 @@ class Post
       if type == :ordered
         "<ol>#{content}</ol>"
       else
-        "<ul>#{content}!!</ul>"
+        "<ul>#{content}</ul>"
       end
     end
 
