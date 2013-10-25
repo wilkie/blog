@@ -29,7 +29,7 @@ Students then spent several 2-hour periods during the workshop with their resear
 > Fantastic experience! This workshop revitalized my interest in Computer Science...
 > <div class="citation">&mdash; <cite>OurCS Participant</cite></div>
 
-At the end of the workshop, every student gives a small presentation within their team about the work they accomplished over the weekend. No team leaders are involved in the presentations, only the students. Just like any classroom setting, it is **their** work and they receive all accolades. They were able to portray the intent and direction of their work and, in some cases (particularly a controversial webapp), had to actively defend it against critical questioning.
+At the end of the workshop, every student gives a small presentation as part of their team to all participants and leaders about the work they accomplished over the weekend. No team leaders are involved in the presentations, only the students. Just like any classroom setting, it is **their** work and they receive all accolades. They were able to portray the intent and direction of their work and, in some cases (particularly a controversial webapp), had to actively defend it against critical questioning.
 
 I very much recommend having more such events. They inspire and promote leadership and education. The more diverse graduate students we can create, the more diverse our teachers will become, and thus the more diverse our field overall. If you would like to talk to the organizers of OurCS, [Carol Frieze](http://www.cs.cmu.edu/~cfrieze/) is the current chair for the event and wants to spawn more workshops across the world. I'll now devote the rest of this article to my first-hand experience as a team leader.
 
