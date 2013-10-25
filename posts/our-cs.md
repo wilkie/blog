@@ -7,7 +7,7 @@ subtitle: "Retrospective"
 
 On October 18th, I spent the weekend leading a team of 4 undergraduate women in an exploration of distributed systems for collaboration. [OurCS](http://www.cs.cmu.edu/ourcs/), which stands for **O**pportunities for **U**ndergraduate **R**esearch in **C**omputer **S**cience, held a workshop at [CMU](http://cmu.edu) with organizers also from the [University of Pittsburgh](http://pitt.edu) where researchers from many areas in or around computer science led a team of undergraduate women in order to exhibit the wide variety of topics one could study in this field. I was invited along with a dozen other researchers to lead a team through a tough technology problem.
 
-![border|Computer Science suffers from a declining gender inclusivity.](degrees.png)
+![border|Computer Science suffers from a declining gender inclusivity.](degrees.jpg)
 
 The motivation for the event is one that I would hope is rather well-known by now. If you aren't aware, however, the computer science field, and the tech industry at large, has a critical problem with diversity. There is an insurmountable amount of evidence, but for this discussion, I'll just point to the STEM field degree trends. Computer Science is the only STEM (That is, Science-Technology-Engineering-Mathematics) field with a dramatically negative trend in the gender ratio of the degrees awarded. This workshop is an example of one small event, that must be combined with many others, that serves as a possible **solution** to this incredible social problem.
 
