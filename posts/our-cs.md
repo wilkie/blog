@@ -3,6 +3,8 @@ title: "OurCS"
 subtitle: "Retrospective"
 ---
 
+![border|OurCS participants for 2013.](our_cs_0_small.JPG)
+
 On October 18th, I spent the weekend leading a team of 4 undergraduate women in an exploration of distributed systems for collaboration. [OurCS](http://www.cs.cmu.edu/ourcs/), which stands for **O**pportunities for **U**ndergraduate **R**esearch in **C**omputer **S**cience, held a workshop at [CMU](http://cmu.edu) with organizers also from the [University of Pittsburgh](http://pitt.edu) where researchers from many areas in or around computer science led a team of undergraduate women in order to exhibit the wide variety of topics one could study in this field. I was invited along with a dozen other researchers to lead a team through a tough technology problem.
 
 ![border|Computer Science suffers from a declining gender inclusivity.](degrees.png)
@@ -37,6 +39,8 @@ Therefore, the first two parts of the workshop were about distributed systems in
 
 From there, I proposed the code sharing design. It is worth explaining a little bit. The motivation stems from [this article](posts/apples) which calls for a reduction of abstractions. The design of the systems comes from [another article](posts/djehuty-technical) and this [talk](https://speakerdeck.com/wilkie/xomb-plus-djehuty-a-remix-os-for-computation-liberation).
 
+![border|Thinking about distributed systems through implementation](our_cs_1_small.JPG)
+
 Essentially, it is the reduction of code into as small of pieces as you can imagine. Each useful piece of code is given an **interface** (name, description of how to invoke, think function definition). Relationships among interfaces can be thought of as an object-oriented network, however in this system, a single entity does not know of the entire object-oriented graph. A single interface can be passed among many nodes in the system to be *discovered*. When a system knows of a name for a piece of code (let's say `sort` for example) it is now aware that there is some code to invoke that behavior, but it does not know how to do it. So it will ask for an **implementation** of that interface. This is some code that will perform the behavior implied by its name. Now, whenever `sort` is invoked, it will compute the result with that implementation. Systems can then pass around or even create new implementations as they wish. Multiple implementations are a good thing.
 
 The students were quick to point out a flaw that some implementations may do the wrong thing, whether by bugs (human-error), corruption (network-error), hardware (machine-error) or maliciousness. So, we introduced a new component to our system: the **specification** which describes the behaviors all implementations should be beholden to. Now any node in the system can introduce a *rule*, for instance *"All elements in the output should be greater than or equal to the previous element"* which would only allow implementations of `sort` that produced an ascending list. When new loopholes are found, any person can introduce a new rule.
@@ -54,7 +58,11 @@ Essentially, there was an *interface* for plotting, found [here](https://github.
 
 After they were finished, they used a program that implemented the protocol. This was actually the same code running on all machines, including the server I had running the plotter. We looked at how it was implemented and showed the sharing that the system was capable of by downloading the implementations of their fellow students. In the end, we could look at the eventual plots.
 
+![border|After their presentation: Rachel, Grishma, Deeksha, and Lucy.](our_cs_3_small.JPG)
+
 The students were very active in their discussion of the protocol and the system and quickly identified faults and possible problems. They were all pivotal in pushing the idea further and have greatly influenced any further work I may do in this space. It just goes to show that nobody should ever underestimate any student and that this workshop can and does promote confidence and the understanding to every student that they **do** belong and their opinions and thoughts **are** valuable. Such a great experience.
+
+For instance, the students independently determined that this system could use a distributed reputation system to mitigate actively malicious implementations and specifications. They have in fact added to the entire discourse of distributed systems in only a matter of hours!
 
 So, to conclude, let's look at the result. The following five images (a subset chosen from the many permutations) show each of the students (and my original plotter) plot implementations working on Grishma's dataset. As you can see, Grishma's original plot is at the top and it is drastically different from the other students. However, by allowing for this type of collaborative code sharing system, she can now see other ideas and be inspired by other techniques. For instance, the bottom chart, which shows a stacked bar graph, may better represent her data. This demonstrates that the system can indeed allow collaboration without explicit human arbitration, and that this is valuable. Now, we can go on to producing a larger system that will extend this idea to all code!
 
