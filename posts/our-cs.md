@@ -1,6 +1,8 @@
 ---
 title: "OurCS"
 subtitle: "Retrospective"
+date: 10-25-2013
+author: wilkie
 ---
 
 ![border|OurCS participants for 2013.](our_cs_0_small.JPG)
