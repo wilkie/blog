@@ -16,7 +16,7 @@ Let's be very clear: we all make mistakes. We cannot learn unless we fail, other
 
 ![Doom, released in 1993, is now open source-- and riddled with interesting programming mistakes.](doom.gif)
 
-As proof of this point, we will look at bugs humbly illustrated by [John Carmack](http://en.wikipedia.org/wiki/John_D._Carmack), a programmer chiefly responsible for the video game [Doom](http://en.wikipedia.org/wiki/Doom_(video_game\)). Carmack is very well known for his programming prowess. However, just like the rest of us, he is actually human and makes the very simplest of mistakes.
+As proof of this point, we will look at bugs humbly illustrated by [John Carmack](http://en.wikipedia.org/wiki/John_D._Carmack), a programmer chiefly responsible for the video game [Doom](http://en.wikipedia.org/wiki/Doom_(video_game)). Carmack is very well known for his programming prowess. However, just like the rest of us, he is actually human and makes the very simplest of mistakes.
 
 To show the art of the bug exploit, we will look at **speedrunning**. [Speedrunning](http://en.wikipedia.org/wiki/Speedrun) is a concept where a player attempts to complete a video game challenge as quickly as possible. Speedrunners are typically allowed to break the game in any way. They see code as the rules of the game, and anything the code allows is proper. In Doom, these expert players take advantage of several very basic and simple mistakes in the Doom code.
 
