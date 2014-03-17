@@ -141,7 +141,7 @@ class Post
       "</p><div class='#{classes}'>#{img_source}#{caption}</div><p>"
     end
 
-    def header(text, header_level)
+    def header(text, header_level, *args)
       new_node = Node.new text
       if header_level == @last.level
         new_node.parent = @last.parent
