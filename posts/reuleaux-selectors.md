@@ -12,9 +12,22 @@ Whether you believe gender follows essentialist principles or is constructed, th
 Contrary to unfortunately popular belief, gender is not chosen from a binary as though it were conjured at the whim of a coin-toss.
 Gender is different for just about every individual and as infinite as our collective imaginations can bear.
 
+In this post, we describe a new form of gender selection interface (the [code](https://github.com/wilkie/blog/blob/master/public/javascript/reuleaux-selectors/reuleaux-selectors.js) is open and in need of refactoring).
+It is worth noting this disclaimer: we are not trying to develop the perfect representation.
+For decades, the computer science community has not explored new approaches to this problem, and thus for decades people have been excluded based on not being able to fully reflect themselves.
+There are a few reasons why&mdash; particularly computer science's predilection toward metrics and peer-review which hurt divisive, intentionally vague, or exploratory work.
+Yet this is exactly meant to be a provocative push to get people, including UI/UX researchers, invigorated about this problem.
+We should ultimately be collaborating on a better solution.
+
+For now, though, if you ask for gender, reconsider asking.
+If that fails, consider asking for pronouns instead.
+If you still can't say no, use a text field.
+
 ## What is gender?
 
-In order to describe a method of how to represent gender and allow an individual to select a gender identity, we first will explore the variety of gender we tend to describe, and the variety of gender that exists. Many people may be surprised at the depth of gender that exists. It is perfectly acceptable to be unaware, but as we build social spaces, we should certainly make an attempt to empathize.
+In order to describe a method of how to represent gender and allow an individual to select a gender identity, we first will explore the variety of gender we tend to describe, and the variety of gender that exists.
+Many people will be surprised at the amazing rainbow-like diversity of gender that the universe contains.
+It is perfectly acceptable to be unaware, but as we build social spaces and as we interact with a diversity of people, we should certainly make an attempt to empathize.
 
 ### Gender binary
 
@@ -25,7 +38,7 @@ You are either a man or a woman and if you are not one of those two, you are pus
 
 It is clear that our overall society enforces this concept through its presentation in various societal forms: which bathroom we use, and reinforced through cultural symbols: such as the ones that adorn such bathroom doors and through gendered language such as binary pronouns (he, she) and gendered nouns (blond, blonde in English).
 
-There is no room for diversity here. A person could be on that fuzzy (and ever-changing) line between men and women. What pronouns do we use? Well, we should use what pronouns they prefer, and should ask for such. As it stands, though, we are still pushing this individual to select between two choices, when in fact, they may prefer another option. This is perfectly, and naturally, acceptable.
+There is no room for diversity here. A person could be on that fuzzy (and ever-changing) line between men and women. What pronouns do we use? Well, we should use what pronouns they prefer, and should ask for such. As it stands, though, we are still pushing this individual to select between two choices, when in fact, they may prefer another option. This choice is perfectly, and naturally, acceptable.
 
 ### Gender scale
 
@@ -51,7 +64,7 @@ That is, it is good for representing the qualification of gender, but not very g
 Therefore, a triangle would represent the same idea. It does make certain landmarks clear by placing familiar gender identities in the corners. However, this should help individuals choose by selecting a gender identity relative to those landmarks.
 Also, by placing agender at the midpoint, bigender at the bottom center, and polygender at the top, eschewing gender is always a matter of going toward the center without having to move through genders to be rid of them.
 
-This representation is a 2d input that provides input for a three dimensional point. The point will be calculated as a vector of the distances to each corner. From there, we can create a gender selector using the idea of this triangle such that a fuller representation of the spectrum is available.
+This representation is a 2d input that provides input for a three dimensional point. The point will be calculated as a vector of the distances to each corner. From there, we can create a gender selector by refining this triangle concept such that a fuller representation of the spectrum is available.
 
 ## Defining a comparable gender value
 
@@ -59,7 +72,7 @@ This representation is a 2d input that provides input for a three dimensional po
 
 The intuitive attempt to represent directional values for male, female, and androgynous would be to use a triangle and place each gender at a corner.
 This posed some difficulty in selection.
-Some individuals were quick to place their marker in a corner directly.
+Based on informal feedback, some individuals were quick to place their marker in a corner directly.
 The corners, by being corners, could not capture the fluidity of the spectrum.
 
 Therefore, the corners should be rounded off in a way that did not compromise their position as an extent, but also give the impression of fluidity.
@@ -100,11 +113,15 @@ The selection is given as a strict choice normally between two different values:
 
 ### dropdown
 
-The dropdown is the traditional gender selector. Generally, it seems developers tend to only allot the two familiar choices. Even social services proud to be used by millions of people, such as facebook, have not conceding in offering any amount of choice, even under [heavy criticism](http://www.zdnet.com/blog/facebook/nepal-asks-facebook-for-third-sex-option/11117). Interestingly, facebook does contain internal support for a third gender that users were [able to enable through a hack](http://www.youtube.com/watch?v=rb68sPtblyo) which then used non-gendered pronouns to refer to them to friends.
+The dropdown is the traditional gender selector. Generally, it seems developers tend to only allot the two familiar choices. Even social services proud to be used by millions of people, such as facebook, have long fought offering any amount of choice, even under [heavy criticism](http://www.zdnet.com/blog/facebook/nepal-asks-facebook-for-third-sex-option/11117). Interestingly, facebook has always contained internal support for a third gender that users were [able to enable through a hack](http://www.youtube.com/watch?v=rb68sPtblyo) which then used non-gendered pronouns to refer to them to friends.
 
-![border|Facebook, a social network with millions of users, fails to represent non-binary genders.](gender-facebook.png)
+Eventually, [facebook added](http://abcnews.go.com/blogs/headlines/2014/02/heres-a-list-of-58-gender-options-for-facebook-users/) a curated list of gender options, most of which are just variants along the cis/trans binary and vague angrogynous terms.
+Notably, facebook hid their list of acceptable genders and employed in place of a drop-down an auto-complete text field, which is certainly an implicit drop-down.
+However, with this change, they also ask for pronouns and allow people to select a long-supported non-gendered 'their'.
 
-There was a conscious effort of developers in general (facebook avoided this trend), one could insist was merely to retrofit a proactive model with an existing system, to add a third catch-all option usually titled "other."
+![border|Facebook, a social network with millions of users, allows basic non-binary genders if you can guess the terms they support.](fb_gender.png)
+
+There was a conscious effort of developers in general (facebook avoided this trend), perhaps to retrofit a proactive model with an existing system, to add a third catch-all option usually titled "other."
 This is an incorrect solution because culturally it paints the image that this third option represents a third gender, when it really collects those strictly outside of the cultural gender-binary.
 It dismisses the gender identity of all of those outside male and female. Furthermore, the term "*other*" depicts these individuals as abnormal.
 It says, you can be a man, a woman, or something else. This is not equality. This is merely placation without respect for identity.
@@ -121,7 +138,7 @@ This is, of course, a simple textfield.
 This solution is generally seen as a versatile solution that allows a wealth of choices.
 It is a solution that is used, perhaps slightly strategically, by facebook's cultural competitor [Diaspora](http://www.sarahmei.com/blog/2010/11/26/disalienation/).
 
-![border|The change to a text field for gender was a divisive issue for Diaspora, shown here, but not for Metafilter who originally had such a field for the last decade. [1]](diaspora-gender.png)
+![border|The change to a text field for gender was a divisive issue for Diaspora, shown here, but not for Metafilter who originally had such a field for over 10 years. [1]](diaspora-gender.png)
 
 However, it is not without fault. A textfield cannot describe all options because it is limited by language. It also does not represent degrees of gender. That is, one person can say "male"
 and so can the next, yet, we cannot tell if such a set of individuals was presented with a scale, would they then say that they are 80% male and 70% male?
@@ -166,7 +183,7 @@ That is, the selector allows you to put a point at the bottom of the field. But 
 This can be solved by allowing gender to be specified as a single point, and sexual orientation to be a set of points to form areas of selection.
 In this form, if a gender identity that an individual **A** selects falls within the area given by the sexual orientation selector of person **B**, then you could say that **A** would be gender-compatible with **B** from **B**'s perspective.
 This greatly complicates the sexual orientation selector relative to the gender selector in terms of user ease of use.
-However, in cases where this type of input is very useful (such as with dating services,) this complication can be tolerated by users in order to increase the quality of their information.
+However, in cases where this type of input is very useful (such as with dating services,) this complication can be tolerated by users in order to increase the quality of their representation.
 
 <p></p>
 <div class="image">
@@ -199,8 +216,6 @@ Please experiment with the selectors above to create your identity profile below
     <strong>Interactive</strong>: Use the selectors directly above these to create your identity image.
   </div>
 </div>
-
-TODO: Allow people to share by url?
 
 ## Not an end-all solution
 

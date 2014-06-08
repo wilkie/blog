@@ -97,7 +97,7 @@ class Post
         end
         new_code << l
       end
-      "<pre><code>#{language}#{new_code}</code></pre>"
+      "<pre><code class='lang-#{language}'>#{new_code}</code></pre>"
     end
 
     def image(link, title, alt_text)

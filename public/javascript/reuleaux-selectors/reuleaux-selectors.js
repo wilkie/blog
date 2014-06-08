@@ -1,14 +1,14 @@
 Raphael.fn.triangle = function(x,y,r) {
 	r = r || 1;
-	
+
 	var points = getPoints(x,y,r);
-	
+
 	var pathstr = "M" + points[0].x + " " + points[0].y;
 	for(var i=1;i<3;i++) {
 		pathstr += "L" + points[i].x + " " + points[i].y;
 	}
 	pathstr += "z";
-	
+
 	return this.path(pathstr);
 }
 
@@ -249,8 +249,8 @@ function getAreaPoints(x, y, r, ir, areas, paper) {
         // Render the single circle
         knob.rendered = true;
         ret.moveTo(knob.x+x, knob.y+y-knob.radius);
-        ret.circleArcTo(knob.x+x, knob.y+y+knob.radius, knob.radius, 1, 1); 
-        ret.circleArcTo(knob.x+x, knob.y+y-knob.radius, knob.radius, 1, 1); 
+        ret.circleArcTo(knob.x+x, knob.y+y+knob.radius, knob.radius, 1, 1);
+        ret.circleArcTo(knob.x+x, knob.y+y-knob.radius, knob.radius, 1, 1);
         ret.close();
       }
       if (startingArea != -1) {
@@ -807,7 +807,7 @@ function getReuleauxArcPathString(x, y, r, startAngle, endAngle) {
     }
     builder.circleArcTo(endPoint.x, endPoint.y, cir_r, sweep);
   }
-  
+
   return builder;
 }
 
@@ -1114,7 +1114,7 @@ Raphael.fn.prettyReuleauxRing = function(x, y, r, ir, caption, labels) {
   ret.labels.all    = this.pathFromBuilder(polySymbol(x, y, r)).attr({"fill-opacity": 0.0, "stroke-width": 1.4}).attr(font_attr);
 
   ret.caption = this.text(x,(0.9*r)+y,caption).attr(caption_attr);
-  
+
   ret.outer_border = this.path(outer_pathstr);
   ret.inner_border = this.path(inner_pathstr);
 
@@ -1367,7 +1367,7 @@ function drawSelector(paper, x, y, size, attr_outer, caption, labels, start_x, s
             newy = intersectionPoints[0].y;
           }
         }
-  
+
         this.attr({cx: newx, cy: newy});
 
         this.attr({opacity: 0.5});
@@ -1718,7 +1718,7 @@ function transformPoint(newx, newy, x,y,size,size_inner) {
   var f = Math.sqrt(fx + fy);
 
   // How far from the center to the edge normal to the curve are we?
-  // We then go that far along the diagonal of the triangle for 
+  // We then go that far along the diagonal of the triangle for
   // our transformation.
   var diff = f / d;
 
@@ -1772,7 +1772,9 @@ window.onload = function() {
 	var gender = {};
   var gender2 = {};
   var gender3 = {};
+  var gender4 = {};
 	var sexuality = {};
+	var sexuality2 = {};
 	var sexualitySimple = {};
 	var attr = {};
 
@@ -1824,6 +1826,17 @@ window.onload = function() {
 	                              parseInt(document.getElementById("genderXPos2").value),
 	                              parseInt(document.getElementById("genderYPos2").value));
 
+  /*
+	gender4.paper = Raphael("genderTriField3", 200, 200);
+	gender4.selector = drawSelector(gender4.paper,
+	                           100, 100, 100,
+							   attr.outer,
+							   "I Identity As",
+							   {middle: "none", top: "all", left: "female", right: "male"},
+	                              parseInt(document.getElementById("genderXPos3").value),
+	                              parseInt(document.getElementById("genderYPos3").value));
+                                */
+
 	var lastline;
 	var lasttriline;
 	var lastcir1;
@@ -1840,7 +1853,7 @@ window.onload = function() {
 
 		// length of a side of the triangle
 		var MAX = Math.sqrt(Math.pow(points[0].x - points[1].x, 2) + Math.pow(points[0].y - points[1].y, 2));
-		
+
 		if(newx == 100 && newy == 100){
 			// inside the hole
 			triple.a = 0;
@@ -1889,7 +1902,7 @@ window.onload = function() {
 
 		// length of a side of the triangle
 		var MAX = Math.sqrt(Math.pow(points[0].x - points[1].x, 2) + Math.pow(points[0].y - points[1].y, 2));
-		
+
 		if(newx == 100 && newy == 100){
 			// inside the hole
 			triple.a = 0;
@@ -1903,6 +1916,17 @@ window.onload = function() {
 
 		document.getElementById("sexualityVal").value = JSON.stringify(triple);
 	}
+
+  /*
+	sexuality2.paper = Raphael("sexualityTriField2", 200, 200);
+	sexuality2.selector = drawSelector(sexuality2.paper,
+	                              100, 100, 100,
+								  attr.outer,
+								  "I'm Attracted To",
+                  {middle: "none", top: "all", left: "female", right: "male"},
+	                              parseInt(document.getElementById("sexualityXPos2").value),
+	                              parseInt(document.getElementById("sexualityYPos2").value),
+                                false);*/
 
   var output = {};
   output.paper = Raphael("output", 470, 230);

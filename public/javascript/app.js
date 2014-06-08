@@ -4,10 +4,14 @@ $(document).ready(function(){
     $("pre code").parent().each(function() {
       $(this).addClass('prettyprint');
       prettify = true;
-      });
+    });
 
     // if code blocks were found, bring in the prettifier ...
     if ( prettify ) {
-    $.getScript("/javascript/prettify.js", function() { prettyPrint() });
+      $.getScript("/javascript/prettify.js", function() {
+        $.getScript("/javascript/lang-vb.js", function() {
+          prettyPrint()
+        });
+      });
     }
 });

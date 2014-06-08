@@ -12,13 +12,6 @@ body, html {
   height: 1px;
 }
 
-.post h2.subtitle {
-	font-family: 'Cinzel', serif;
-	color: rgb(148, 148, 228); //rgb(72, 74, 171);
-  text-align: center;
-  font-size: 30px;
-}
-
 .post hr + p {
   margin-bottom: 15px;
 }
@@ -34,15 +27,15 @@ body, html {
 
 .container {
 	min-height: 100%;
-  max-width: 960px;
+  max-width: 970px;
   margin-left: auto;
   margin-right:auto;
-  padding-left: 15px;
+  padding-left: 5px;
   padding-bottom: 15px;
 }
 
 .post {
-	background-color: #f4f4f4;
+	background-color: #ffffff;
 	min-height: 100%;
 
 	padding-left: 20px;
@@ -71,7 +64,7 @@ body, html {
 
 .post h2 {
   clear: both;
-	font-family: 'Judson', serif;
+	font-family: 'Philosopher', 'Judson', serif;
   font-weight: 400;
 	font-size: 28px;
 	margin-bottom: 13px;
@@ -82,20 +75,26 @@ body, html {
 	font-family: 'Source Sans Pro', serif;
   font-weight: 400;
 	color: rgb(73, 76, 230);
-	color: rgb(118, 118, 228); //rgb(72, 74, 171);
+	color: rgb(118, 118, 228);
 	font-size: 18px;
 	margin-bottom: 13px;
   margin-left: 1px;
 }
 
 .post h1, .post h1 a {
-	font-family: 'Cinzel', serif;
+	font-family: 'Philosopher', serif;
   text-align: center;
-	color: rgb(148, 148, 228); //rgb(72, 74, 171);
+	color: rgb(98, 98, 178);
 	font-size: 64px;
-  font-weight: 700;
 	line-height: 1.0em;
 	margin-bottom: 18px;
+}
+
+.post h2.subtitle {
+	font-family: 'Cinzel', serif;
+	color: rgb(148, 148, 228);
+  text-align: center;
+  font-size: 30px;
 }
 
 .post h1 + p {
@@ -105,22 +104,20 @@ body, html {
 .post h2, .post h2 a, .post h2 a:visited {
 	color: rgb(88, 90, 209);
 	color: rgb(118, 118, 228); //rgb(72, 74, 171);
+  color: rgb(34, 153, 170);
 }
 
 .post p {
 	margin-top: 3px;
 	margin-left: 2px;
 
-  color: rgb(68,68,68);
+  color: rgb(48,48,48);
 
-	font-size: 17px;
-	font-family: 'News Cycle', 'Metrophobic', sans-serif;
+	font-size: 18px;
+	font-family: 'Open Sans' ,'News Cycle', 'Metrophobic', sans-serif;
+  font-weight: 200;
 
-  text-align: justify;
-
-	line-height: 1.4em;
-
-  letter-spacing: 0.033em;
+	line-height: 23px;
 }
 
 .post h1 + p {
@@ -142,7 +139,7 @@ body, html {
 .post ul + h2,
 .post ol + h3,
 .post ul + h3 {
-	margin-top: 25px;
+	margin-top: 35px;
 }
 
 .post p + p {
@@ -151,6 +148,9 @@ body, html {
 
 .post em {
 	font-style: italic;
+	color: rgb(58, 58, 138);
+  font-family: 'Philosopher', serif;
+  font-size: 20px;
 }
 
 .post strong {
@@ -178,15 +178,11 @@ body, html {
 
 .post p code {
 	font-size: 14px;
+  line-height: 18px;
   display: inline-block;
 	font-family: 'Inconsolata', monospace;
-  color: #dcdccc;
-  padding: 1px;
-  padding-left: 3px;
-  padding-right: 3px;
-  padding-top: 0px;
-  border-radius: 5px;
-	border: 1px solid #777;
+  background-color: inherit;
+	color: #757;
 }
 
 .post pre > code > .ref_line {
@@ -263,8 +259,8 @@ body, html {
 .post blockquote > p {
 	font-family: 'Marcellus', serif;
 	font-style: normal;
-	font-size: 16px;
-  letter-spacing: 0.033em;
+	font-size: 24px;
+  line-height: 1.2em;
 	color: #606060;
 }
 
@@ -273,7 +269,7 @@ body, html {
 	margin-bottom: 20px;
 	background-color: #e3e3e3;
 	color: #606060;
-	padding: 0.5em 2em 0.6em 2.3em;
+	padding: 10px 2em 0.6em 50px;
 	position: relative;
 }
 
@@ -283,9 +279,9 @@ body, html {
 	position: absolute;
 	top: 0;
 	left: 3px;
-	font-size: 4em;
+	font-size: 5em;
 	line-height: 1;
-	color: #d0a0d0;
+	color: #979;
 	z-index: 1;
 }
 
@@ -294,7 +290,7 @@ body, html {
 	font-size: 12px;
 	font-family: 'Metrophobic';
 	font-style: italic;
-	color: #aaa;
+	color: #888;
 	text-align: right;
 	margin-top: 8px;
 }
