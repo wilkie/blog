@@ -12,7 +12,7 @@ Whether you believe gender follows essentialist principles or is constructed, th
 Contrary to unfortunately popular belief, gender is not chosen from a binary as though it were conjured at the whim of a coin-toss.
 Gender is different for just about every individual and as infinite as our collective imaginations can bear.
 
-In this post, we describe a new form of gender selection interface (the [code](https://github.com/wilkie/blog/blob/master/public/javascript/reuleaux-selectors/reuleaux-selectors.js) is open and in need of refactoring).
+In this post, we ([Lindsey Bieda](http://rarlindseysmash.com) and wilkie) describe a new form of gender selection interface (the [code](https://github.com/wilkie/blog/blob/master/public/javascript/reuleaux-selectors/reuleaux-selectors.js) is open and in need of refactoring).
 It is worth noting this disclaimer: we are not trying to develop the perfect representation.
 For decades, the computer science community has not explored new approaches to this problem, and thus for decades people have been excluded based on not being able to fully reflect themselves.
 There are a few reasons why&mdash; particularly computer science's predilection toward metrics and peer-review which hurt divisive, intentionally vague, or exploratory work.
