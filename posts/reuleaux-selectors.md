@@ -116,7 +116,8 @@ The selection is given as a strict choice normally between two different values:
 The dropdown is the traditional gender selector. Generally, it seems developers tend to only allot the two familiar choices. Even social services proud to be used by millions of people, such as facebook, have long fought offering any amount of choice, even under [heavy criticism](http://www.zdnet.com/blog/facebook/nepal-asks-facebook-for-third-sex-option/11117). Interestingly, facebook has always contained internal support for a third gender that users were [able to enable through a hack](http://www.youtube.com/watch?v=rb68sPtblyo) which then used non-gendered pronouns to refer to them to friends.
 
 Eventually, [facebook added](http://abcnews.go.com/blogs/headlines/2014/02/heres-a-list-of-58-gender-options-for-facebook-users/) a curated list of gender options, most of which are just variants along the cis/trans binary and vague angrogynous terms.
-Notably, facebook hid their list of acceptable genders and employed in place of a drop-down an auto-complete text field, which is certainly an implicit drop-down.
+Notably, facebook hid their list of acceptable genders and employed (in place of a drop-down) an auto-complete text field.
+That is: an implicit drop-down.
 However, with this change, they also ask for pronouns and allow people to select a long-supported non-gendered 'their'.
 
 ![border|Facebook, a social network with millions of users, allows basic non-binary genders if you can guess the terms they support. Image from [Will Oremus's article](http://www.slate.com/blogs/future_tense/2014/02/13/facebook_custom_gender_options_here_are_all_56_custom_options.html).](fb_gender.png)
