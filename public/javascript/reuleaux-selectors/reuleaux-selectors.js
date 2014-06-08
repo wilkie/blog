@@ -1320,7 +1320,7 @@ function drawSelector(paper, x, y, size, attr_outer, caption, labels, start_x, s
   selector.labels = {};
   selector.labels.middle = paper.text(x,y,labels.middle)
     selector.labels.top = paper.text(x,20+(y-size), labels.top)
-    selector.labels.left = paper.text((0.40*size)+(x-size),(0.40*size)+y,labels.left)
+    selector.labels.left = paper.text((0.40*size)+(x-size-10),(0.40*size)+y,labels.left)
     selector.labels.right = paper.text((0.65*size)+x,(0.40*size)+y, labels.right)
     selector.caption = paper.text(x,(0.8*size)+y,caption);
 
@@ -1785,7 +1785,7 @@ window.onload = function() {
 	                            100, 100, 100,
 							   attr.outer,
 							   "Gender Identity",
-							   {middle: "none", top: "all", left: "female", right: "male"},
+							   {middle: "none", top: "all", left: "male", right: "female"},
 	                              parseInt(document.getElementById("genderXPosI").value),
 	                              parseInt(document.getElementById("genderYPosI").value));
 
@@ -1813,7 +1813,7 @@ window.onload = function() {
 	                           100, 100, 100,
 							   attr.outer,
 							   "I Identity As",
-							   {middle: "none", top: "all", left: "female", right: "male"},
+							   {middle: "none", top: "all", left: "male", right: "female"},
 	                              parseInt(document.getElementById("genderXPos").value),
 	                              parseInt(document.getElementById("genderYPos").value));
 
@@ -1822,7 +1822,7 @@ window.onload = function() {
 	                           100, 100, 100,
 							   attr.outer,
 							   "I Identity As",
-							   {middle: "none", top: "all", left: "female", right: "male"},
+							   {middle: "none", top: "all", left: "male", right: "female"},
 	                              parseInt(document.getElementById("genderXPos2").value),
 	                              parseInt(document.getElementById("genderYPos2").value));
 
@@ -1873,7 +1873,7 @@ window.onload = function() {
 	                              100, 100, 100,
 								  attr.outer,
 								  "I'm Attracted To",
-		  					      {middle: "none", top: "all", left: "women", right: "men"},
+		  					      {middle: "none", top: "all", left: "men", right: "women"},
 	                              parseInt(document.getElementById("sexualityXPosSimple").value),
 	                              parseInt(document.getElementById("sexualityYPosSimple").value));
 
@@ -1887,7 +1887,7 @@ window.onload = function() {
 	                              100, 100, 100,
 								  attr.outer,
 								  "I'm Attracted To",
-                  {middle: "none", top: "all", left: "female", right: "male"},
+                  {middle: "none", top: "all", left: "male", right: "female"},
 	                              parseInt(document.getElementById("sexualityXPos").value),
 	                              parseInt(document.getElementById("sexualityYPos").value),
                                 false);
@@ -1933,12 +1933,12 @@ window.onload = function() {
   output.gen_ring  = output.paper.prettyReuleauxRing(125, 125, 98, 17,
       "I Identify As",
       { middle: "\u26aa", top: "\u26a7",
-        left: "\u2642", right: "\u2640"});
+        left: "\u2640", right: "\u2642"});
 
   output.sex_ring  = output.paper.prettyReuleauxRing(345, 125, 98, 17,
       "I'm Attracted To",
       { middle: "\u26aa", top: "\u26a7",
-        left: "\u2642", right: "\u2640"}, true);
+        left: "\u2640", right: "\u2642"}, true);
 
   output.gen_ring.set_knob(0, 0);
   gender3.selector.updated = function(x,y) {
