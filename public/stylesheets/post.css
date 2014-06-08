@@ -362,13 +362,21 @@ body, html {
 	border: 1px solid #a8a;
 }
 
-.post .image .caption {
+.post .image .caption,
+.post .image .caption p {
 	font-family: 'Judson', sans-serif;
   font-size: 13px;
   line-height: 1.3em;
   color: rgb(84,84,84);
   font-style: italic;
   width: 80%;
+  margin: 0 auto;
+}
+
+.post .image .caption p {
+  width: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 .post .image .caption > strong {

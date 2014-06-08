@@ -127,6 +127,7 @@ class Post
 
       caption = ""
       caption = alt_text unless alt_text.start_with? "!"
+      caption = Redcarpet::Markdown.new(self.class.new(@slug)).render(caption)
       alt_text = Nokogiri::HTML(alt_text).xpath("//text()").remove
 
       img_source = "<img src='#{link}' title='#{title}' alt='#{alt_text}' />"

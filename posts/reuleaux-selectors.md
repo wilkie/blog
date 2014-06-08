@@ -119,7 +119,7 @@ Eventually, [facebook added](http://abcnews.go.com/blogs/headlines/2014/02/heres
 Notably, facebook hid their list of acceptable genders and employed in place of a drop-down an auto-complete text field, which is certainly an implicit drop-down.
 However, with this change, they also ask for pronouns and allow people to select a long-supported non-gendered 'their'.
 
-![border|Facebook, a social network with millions of users, allows basic non-binary genders if you can guess the terms they support.](fb_gender.png)
+![border|Facebook, a social network with millions of users, allows basic non-binary genders if you can guess the terms they support. Image from [Will Oremus's article](http://www.slate.com/blogs/future_tense/2014/02/13/facebook_custom_gender_options_here_are_all_56_custom_options.html).](fb_gender.png)
 
 There was a conscious effort of developers in general (facebook avoided this trend), perhaps to retrofit a proactive model with an existing system, to add a third catch-all option usually titled "other."
 This is an incorrect solution because culturally it paints the image that this third option represents a third gender, when it really collects those strictly outside of the cultural gender-binary.
@@ -203,8 +203,6 @@ However, in cases where this type of input is very useful (such as with dating s
 </div>
 
 Please experiment with the selectors above to create your identity profile below.
-
-### Describe yourself
 
 <p></p>
 <div class="image">
