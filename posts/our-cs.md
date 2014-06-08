@@ -1,7 +1,7 @@
 ---
 title: "OurCS"
 subtitle: "Retrospective"
-date: 10-25-2013
+date: 2013-10-25
 author: wilkie
 ---
 
