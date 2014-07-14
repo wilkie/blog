@@ -148,9 +148,9 @@ body, html {
 
 .post em {
 	font-style: italic;
-	color: rgb(58, 58, 138);
+	color: rgb(78, 78, 158);
   font-family: 'Philosopher', serif;
-  font-size: 20px;
+  font-size: 17px;
 }
 
 .post strong {
@@ -387,31 +387,36 @@ body, html {
 
 .post p.footer {
   font-size: 10px;
+  clear: both;
   color: #888888;
 }
 
-.image > div.youtube {
-  max-width: 420px;
-  background-image: url('../images/youtube_placeholder.png');
-}
-
-.image > div.youtube > div.youtube_fixture {
+.image > .yt {
   position: relative;
   width: 100%;
   max-width: 420px;
+  margin: 0 auto;
 }
 
-.image > .youtube > .youtube_fixture > img {
+.image > .yt > .yt_fixture {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  max-width: 420px;
+}
+
+.image > .yt > .yt_fixture > img {
   width: 100%;
   max-width: 420px;
 }
 
-.image > .youtube > .youtube_fixture > .youtube_frame {
+.image > .yt > .yt_fixture > .yt_frame {
   position: absolute;
   top: 0px;
   left: 0px;
   width: 100%;
   height: 100%;
+  max-width: 420px;
 }
 
 .post {

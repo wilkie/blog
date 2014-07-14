@@ -135,7 +135,7 @@ class Post
       if link.match "http[s]?://(www.)?youtube.com"
         # embed the youtube link
         youtube_hash = link.match("youtube.com/.*=(.*)$")[1]
-        img_source = "<div class='youtube'><div class='youtube_fixture'><img src='/images/youtube_placeholder.png' /><iframe class='youtube_frame' src='http://www.youtube.com/embed/#{youtube_hash}'></iframe></div></div>"
+        img_source = "<div class='yt'><div class='yt_fixture'><img src='/images/yt_placeholder.png' /><iframe class='yt_frame' src='http://www.youtube.com/embed/#{youtube_hash}'></iframe></div></div>"
       end
 
       caption = "<br /><div class='caption'>#{caption}</div>" unless caption == ""
