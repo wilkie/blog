@@ -37,7 +37,7 @@ Check out how this speedrunner runs:
 ![Rarely will this runner ever travel in the direction the player is facing.](http://www.youtube.com/watch?v=M6PK9bd_uUs)
 
 ## Looking at the code
-Let's now investigate why these particular bugs happen. Doom is written in [C](http://en.wikipedia.org/wiki/C_(programming_language\)), which is a very low-level programming language, meaning it is designed for speed and not particularly for programmer comfort. This was a very common language to write games in at the time since the language allowed you to write very optimized code so one could push the limits of the technology.
+Let's now investigate why these particular bugs happen. Doom is written in [C](http://en.wikipedia.org/wiki/C\_\(programming_language\)), which is a very low-level programming language, meaning it is designed for speed and not particularly for programmer comfort. This was a very common language to write games in at the time since the language allowed you to write very optimized code so one could push the limits of the technology.
 
 In the [Doom source](https://github.com/osgcc/doom), there are several functions that deal with moving the player. The gist of them is that each frame before it draws the screen, it will decide how to move the player. It looks at which keys are pressed, and if, for instance, the walk forward key is down, it will update the player's position to move them forward. It may then look at collisions and react to running into monster projectiles, but let's just focus on the movement part.
 
