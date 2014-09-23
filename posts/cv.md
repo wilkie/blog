@@ -11,7 +11,7 @@ My name is Dave Wilkinson, better known as ***wilkie***. I develop large scale d
 
 * **College**: University of Pittsburgh, 2005-2009
 * **Degree**: Bachelors with Honors, Computer Science
-* **Post-Bachelors**: Graduate study in CS, University of Pittsburgh, 2009-2012
+* **Post-Bachelors**: Masters of Science, Computer Science, University of Pittsburgh, 2009-2014
 
 ## Speaking
 
@@ -45,7 +45,7 @@ My name is Dave Wilkinson, better known as ***wilkie***. I develop large scale d
 
 * ***Student Researcher*** - University of Pittsburgh - 2009-2012 - Researched operating system designs and distributed systems with an emphasis on building new systems.
 
-* ***Teaching Fellow*** - University of Pittsburgh - 2010-2012 - Responsible for curriculum in introductory programming courses. See [Teaching](#teaching) section.
+* ***Teaching Fellow*** - University of Pittsburgh - 2010-2014 - Responsible for curriculum in introductory programming courses. See [Teaching](#teaching) section.
 
 
 ## Software

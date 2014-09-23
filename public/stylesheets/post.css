@@ -149,7 +149,8 @@ body, html {
 .post em {
 	font-style: italic;
 	color: rgb(78, 78, 158);
-  font-family: 'Philosopher', serif;
+  font-family: 'Open Sans', 'Philosopher', serif;
+  font-weight: 400;
   font-size: 17px;
 }
 
