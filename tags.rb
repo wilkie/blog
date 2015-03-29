@@ -57,7 +57,7 @@ class Tags
     Dir.glob("posts/*.md") do |post|
       post = post[/posts\/(.*).md$/, 1]
       p = Post.new(post)
-      p.tags.each do |tag_check|
+      (p.tags || []).each do |tag_check|
         ret << p if tag_check == tag
       end
     end
