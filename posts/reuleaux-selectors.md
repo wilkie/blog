@@ -8,7 +8,7 @@ tags: ["diversity", "diversity/gender", "programming", "programming/ui"]
 scripts: ["raphael-min", "reuleaux-selectors"]
 ---
 
-Whether you believe gender follows essentialist principles or is constructed, the concept of gender identity is a very complicated subject.
+Whether you believe gender follows essentialist principles, is constructed, or something in between, the concept of gender identity is a very complicated subject.
 Contrary to unfortunately popular belief, gender is not chosen from a binary as though it were conjured at the whim of a coin-toss.
 Gender is different for just about every individual and as infinite as our collective imaginations can bear.
 

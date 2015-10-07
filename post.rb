@@ -171,6 +171,7 @@ class Post
   attr_reader :date
   attr_reader :tags
   attr_reader :scripts
+  attr_reader :styles
   attr_reader :outline
   attr_reader :slug
   attr_reader :url
@@ -210,6 +211,7 @@ class Post
       @author = [@author] unless @author.is_a? Array
       @tags = meta_data["tags"] || []
       @scripts = meta_data["scripts"] || []
+      @styles  = meta_data["styles"] || []
       @gittip = meta_data["gittip"] || ["wilkie"]
       @gittip = [@gittip] unless @gittip.is_a? Array
       if @gittip.count == @gittip.select{|a| a=="no" }.count

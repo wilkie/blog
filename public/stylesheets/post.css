@@ -1,6 +1,6 @@
 body, html {
   background-image: url('../images/blue_bg.png');
-	background-color: #eef;
+	background-color: #e8e8ff;
 	background-attachment: fixed;
 	height: 100%;
 }
@@ -64,16 +64,16 @@ body, html {
 
 .post h2 {
   clear: both;
-	font-family: 'Philosopher', 'Judson', serif;
-  font-weight: 400;
+	font-family: 'Lato', 'Judson', serif;
+  font-weight: 300;
 	font-size: 28px;
 	margin-bottom: 13px;
 }
 
 .post h3 {
   clear: both;
-	font-family: 'Source Sans Pro', serif;
-  font-weight: 400;
+	font-family: 'Lato', 'Source Sans Pro', serif;
+  font-weight: 300;
 	color: rgb(73, 76, 230);
 	color: rgb(118, 118, 228);
 	font-size: 18px;
@@ -113,11 +113,11 @@ body, html {
 
   color: rgb(48,48,48);
 
-	font-size: 18px;
+	font-size: 14pt;
 	font-family: 'Open Sans' ,'News Cycle', 'Metrophobic', sans-serif;
-  font-weight: 200;
+  font-weight: 300;
 
-	line-height: 23px;
+	line-height: 1.3em;
 }
 
 .post h1 + p {

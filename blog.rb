@@ -109,6 +109,7 @@ class Blog < Sinatra::Base
     @outline = source.outline
     @tags = source.tags
     @scripts = source.scripts
+    @styles  = source.styles
     @slug = source.slug
 
     # render
