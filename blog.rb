@@ -47,6 +47,10 @@ class Blog < Sinatra::Base
     haml :index
   end
 
+  get '/abstractions' do
+    redirect "/posts/abstractions"
+  end
+
   get '/archive' do
     @tags = Tags.archive_content
     @tags_rest = []
