@@ -12,7 +12,8 @@ smaller, and faster seemingly at the same time, each of these roles has changed 
 What I find interesting is what parts of them have not changed, and furthermore, thinking about
 which parts should have evolved but didn't for some reason.
 
-Our goal? A system where applications can run because they exist. A solution where data is ubiquitous
+Our goal? A system where applications can run because they exist, regardless of where they exist.
+A solution where data is ubiquitous
 and preservation and archival of both digital data and the software needed to view them are trivial.
 One where shared libraries do not exist because shared code is just a natural by-product of how the
 system works.
@@ -231,10 +232,10 @@ like it is quite large... on the system itself, it is split up and organized as 
 Sure, you can still have the code be interchangeable, but you can still pass along a canonical version of the
 code you know works well with it. Other people can decide to replace that code with something else at any
 point... in effect creating a new program in the process that refers to different hashes for the chunks
-related to that functionality. It's just a natural part of the system.
+related to that functionality. It's just a natural part of the system, although we may have to start looking at
+code and compilation in different ways.
 
-Oh, and shared
-library versioning is just something that happens naturally, too.
+Oh, and shared library versioning is just something that happens naturally, too.
 
 ![width=500|border|Program A and B, although distinct programs, both share code that relates to drawing to the screen. This code logically exists as a whole in these two different contexts, but only physically exists as a set of chunks referred to by their hash.](memory-breakdown.png)
 
