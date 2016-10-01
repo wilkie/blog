@@ -1,6 +1,6 @@
 ---
-title: Filesystems
-subtitle: What We Know and What We Can Learn
+title: Distributed Filesystems
+subtitle: Getting Rid Of Shared Libraries
 author: wilkie
 date: 2016-10-01
 ---
@@ -11,6 +11,11 @@ Over the years, as computers have taken on different roles in our lives and have
 smaller, and faster seemingly at the same time, each of these roles has changed to fit.
 What I find interesting is what parts of them have not changed, and furthermore, thinking about
 which parts should have evolved but didn't for some reason.
+
+Our goal? A system where applications can run because they exist. A solution where data is ubiquitous
+and preservation and archival of both digital data and the software needed to view them are trivial.
+One where shared libraries do not exist because shared code is just a natural by-product of how the
+system works.
 
 ## Code Straight To Your Doorstep
 
@@ -28,8 +33,8 @@ with similarly compiled code from other sources: system routines, code others ha
 or runtime that your program relies on to work. Linking is like a bunch of Lego... and a
 programmer's job is to tell it how to build your castle.
 
-Back in the day, almost before my time, programs ran directly on the hardware of the machine.
-There was very little
+Back in the day, almost before my time but fortunately not quite, programs ran directly on the
+hardware of the machine. There was very little
 systems software. Usually just some stuff to boot the machine and some program loader. Over
 the years, operating systems became bigger and their responsibilities grew wider. I enjoy
 thinking about why this actually is. We take for granted what they do, but if you ask someone
@@ -57,7 +62,8 @@ mere kilobytes in size and work with even less RAM. For instance, this website's
 likely overwhelm such systems. It is hard to imagine these days, even if you lived through them
 in the past.
 
-But that is exactly it. It *is* the past. Somebody said to me the other day "We should get rid of
+But that is exactly it. It *is* the past. What is weird is that hardly anybody will protest
+against it. Somebody said to me the other day "We should get rid of
 shared libraries." They want to get rid of this system! This bastion of sharing! How
 could we even consider doing such a thing? But I want you to actually think about this.
 Can you fundamentally change a system? Throw away something that has become so commonplace?
@@ -97,6 +103,8 @@ When you "link" this program, usually at the time when you compile it, it perfor
 "relocation" where it fills in the madlibs with the locations of the routines on the specific machine
 you want to run it on. These are the "shared libraries."
 
+![width=500|border|!](so-list.png)
+
 On a modern machine, you'll find these shared libraries in system directories. On a Windows machine,
 shared libraries have ".DLL" (dynamically linked library) extensions, and on UNIX based systems they
 will have ".so" extensions. When you start a program, a process called "loading," on whichever machine,
@@ -125,6 +133,21 @@ hierarchical is a result of a technological limitation, not the needs or wants o
 them. Essentially, it was easier to represent that structure in a way that was performant on the
 storage types of the time (tape, slower magnetic media, etc) You simply followed a series of named links
 to the data: "root" points to "users" points to "wilkie" points to "documents" points to "good-writing.pdf"
+
+> The situation, however, has evolved. In 1992, a “typical”
+disk was approximately 300 MB. In 2009, a typical
+disk is closer to 300 GB, representing a three order of
+magnitude increase. While typical file sizes have also increased,
+they have not increased by the same margin. As
+a result, users may have many gigabytes worth of photo,
+video, and audio libraries on a single pc. This situation
+represents a management nightmare, and mere hierarchical
+naming is ill-suited to the task. One might want to
+access a picture, for instance, based on who is in it, when
+it was taken, where it was taken, etc. Applications interacting
+with such libraries have evolved external tagging
+mechanisms to deal with this problem.
+> <div class="citation">&mdash; <cite>Margo Seltzer, Hierarchical File Systems are Dead, 2009</cite></div>
 
 I'm going to channel a lot of Margo Seltzer, here. She wrote
 ["Hierarchical File Systems are Dead,"](https://www.eecs.harvard.edu/margo/papers/hotos09/paper.pdf) after all.
@@ -162,7 +185,7 @@ that way due to technical limitations. Internet search engines prove that such l
 exist. We can build indexes that evolve and can capture a type of semantic meaning for what we are
 searching for.
 
-So, as Seltzer argues, we should very much replace directory-based filesystems on this idea. Directory-based
+So, as Seltzer argues in 2009, we should very much replace directory-based filesystems on this idea. Directory-based
 filesystem designs are called "named-addressed" or "location-addressed" systems. These tag-based systems
 are called "content-addressed" or "associative-storage" systems. Where the data is looked up based on
 some description or representation of the data itself and not on any arbitrary name.
@@ -175,7 +198,7 @@ are many philosophical implications of this being practical that keep me up for 
 works in too much detail is out of scope, here.)
 
 There are a few interesting ideas to pull out of this idea. First, is that the nature of mathematics is that it
-is true everywhere. So, "Hello World" using the hash algorithm called "MD5" is "b10a8db164e0754105b7a99be72e3fe5"
+is true everywhere. So, "Hello World" using the hash algorithm called **MD5** is `b10a8db164e0754105b7a99be72e3fe5`
 and it is that exact hash on every machine in the entire universe. Another, is that this garbled, unpronounceable
 mess is always the same size (although longer is strictly better for uniqueness) regardless of the size of the
 data. So it is easy to use, store, and you interestingly can know one when you see one. Last, you can hash parts
@@ -203,8 +226,17 @@ track.
 All we would need to do is store the shared code on such a tagged filesystem. However, we no longer have to
 separate it from the program itself. We can compile shared code directly into a program. If two programs have
 both used the same shared code, it will hash to the same place. Even though, if you look at the program, it looks
-like it is quite large... on the system itself, it is split up and organized as efficiently as possible. Oh, and shared
-library versioning is just something that happens naturally.
+like it is quite large... on the system itself, it is split up and organized as efficiently as possible.
+
+Sure, you can still have the code be interchangeable, but you can still pass along a canonical version of the
+code you know works well with it. Other people can decide to replace that code with something else at any
+point... in effect creating a new program in the process that refers to different hashes for the chunks
+related to that functionality. It's just a natural part of the system.
+
+Oh, and shared
+library versioning is just something that happens naturally, too.
+
+![width=500|border|Program A and B, although distinct programs, both share code that relates to drawing to the screen. This code logically exists as a whole in these two different contexts, but only physically exists as a set of chunks referred to by their hash.](memory-breakdown.png)
 
 We simply don't need to care about shared libraries as a distinct thing. Just use the code. Have the compiler
 split up the program into reasonable, logical chunks (such as each file or module) and have the storage system
@@ -221,8 +253,10 @@ install programs to our disk. This is a by-product of this assumption. Even thou
 available from another machine, we download the entire copy of it at some point, use it, and then it just sits
 there.
 
+![width=500|Photo of the Earth by [NASA](https://www.nasa.gov/image-feature/nasa-captures-epic-earth-image)](data-ubiquitous.png)
+
 With our lack of shared libraries comes a lack of concern about where data actually lives. We don't live in the
-world where all of our code needs to exist on the disk 3 feet away from us at every moment of every day. The
+world where all of our code needs to exist on the disk three feet away from us at every moment of every day. The
 surge of popularity of strictly online applications has proven this time and time again, and will continue to
 do so until we agree about why. The reason why is that we actually want a fundamentally different operating
 system.
@@ -251,6 +285,8 @@ the pieces of the application we don't have from *any* machine that has them. In
 thinking about our computers as having the knowledge from every other machine they can talk to. There
 is no "local" storage in this system. You simply type "run calculator" and it figures out the rest.
 
+![width=500|border|The same Program A and B from the graphic above are shown here. They don't need to be "whole" to be usable. In fact, Program B doesn't exist locally at all, but it can still be used. Our new operating system sees all blocks as local and can run partial programs by pulling the needed blocks as they are needed and trading blocks that aren't useful to other machines.](machine-breakdown.png)
+
 Now our operating system is the following: a content-addressed filesystem, and the means of downloading
 and uploading chunks of data. That is the smallest an operating system needs to be. It can download the
 rest of itself at this point. It can effectively learn what it doesn't yet know how to do.
@@ -267,6 +303,7 @@ useful data. This type of protocol is further explored in current technologies s
 [BitTorrent](https://en.wikipedia.org/wiki/BitTorrent),
 and specifically the dramatically named [InterPlanetary File System](https://ipfs.io/).
 
-At the end of the day, programs no longer need to break themselves into pieces. They do not need to be
-locally available to use. And they do not have to be limited by the imagination of systems designers
-of the 1960s. Furthermore, the software can be preserved for years to come.
+At the end of the day, programs no longer need to break themselves into pieces installed independently.
+They do not need to be installed at all... no need to be locally available to use. And they do not have
+to be limited by the imagination of systems designers of the 1960s. Furthermore, as a nice side-effect,
+the software can be preserved for years to come.
