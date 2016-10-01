@@ -90,7 +90,7 @@ int main(int argc, char** argv) {
 }
 ```
 
-They way this worked is that the language was designed to provide a standard way of doing the
+The way this worked is that the language was designed to provide a standard way of doing the
 everyday tasks. Above, the code prints to the screen (or printer, back in this era), an obviously
 useful task. You tell the compiler you are using a particular interface (in this case: stdio or
 "standard input/output") and then call upon the routine that has already been written for you: printf
