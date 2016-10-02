@@ -265,7 +265,7 @@ system.
 Our new filesystem has inspired a new way of linking programs. A new way of organizing code. And therefore, it
 must inspire a new operating system. This hypothetical system will no longer care about whether or not a program
 exists on your machine when you want to run it. Or any part of it. Maybe parts of the program you never seem to
-use can be deleted? Of oourse, they can! Why not? You aren't using them and they generally exist somewhere.
+use can be deleted? Of course, they can! Why not? You aren't using them and they generally exist somewhere.
 
 Since our hash of data is the same in every inch of the universe, we have a powerful means of identifying the
 code we actually need anywhere in that universe. If I want to run my system's "calculator" application, it is
