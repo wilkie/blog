@@ -71,7 +71,7 @@ software is preserved.
 
 ![!](reproducibility-ladder.svg)
 
-The bottom two degrees are something for us all to avoid. A **lost** artifact is one that existed at some point but was unfortunately destroyed. It is hard to determine how many pieces of software are unrecoverable. The goal of a good archival system will be to make replication trivial. A **hidden** artifact is only slightly better than a lost artifact. It is one that exists somewhere, but has been hoarded, and might some day come to light. A good archival system will be artifacts highly available.
+The bottom two degrees are something for us all to avoid. A **lost** artifact is one that existed at some point but was unfortunately destroyed. It is hard to determine how many pieces of software are unrecoverable. The goal of a good archival system will be to make replication trivial. A **hidden** artifact is only slightly better than a lost artifact. It is one that exists somewhere, but has been hoarded, and might some day come to light. A good archival system will make artifacts highly available.
 
 For the remaining degrees, artifacts will build up a set of qualities that make them more sustainable in the long-term. Although it can be argued that these aren't perfect subsets of one another, the argument presented here is that one degree so heavily demands the previous degrees that lacking them makes the artifact unreasonable to use for the purposes of repeatable and reproducible science and generally have far weaker sustainability.
 
