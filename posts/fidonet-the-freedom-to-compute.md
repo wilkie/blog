@@ -1,5 +1,6 @@
 ---
-title: The Freedom to Compute (Repost from FidoNews)
+title: The Freedom to Compute
+subtitle: "(Repost from FidoNews)"
 author: wilkie via Mike Guffey
 date: 2013-05-19
 summary: "A reposting of a FidoNews editorial about the threat of government control of computation."
