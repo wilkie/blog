@@ -1,6 +1,6 @@
 ---
-title: "Software Reproducibility"
-subtitle: "Evaluating Sustainability of Archived Software"
+title: "Software Sustainability"
+subtitle: "Evaluating Interactive Software Archives"
 ---
 
 90% of scientists surveyed will tell you that we are in a time of a reproducibility [crisis](http://www.nature.com/news/1-500-scientists-lift-the-lid-on-reproducibility-1.19970).
@@ -8,14 +8,14 @@ The numbers are bleak. Within the field of computer science, where digital scien
 [shown to be repeatable](http://cacm.acm.org/magazines/2016/3/198873-repeatability-in-computer-systems-research/fulltext),
 let alone reproducible. The Nature study shows that scientists see various causes for this issue: poor analysis, publishing pressure, and unavailable code.
 
-At the end of the day, peer-review has largely missed or possibly ignored many of the factors listed. Reviewers just don't have the tools to properly account for factors that
-contribute to a lack of repeatability. Furthermore, it is becoming more obvious that metrics for evaluating a digital experiment are vastly insufficient. This is allowing poor
-experimentation, and the more damning yet prevelant "use-once" style experimentation, seep into the scientific corpora.
+At the end of the day, peer-review has largely missed or possibly ignored many of the factors listed. Reviewers just don't have the tools to properly account for the flaws that
+contribute to a lack of repeatability. Furthermore, it is becoming more obvious that metrics for evaluating a digital experiment, and thus research software, are vastly insufficient.
+This is allowing poor experimentation, poor documentation or lack of publishing of software, and the more damning yet prevelant "use-once" style experimentation, seep into the scientific corpora.
 
 Others have proposed metrics of evaluating the strength of a digital experiment. C. Titus Brown makes a quick note on the 
 ["Ladder of Academic Software Reusability and Sustainability"](http://ivory.idyll.org/blog/ladder-of-academic-software-notsuck.html) where
-he describes a path from the most minimal software artifact to one that is truly distributable. Neil Chue Hong expands upon the
-same spirit and lists the ["Five Stars of Research Software"](https://www.software.ac.uk/blog/2016-10-07-five-stars-research-software) which
+he describes a path from the most minimal software artifact to one that is truly distributable. Neil Chue Hong, in the
+same spirit, lists the ["Five Stars of Research Software"](https://www.software.ac.uk/blog/2016-10-07-five-stars-research-software) which
 gives 5 levels for a software artifact based on how well-defined and runnable it is. Both articles promise a follow-up, but none ever do, leaving us in a position where it is
 clear that metrics are desired but none are devised. I will formally define and fully illustrate such a metric.
 
