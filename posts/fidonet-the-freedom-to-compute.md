@@ -7,7 +7,7 @@ summary: "A reposting of a FidoNews editorial about the threat of government con
 tags: [social]
 ---
 
-***This is a [reposting](http://www.wps.com/J/FidoNet/FidoNews/1986/FIDO311.NWS)
+***This is a [reposting](http://www.goto10.fr/fidonews/1986/fido311.nws)
 of an editorial written in FidoNews published on March
 17th, 1986 by Mike Guffey. FidoNews is the newsletter of the FidoNet distributed network which
 was a network of dialup BBSes that could share information. It was the first wide network that
