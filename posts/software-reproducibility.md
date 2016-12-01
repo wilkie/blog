@@ -1,6 +1,6 @@
 ---
 title: "Software Reproducibility"
-subtitle: "Evaluating Sustainability and Archival"
+subtitle: "Evaluating Sustainability of Archived Software"
 ---
 
 90% of scientists surveyed will tell you that we are in a time of a reproducibility [crisis](http://www.nature.com/news/1-500-scientists-lift-the-lid-on-reproducibility-1.19970).
