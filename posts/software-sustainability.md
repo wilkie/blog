@@ -3,7 +3,7 @@ title: "Software Sustainability"
 subtitle: "Evaluating Interactive Software Archives"
 ---
 
-90% of scientists surveyed will tell you that we are in a time of a reproducibility [crisis](http://www.nature.com/news/1-500-scientists-lift-the-lid-on-reproducibility-1.19970).
+90% of scientists surveyed tell us that we are experiencing a reproducibility [crisis](http://www.nature.com/news/1-500-scientists-lift-the-lid-on-reproducibility-1.19970).
 The numbers are bleak. Within the field of computer science, where digital science is and has always been prevalent, the answer is the same. Only 32% of recent computer science studies have been
 [shown to be repeatable](http://cacm.acm.org/magazines/2016/3/198873-repeatability-in-computer-systems-research/fulltext),
 let alone reproducible. The Nature study shows that scientists see various causes for this issue: poor analysis, publishing pressure, and unavailable code.
