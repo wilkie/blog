@@ -1,6 +1,6 @@
 ---
 title: "Software Reproducibility"
-subtitle: "Beyond Repeatability Toward Accountability"
+subtitle: "Evaluating Sustainability and Archival"
 ---
 
 90% of scientists surveyed will tell you that we are in a time of a reproducibility [crisis](http://www.nature.com/news/1-500-scientists-lift-the-lid-on-reproducibility-1.19970).
@@ -17,7 +17,7 @@ Others have proposed metrics of evaluating the strength of a digital experiment.
 he describes a path from the most minimal software artifact to one that is truly distributable. Neil Chue Hong expands upon the
 same spirit and lists the ["Five Stars of Research Software"](https://www.software.ac.uk/blog/2016-10-07-five-stars-research-software) which
 gives 5 levels for a software artifact based on how well-defined and runnable it is. Both articles promise a follow-up, but none ever do, leaving us in a position where it is
-clear that metrics are desired but none are devised. We will formally define and fully illustrate such a metric.
+clear that metrics are desired but none are devised. I will formally define and fully illustrate such a metric.
 
 ## The Scientific Method
 
@@ -54,7 +54,8 @@ indeed a cycle. Science breeds science; the provenance of even the most recent f
 
 The role of software in the research cycle has not been thoroughly discussed. With research software being such a large part of experimentation, even as far as being the entire research
 artifact for a result, it touches every aspect of the scientific lifecycle. Software is designed, it collects, it offers collaboration and exploration of results, it must be stored in a
-way that it can be reused, it should certainly be published and reviewed (and there are [processes for this](http://www.acm.org/publications/policies/artifact-review-badging) and [multiple](http://www.journals.elsevier.com/softwarex/) [software](http://openresearchsoftware.metajnl.com/) [journals](http://joss.theoj.org/)), and finally it must be discoverable and citable.
+way that it can be reused, it should certainly be published and reviewed (and there are [processes for this](http://www.acm.org/publications/policies/artifact-review-badging) and [multiple](http://www.journals.elsevier.com/softwarex/) [software](http://openresearchsoftware.metajnl.com/) [journals](http://joss.theoj.org/)), and finally it must be discoverable and citable. We must preserve the
+software!
 
 For a software archive, it may seem that all you need is to store the code and some description of the artifact to preserve the software for the entire lifecycle. Yet, this raises some
 concerns about what "reusable" and "preserved" mean. There are degrees to which software is preserved. Just having the code may be enough to preserve the intention or meaning of a research
@@ -136,3 +137,26 @@ However, an archival system can leverage the tools to provide higher levels of s
 For instance, an archive system can use Docker to isolate the environment such that it can make stronger claims about the deployability of a software artifact. The archive system would
 need to preserve Docker to some effect (and any base images or containers it uses) in order to make that claim. Essentially, the overall system need not reinvent a complete system
 from scratch, but just packaging your software in Docker or a virtual machine is not enough. In other words, virtualization/containerization tools are what they are: tools. Not archival or preservation solutions.
+
+## Concluding Remarks
+
+The scientific and library/archive community has made quite a lot of progress in the last ten years toward the evangelism and evaluation of reproducible digital science.
+Toward this end, archives have come (and some have gone!) to bring us closer to this goal. Yet, no evaluation or metric has been
+reasonably put forward to guide us.
+
+I propose we measure archives by catagorizing them by how well they fit within a research lifecycle and by how well they preserve running software.
+To this end, the degrees of software sustainability above may judge how well an archive of interactive/executable artifacts fits these goals.
+Data repositories, such as RunMyCode, merely hold data. They only provide an archive for "retrievable" software.
+
+Executable archives such as ones built around [bwFLA](http://bw-fla.uni-freiburg.de/) and used by [Rhizome](http://rhizome.org/editorial/2015/apr/17/theresa-duncan-cd-roms-are-now-playable-online/),
+The [Olive Archive](https://olivearchive.org/), and the javascript based emulation provided by [The Internet Archive](https://archive.org/details/software) offer more practical and robust
+forms of interaction. These allow people to run the artifacts, such as older games and scientific tools, through either a web browser or virtual machine client. Therefore, they are an archive
+of "repeatable" software.
+
+They don't yet allow much configuration for the artifacts and generally give you an all-or-nothing packaged version. Much of the time, the concern is with proprietary artifacts and not much attention
+is placed on even being able to retrieve the artifact outside of the streaming mechanism, let alone the code. This is the next step for software archives. The ability to see and affect the
+code itself and to use the tools to generate content that is itself archived. For example, being able to run an old art program and having any art saved to itself be preserved along with provenance that
+points back to the art program. Being able to take the code from that old program and create a modern one, which we obviously also archive! Deep inspection of the software allows for verification and gives us all a means of producing work which is part of a
+larger cycle of creation and progress.
+
+Let's build better archives.
