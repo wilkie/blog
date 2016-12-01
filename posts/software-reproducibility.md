@@ -27,6 +27,8 @@ Alhacen determined that his experimentation should not simply be believed, but r
 if learning the truth is his goal, is to make himself an enemy of all that he reads, and ... attack it from every side. He should also suspect himself as he performs his critical
 examination of it, so that he may avoid falling into either prejudice or leniency."
 
+![right|border|Ibn al-Haytham, a significant pioneer in the field of mathematics, optics, and astronomy.](Alhazen%2C_the_Persian.gif)
+
 This message of doubt driving understanding along with Alhacen's principled controlled testing is the basis of the modern scientific method. You propose, test, measure, record,
 and repeat. This basic set of steps is what all scientists must follow and is what peer-review is meant to evaluate. Yet, at the end of the day, that last step is both cruicial and too often ignored!
 
@@ -112,6 +114,8 @@ Therefore, how systems promote sustainable software is a worthy metric to evalua
 Some software archives are nothing more than traditional digital archives or code repositories.
 There has been no formal method of both showing that such a system is insufficient for software and what it lacks.
 
+![border|How do we evaluate the options?](archival-stuff.png)
+
 The current state of scientific archives is in the teething stage of development. Biting off a little here and there but not
 quite going to any extreme. These archives are meant to supplement traditional publishing houses to host related code and data
 that doesn't fit in our stubborn paper-driven world. Commercial services such as GitHub don't have a reliable interest in preservation and
@@ -158,5 +162,8 @@ is placed on even being able to retrieve the artifact outside of the streaming m
 code itself and to use the tools to generate content that is itself archived. For example, being able to run an old art program and having any art saved to itself be preserved along with provenance that
 points back to the art program. Being able to take the code from that old program and create a modern one, which we obviously also archive! Deep inspection of the software allows for verification and gives us all a means of producing work which is part of a
 larger cycle of creation and progress.
+
+Can we achieve an archive of derivable software? A library that updates software and keeps track of verified software and can keep track of the provenance that led to that decision? I think we certainly
+can. And that this is the goal for the emerging field of interactive software archival.
 
 Let's build better archives.
