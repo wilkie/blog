@@ -10,7 +10,7 @@ let alone reproducible. The Nature study shows that scientists see various cause
 
 At the end of the day, peer-review has largely missed or possibly ignored many of the factors listed. Reviewers just don't have the tools to properly account for the flaws that
 contribute to a lack of repeatability. Furthermore, it is becoming more obvious that metrics for evaluating a digital experiment, and thus research software, are vastly insufficient.
-This is allowing poor experimentation, poor documentation or lack of publishing of software, and the more damning yet prevelant "use-once" style experimentation, seep into the scientific corpora.
+This is allowing poor experimentation, poor documentation or lack of publishing of software, and the more damning yet prevalent "use-once" style experimentation, seep into the scientific corpora.
 
 Others have proposed metrics of evaluating the strength of a digital experiment. C. Titus Brown makes a quick note on the 
 ["Ladder of Academic Software Reusability and Sustainability"](http://ivory.idyll.org/blog/ladder-of-academic-software-notsuck.html) where
