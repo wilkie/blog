@@ -1,0 +1,72 @@
+==================================================================
+https://keybase.io/wilkie
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of http://wilkie.how
+  * I am wilkie (https://keybase.io/wilkie) on keybase.
+  * I have a public key with fingerprint 738A 1D5A FDF6 8DC2 0858  567D C2A2
+    2FFD 2510 664B
+
+To do so, I am signing this object:
+
+{
+  "body": {
+    "key": {
+      "eldest_kid":
+"01012714fe93e401d19f4d54d7594e2d93649691446e2b03aa198eef9bba044cf01b0a",
+      "fingerprint": "738a1d5afdf68dc20858567dc2a22ffd2510664b",
+      "host": "keybase.io",
+      "key_id": "c2a22ffd2510664b",
+      "kid":
+"01012714fe93e401d19f4d54d7594e2d93649691446e2b03aa198eef9bba044cf01b0a",
+      "uid": "ea7cbe43fdd600061fe56d6c12574019",
+      "username": "wilkie"
+    },
+    "service": {
+      "hostname": "wilkie.how",
+      "protocol": "http:"
+    },
+    "type": "web_service_binding",
+    "version": 1
+  },
+  "ctime": 1506714494,
+  "expire_in": 157680000,
+  "prev": "5a8c4c35f5fe9b4407892d1cfd13231b71cdaf5d90d8e993452c2e3ada6e0686",
+  "seqno": 12,
+  "tag": "signature"
+}
+
+which yields the signature:
+
+-----BEGIN PGP MESSAGE-----
+Version: Keybase OpenPGP v2.0.74
+Comment: https://keybase.io/crypto
+
+yMIiAnicrZJbSBVBGMfPyco80QUS0yKTjYryaDO7s7O7h5TqwYhupEJa6mF2Z1a3
+Y2dP56x3MwiSlDDCriQalFBCSmCm1IOpCGFkRElFD2lR+BQG0ZVoVuoh6LGnmfnm
+///N//uYkUVxHp83f1NbRig8Ee8du99a4Sl8dLWhTtBtWiME6oQQm11YOWUxJxiy
+qBAQAARQVCAymSYxBCCFmomojKgia4iJVJMw0rAGEcJM1IFECNRUxkxN1wlAyDAB
+1AER/IJphUtZNBK1wg7HKpJKIJWJSU2sUkMEqqzKWOE7IoqmSUUZAoyRzo1ldsx1
+8HA6ibFMy+Y1fgjOxvuH/j/nrpjFMaIYOkOSSSkGAGBoMhlTbEBRVjhdc4UxFg2T
+w4yrq6zykMWEo36B1yotg7ljdfv46z6zzK7ivkjUdmzDLuf1MseJBFybUxOZ1TE9
++JsQ1K0w5SPkhkoWjVl2WAhArjQcy0VCGWDeLdKQX2DVESvKgparkBWs8rzAfYZV
+cqRMVAMZkmzKfDI6QkBRNZFCw6RQEiWoK9CgxJSpBqjKNE1CsmiITCKUYAawigW3
+pyNhm7NFnpOUcmbMKg0TpyLKOx4aLJrr8fo88+fNcf+Wx5ew9M+P60xc4LmS2bp9
+svhr74kHD+Omvuxd9qxn5HrNwcuDk9LzwIebjWnpM9vfHdvIWs5erHh6ryglP3Gr
+d7d37EdCT0fWl/aUbGd6z2hbs5Kbau0zvtGxVYm7Wm4oye31hZUj9Wt/dg5Ab+vt
+ocfH5yYVq7e68OYd8aRvYUnW3eH0gbhcxbNmdUFCfLKvY8vlrORP3y9aL65cqEkZ
+6ivJO/vk9Mr0Sxmvut4E1zUs6d7QmxYwqxc37WxacU470z+nwf/x9XD23sH+nKTx
+6oJx36W3qVXWndKi4QMzk0gcOXR+upsNvf9Um77+o//k56nltadC1ftz3jQWSkuu
+jSaB5pdpy1uyO6a25Z2e+AWLzjZB
+=npwg
+-----END PGP MESSAGE-----
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/wilkie
+
+==================================================================
+
