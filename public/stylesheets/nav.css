@@ -1,12 +1,13 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600|Lato:300|Philosopher|Source+Sans+Pro|News+Cycle:400|Marcellus|Marcellus+SC|Cinzel:700|Forum|Archivo+Narrow|Inconsolata|Metrophobic|Judson:400');
+
 .container {
-	background-color: #f0e8f0;
-  border-right: 1px solid #979;
-  border-left: 1px solid #979;
-  border-bottom: 1px solid #a8a;
+	background-color: #443044;
+  border-right: 1px solid #4e3d4e;
+  border-left: 1px solid #5a405a;
 }
 
 nav .nav-content .nav-title a {
-  color: black
+  color: #e6e6e6;
 }
 
 nav .hidden {
@@ -14,14 +15,16 @@ nav .hidden {
 }
 
 .header {
-	max-width: 960px;
-  border-right: 1px solid #979;
-  border-left: 1px solid #979;
+	max-width: 1070px;
+  box-sizing: border-box;
+  border-right: 1px solid #5a405a;
+  border-left: 1px solid #5a405a;
   margin-left:auto;
   margin-right:auto;
-  padding-left: 15px;
+  padding-left: 9px;
   padding-bottom: 15px;
-	background-color: #f0e8f0;
+	background-color: #443044;
+  #5a405a;
 }
 
 nav {
@@ -29,6 +32,11 @@ nav {
 	padding-top: 15px;
 	padding-right: 12px;
 	padding-bottom: 20px;
+}
+
+img.me {
+  display: block;
+  width: 100%;
 }
 
 nav .nav-content {
@@ -58,6 +66,10 @@ nav h3 {
 
 nav .nav-section + h3 {
 	margin-top: 30px;
+}
+
+nav .nav-section img {
+  filter: invert(100%) brightness(90%);
 }
 
 nav .nav-section p.summary {
@@ -108,19 +120,42 @@ nav a.image {
 	margin: 24px;
 }
 
-  nav .nav-content > h3 { display: none; }
-  nav .hidden {
-    display: inline;
+@media (max-width: 700px) {
+  nav a.image {
+    margin: 12px;
   }
-  nav .nav-section { display: none; }
-  nav .nav-title { display: inline; float: left; margin-left: -1px; }
-  nav {
-    position:relative;
+}
+
+@media (max-width: 450px) {
+  nav a.image {
+    margin: 6px;
   }
+}
+
+nav a.image img {
+  width: 16px;
+  height: 16px;
+}
+
+nav .nav-content > h3 { display: none; }
+nav .hidden {
+  display: inline;
+}
+nav .nav-section { display: none; }
+nav .nav-title { display: inline; float: left; margin-left: -1px; }
+nav {
+  position:relative;
+}
+nav .nav-title + .nav-section {
+  display: block;
+  position: absolute;
+  right: 3px;
+  margin-left: auto;
+  top: 18px;
+
+}
+@media (max-width: 350px) {
   nav .nav-title + .nav-section {
-    display: block;
-    position: absolute;
-    right: 3px;
-    margin-left: auto;
-    top: 18px;
+    display:none;
   }
+}

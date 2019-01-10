@@ -10,6 +10,8 @@ class Blog < Sinatra::Base
   GITHUB_USERNAME = "wilkie"
   TWITTER_USERNAME = "wilkieii"
   RSTATUS_USERNAME = "wilkieii"
+  MASTODON_DOMAIN = "mastodon.social"
+  MASTODON_USERNAME = "wilkie"
 
   helpers Sinatra::ContentFor
 

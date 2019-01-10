@@ -36,7 +36,7 @@ Here are the two movement tricks we will look at:
 
 Check out how this speedrunner runs:
 
-![Rarely will this runner ever travel in the direction the player is facing.](http://www.youtube.com/watch?v=M6PK9bd_uUs)
+![Rarely will this runner ever travel in the direction the player is facing.](https://www.youtube.com/watch?v=1-7Ig-1FTiE)
 
 ## Looking at the code
 Let's now investigate why these particular bugs happen. Doom is written in [C](http://en.wikipedia.org/wiki/C\_\(programming_language\)), which is a very low-level programming language, meaning it is designed for speed and not particularly for programmer comfort. This was a very common language to write games in at the time since the language allowed you to write very optimized code so one could push the limits of the technology.
@@ -180,9 +180,9 @@ This will ensure strafe 50 is no longer a problem. You will now not be able to d
 
 ## Your turn
 
-You can try these tricks as well! [Grab a copy](http://store.steampowered.com/app/2280) of Doom and try running through the levels. Use the cheat code `idclev14` to go to the level the screen cap above illustrates. You can find a guide to other strategies [here](http://doomwiki.org/wiki/E1M4).
+You can try these tricks as well! [Grab a copy](https://www.gog.com/game/the_ultimate_doom) of Doom and try running through the levels. Use the cheat code `idclev14` to go to the level the screen cap above illustrates. You can find a guide to other strategies [here](http://doomwiki.org/wiki/E1M4).
 
-On Thursday at around 8:45pm EST, the Speed Demos Archive charity will be live speed demoing the entire Doom game while giving further commentary on the techniques. Please, [go watch](http://marathon.speeddemosarchive.com/) (right now, in fact, for other games!) and consider donating to Prevent Cancer for prizes and general well-being. Here is a [schedule](http://marathon.speeddemosarchive.com/schedule).
+On Thursday at around 8:45pm EST, the Speed Demos Archive charity will be live speed demoing the entire Doom game while giving further commentary on the techniques. Please, [go watch](https://gamesdonequick.com/) (right now, in fact, for other games!) and consider donating to Prevent Cancer for prizes and general well-being. Here is a [schedule](https://gamesdonequick.com/schedule).
 
 ## Making mistakes
 

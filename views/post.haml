@@ -9,7 +9,6 @@
     #{@content}
   %p.footer
     First published on #{@date} by #{@author.join(", ")}.
-    %hr
   - if @tags.length > 0
     %h3 Tags
     %p
@@ -24,10 +23,12 @@
     If you'd like to comment, just send me an email at wilkie@xomb.org or on either
     %a{:href=>"http://twitter.com/wilkieii", :title=>"Twitter Profile", :alt=>"Twitter Profile"} Twitter
     or via my
-    %a{:href=>"http://status.wilkie.io", :title=>"rstat.us Profile", :alt=>"rstat.us Profile"} rstat.us
+    %a{:href=>"https://#{MASTODON_DOMAIN}/@#{MASTODON_USERNAME}", :title=>"mastodon Profile", :alt=>"mastodon Profile"} mastodon
     profile. I will love to hear from you! Any opinions, criticism, etc are welcome.
-  - if @gittip.count > 0
-    %h3 Donations
+  %h3 Donations
+  %p
+    If you'd like to make a donation, I don't know what is best for that. Let me know.
+  -# if @gittip.count > 0
     %ul{:style => "list-style:none"}
       - @gittip.each_with_index do |tippee, i|
         - next if tippee == "no"
@@ -39,7 +40,7 @@
 
   %h3 Copyright
   %p
-    All content off of this domain is licensed as
+    All content off of this domain, unless otherwise noted or linked from a different domain, is licensed as
     %a{:href=>"http://creativecommons.org/publicdomain/zero/1.0/", :title=>"CC0 License", :alt=>"Creative Commons Zero 1.0 License"}
       CC0
 

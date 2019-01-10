@@ -1,5 +1,5 @@
 body, html {
-  background-image: url('../images/blue_bg.png');
+  background-image: url('../images/noise_black.png');
 	background-color: #e8e8ff;
 	background-attachment: fixed;
 	height: 100%;
@@ -10,6 +10,7 @@ body, html {
   border: none;
   border-top: 1px solid rgb(164,164,164);
   height: 1px;
+  margin: 20px;
 }
 
 .post hr + p {
@@ -17,35 +18,32 @@ body, html {
 }
 
 .post h1 + hr, .post h2.subtitle + hr {
+  -webkit-margin-before: 0;
+  -webkit-margin-after: 0;
+  margin: 0;
   margin-bottom: 23px;
-  width: 90%;
-  border: none;
-  background-image: url('/images/divider.png');
-  background-position: 50%;
-  height: 25px;
+  border-color: rgb(158, 94, 162);
+  width: 100%;
 }
 
 .container {
-	min-height: 100%;
-  max-width: 970px;
+	min-height: calc(100% - 50px);
+	max-width: 1070px;
+  box-sizing: border-box;
   margin-left: auto;
   margin-right:auto;
   padding-left: 5px;
   padding-bottom: 15px;
+  box-sizing: border-box;
 }
 
 .post {
 	background-color: #ffffff;
 	min-height: 100%;
 
-	padding-left: 20px;
-	padding-top: 30px;
-	padding-right: 22px;
-	padding-bottom: 20px;
-
-	border-left: 1px solid #cac;
-	border-right: 1px solid #cac;
-	border-bottom: 1px solid #cac;
+	border-left: 1px solid #6d536d;
+	border-right: 1px solid #3e333e;
+	border-bottom: 1px solid #6d536d;
 }
 
 .post a {
@@ -68,6 +66,7 @@ body, html {
   font-weight: 300;
 	font-size: 28px;
 	margin-bottom: 13px;
+  margin-left: 20px;
 }
 
 .post h3 {
@@ -78,23 +77,35 @@ body, html {
 	color: rgb(118, 118, 228);
 	font-size: 18px;
 	margin-bottom: 13px;
-  margin-left: 1px;
+  margin-left: 21px;
 }
 
 .post h1, .post h1 a {
 	font-family: 'Philosopher', serif;
   text-align: center;
-	color: rgb(98, 98, 178);
+	color: rgb(90, 64, 90);
 	font-size: 64px;
 	line-height: 1.0em;
-	margin-bottom: 18px;
+  background-color: #e8d2e8;
+  padding: 20px;
+  padding-bottom: 23px;
+}
+
+@media (max-width: 450px) {
+  .post h1, .post h1 a {
+    font-size: 32px;
+  }
 }
 
 .post h2.subtitle {
 	font-family: 'Marcellus SC', 'Cinzel', serif;
-	color: rgb(148, 148, 228);
+	color: rgb(61, 61, 125);
   text-align: center;
   font-size: 30px;
+  background-color: #e8d2e8;
+  padding: 20px;
+  padding-top: 0px;
+  margin: 0;
 }
 
 .post h1 + p {
@@ -109,15 +120,25 @@ body, html {
 
 .post p {
 	margin-top: 3px;
-	margin-left: 2px;
+	margin-left: 20px;
+  margin-right: 20px;
 
   color: rgb(70,70,70);
 
 	font-size: 14pt;
-	font-family: 'Lato', 'Open Sans' ,'News Cycle', 'Metrophobic', sans-serif;
-  font-weight: 600;
+	font-family: "Lato", sans-serif;
+  font-weight: 400;
 
 	line-height: 1.3em;
+}
+
+@media (max-width: 450px) {
+  .post p {
+    text-align: justify;
+  }
+  .post ul *, .post li * {
+    text-align: left;
+  }
 }
 
 .post h1 + p {
@@ -151,15 +172,14 @@ body, html {
 	color: rgb(78, 78, 158);
   font-family: 'Open Sans', 'Philosopher', serif;
   font-weight: 400;
-  font-size: 17px;
+  font-size: 90%;
 }
 
 .post strong {
-	font-weight: bold;
+	font-weight: 600;
 }
 
 .post pre {
-	margin-left: 8px;
 	margin-top: 10px;
 	margin-bottom: 10px;
 
@@ -313,7 +333,7 @@ body, html {
 }
 
 .post ul, .post ol {
-	margin-left: 25px;
+	margin-left: 45px;
   margin-bottom: 23px;
 	font-family: 'Metrophobic';
 }
@@ -327,6 +347,7 @@ body, html {
 
 .post * li p {
 	margin-bottom: 10px;
+  margin-left: 0;
 	font-weight: normal;
 	font-size: 14px;
 }
@@ -390,6 +411,20 @@ body, html {
   font-size: 10px;
   clear: both;
   color: #888888;
+  padding-bottom: 10px;
+}
+
+.post p.footer ~ * {
+	background-color: #352c35;
+  margin: 0;
+  padding-left: 20px;
+  padding-right: 20px;
+  color: white;
+  padding-top: 20px;
+}
+
+.post > *:last-child {
+  padding-bottom: 20px;
 }
 
 .image > .yt {
@@ -422,12 +457,12 @@ body, html {
 
 .post {
   border-right: none;
-  border-top: 1px solid #cac;
+  border-top: 1px solid #6d536d;
 }
 
 h3#footnotes ~ ul {
   list-style: none;
-  margin-left: 7px;
+  margin-left: 27px;
 }
 
 p + p.webring {
@@ -437,6 +472,5 @@ p + p.webring {
 }
 
 p.webring + p.coolpeople {
-  text-align:center;
   margin-top:0;
 }
