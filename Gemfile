@@ -8,7 +8,7 @@ gem 'sinatra'
 gem 'sinatra-subdomain'
 gem 'sinatra-contrib', :require => 'sinatra/content_for'
 
-gem 'rackula', :git => "https://github.com/wilkie/rackula", :branch => "feature-wget-options"
+gem 'rackula'
 
 gem 'thin'
 gem 'rake'
