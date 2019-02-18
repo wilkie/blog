@@ -1,8 +1,351 @@
-<?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom"><title>wilkie writes a thing</title><link href="http://blog.davewilkinsonii.com/feed" rel="self" type="application/atom+xml"/><link href="http://blog.davewilkinsonii.com/archive" rel="alternate" type="text/html"/><id>http://blog.davewilkinsonii.com/</id><updated>2013-10-25T00:00:00-04:00</updated><entry><title type="html">OurCS</title><link href="http://blog.davewilkinsonii.com/posts/our-cs" rel="alternate" type="text/html"/><published>2013-10-25T00:00:00-04:00</published><updated>2013-10-25T00:00:00-04:00</updated><author><name>wilkie writes a thing</name></author><id>http://blog.davewilkinsonii.com/posts/our-cs</id><content type="html" xml:base="http://blog.davewilkinsonii.com/posts/our-cs"><![CDATA[<p></p><div class='image border'><img src='/images/our-cs/our_cs_0_small.JPG' title='' alt='OurCS participants for 2013.' /><br /><div class='caption'>OurCS participants for 2013.</div></div><p></p>
+<?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom"><title>wilkie writes a thing</title><link href="http://blog.davewilkinsonii.com/feed" rel="self" type="application/atom+xml"/><link href="http://blog.davewilkinsonii.com/archive" rel="alternate" type="text/html"/><id>http://blog.davewilkinsonii.com/</id><updated>2016-10-01T00:00:00+02:00</updated><entry><title type="html">Distributed Filesystems</title><link href="http://blog.davewilkinsonii.com/posts/filesystems-what-we-know-what-we-can-learn" rel="alternate" type="text/html"/><published>2016-10-01T00:00:00+02:00</published><updated>2016-10-01T00:00:00+02:00</updated><author><name>wilkie writes a thing</name></author><id>http://blog.davewilkinsonii.com/posts/filesystems-what-we-know-what-we-can-learn</id><content type="html" xml:base="http://blog.davewilkinsonii.com/posts/filesystems-what-we-know-what-we-can-learn"><![CDATA[<p>Netflix is down so let&#39;s talk about compiling, linking, filesystems, and operating systems.
+The roles of each of these is a small step between code and a running program.
+Over the years, as computers have taken on different roles in our lives and have gotten bigger,
+smaller, and faster seemingly at the same time, each of these roles has changed to fit.
+What I find interesting is what parts of them have not changed, and furthermore, thinking about
+which parts should have evolved but didn&#39;t for some reason.</p>
+
+<p>Our goal? A system where applications can run because they exist, regardless of where they exist.
+A solution where data is ubiquitous
+and preservation and archival of both digital data and the software needed to view them are trivial.
+One where shared libraries do not exist because shared code is just a natural by-product of how the
+system works.</p>
+<h2 id='code_straight_to_your_doorstep'>Code Straight To Your Doorstep</h2>
+<p>Compiling, linking, and filesystems aren&#39;t just about a transformation of some kind of code
+to some kind of binary blob. They are carefully designed around potential problems and trade-offs.
+Compiling is a classic example of a trade-off of essentially caching the transformation between
+a human language and a distinctive computer language. Yet, interpretive languages such as Python
+or Ruby have been designed to not explicitly perform this type of compilation step and gaining
+some separate benefits by doing so.</p>
+
+<p>As you can surmise, compiling takes source code and turns it into binary code. This code is
+still in a type of intermediate state. Linking takes your binary code and pieces it together
+with similarly compiled code from other sources: system routines, code others have written
+(referred to with the misnomer &quot;libraries&quot;), and generated routines provided by the compiler
+or runtime that your program relies on to work. Linking is like a bunch of Lego... and a
+programmer&#39;s job is to tell it how to build your castle.</p>
+
+<p>Back in the day, almost before my time but fortunately not quite, programs ran directly on the
+hardware of the machine. There was very little
+systems software. Usually just some stuff to boot the machine and some program loader. Over
+the years, operating systems became bigger and their responsibilities grew wider. I enjoy
+thinking about why this actually is. We take for granted what they do, but if you ask someone
+their response to why they exist is some form of &quot;because they need to.&quot; That the functionality
+they provide is something nobody else would want to write or deal with.</p>
+
+<p>That is true. It is hard to argue with that. Most programs will need the same routines to run
+properly. Allocating memory,
+managing resources, and stuff like printing to the screen are all ubiquitously useful. So,
+operating systems provide that functionality and allow programs to &quot;link&quot; to it. No need to
+write it yourself. All programs use the same routines so nobody is stepping on any toes.
+It is essentially a way to reuse code and it pushed programmers forward where they could focus
+on a task and not worry about a lot of the details.</p>
+
+<blockquote>
+<p>We should get rid of shared libraries.
+<div class="citation">&mdash; <cite>anonymous</cite></div></p>
+</blockquote>
+
+<p>This linking technique is also useful for another trade-off that used to be very important.
+The size vs flexibility trade-off. When storage was expensive and thus rare, programs needed
+to fit in small spaces. Making use of code that already existed on machines allowed programmers
+the ability to do more with less. They didn&#39;t have to worry about writing routines to draw squares
+on the screen. They used the existing code provided by the operating system (within what is called
+a <em>shared library</em>) to do it for them. After all, programs needed to fit on disks that were only
+mere kilobytes in size and work with even less RAM. For instance, this website&#39;s total size would
+likely overwhelm such systems. It is hard to imagine these days, even if you lived through them
+in the past.</p>
+
+<p>But that is exactly it. It <em>is</em> the past. What is weird is that hardly anybody will protest
+against it. Somebody said to me the other day &quot;We should get rid of
+shared libraries.&quot; They want to get rid of this system! This bastion of sharing! How
+could we even consider doing such a thing? But I want you to actually think about this.
+Can you fundamentally change a system? Throw away something that has become so commonplace?
+I think so. And we have plenty of reasonable techniques to replace it with.</p>
+<h2 id='how_shared_libraries_work'>How Shared Libraries Work</h2>
+<p>Let&#39;s talk about a modern system. I&#39;d actually say a lot of programmers do not know very much
+about how compiling and linking actually work. It&#39;s a statement about how powerful and successful
+this system has been! People use it every day and it&#39;s just as much a mystery.</p>
+
+<p>When you write even the smallest amount of code, an incredible amount of stuff happens. Below is
+some C code. C is a programming language that has been designed with the idea of shared/dynamic
+libraries in mind. It was created in a time of turmoil where code ran only on a few types of
+machines and was a headache to get working on new machines or competitor&#39;s machines.</p>
+<pre><code class='lang-'>#include &lt;stdio.h&gt;
+
+int main(int argc, char** argv) {
+  printf(&quot;hello world\n&quot;);
+  return 0;
+}
+</code></pre>
+<p>The way this worked is that the language was designed to provide a standard way of doing the
+everyday tasks. Above, the code prints to the screen (or printer, back in this era), an obviously
+useful task. You tell the compiler you are using a particular interface (in this case: stdio or
+&quot;standard input/output&quot;) and then call upon the routine that has already been written for you: printf
+(formatted print).</p>
+
+<p>When you compile this tiny amount of code, it compiles it into a type of madlib. It places an empty
+space where you called that routine and expects it to be filled in later. It doesn&#39;t know who is
+providing that routine yet, because you want this to work on many machines and not just a single one.
+Each machine may provide a different routine called &#39;printf&#39;.
+When you &quot;link&quot; this program, usually at the time when you compile it, it performs a process called
+&quot;relocation&quot; where it fills in the madlibs with the locations of the routines on the specific machine
+you want to run it on. These are the &quot;shared libraries.&quot;</p>
+
+<p></p><div class='image border'><img style='width: 500;' src='/images/filesystems-what-we-know-what-we-can-learn/so-list.png' title='' alt='!' /></div><p></p>
+
+<p>On a modern machine, you&#39;ll find these shared libraries in system directories. On a Windows machine,
+shared libraries have &quot;.DLL&quot; (dynamically linked library) extensions, and on UNIX based systems they
+will have &quot;.so&quot; extensions. When you start a program, a process called &quot;loading,&quot; on whichever machine,
+the program contains a list of the shared objects and each of these also gets loaded into memory as
+though it were part of the program itself. The operating system may even employ some techniques to
+detect when two programs are loading the same library and only load it once.</p>
+
+<p>The process is entirely
+geared toward being very efficient in terms of space while giving up on overall system complexity
+while also allowing this loading overhead.</p>
+<h2 id='filesystems'>Filesystems</h2>
+<p>Filesystems govern how data is laid out on your disk and how it is retrieved. Seems simple.</p>
+
+<p>Here is my theory on filesystems, and I&#39;m just gonna throw it out there... they were designed once
+and then people forgot to change them. Filesystems and operating systems grew up alongside this
+compiling, linking, and loading system above. Generally, they are hierarchical: directories contain
+directories that contain files. When you draw it out, it&#39;s like a family tree; branches spread out
+but generally only in one direction.</p>
+
+<p>Filesystems were designed this way because of the nature of storage at the time. Originally, machines
+simply had a list of files. Then, directories were added because organization became a necessity
+particularly when multiple users could access the machine. The reason filesystems are strictly
+hierarchical is a result of a technological limitation, not the needs or wants of the people who use
+them. Essentially, it was easier to represent that structure in a way that was performant on the
+storage types of the time (tape, slower magnetic media, etc) You simply followed a series of named links
+to the data: &quot;root&quot; points to &quot;users&quot; points to &quot;wilkie&quot; points to &quot;documents&quot; points to &quot;good-writing.pdf&quot;</p>
+
+<blockquote>
+<p>The situation, however, has evolved. In 1992, a “typical”
+disk was approximately 300 MB. In 2009, a typical
+disk is closer to 300 GB, representing a three order of
+magnitude increase. While typical file sizes have also increased,
+they have not increased by the same margin. As
+a result, users may have many gigabytes worth of photo,
+video, and audio libraries on a single pc. This situation
+represents a management nightmare, and mere hierarchical
+naming is ill-suited to the task. One might want to
+access a picture, for instance, based on who is in it, when
+it was taken, where it was taken, etc. Applications interacting
+with such libraries have evolved external tagging
+mechanisms to deal with this problem.
+<div class="citation">&mdash; <cite>Margo Seltzer, Hierarchical File Systems are Dead, 2009</cite></div></p>
+</blockquote>
+
+<p>I&#39;m going to channel a lot of Margo Seltzer, here. She wrote
+<a  href='https://www.eecs.harvard.edu/margo/papers/hotos09/paper.pdf' title=''>&quot;Hierarchical File Systems are Dead,&quot;</a> after all.
+Even though we disagree on filesystems being one or two words, we generally agree with that bold statement.
+People don&#39;t want hierarchical filesystems, yet we rarely protest them. They are just how things are. Yet,
+as she points out, people use the internet in ways that defy hierarchical organization, and this has become
+our predominant way of viewing the world at large. Why limit ourselves when using our own physical machines?
+What else have we just ignored and what other merit aren&#39;t we willing to investigate?</p>
+
+<p>When we think about our model of linking code with shared libraries, it becomes more damning to consider it
+along with the arrested development of filesystems. These shared libraries were motivated by saving storage
+space. Filesystems were designed around limitations of storage speed. Therefore, their lives are interwoven.
+I will make the argument now that changing shared libraries requires a change in filesystems and that this
+change in filesystems is motivated to change how code is linked and loaded.</p>
+<h2 id='a_shared_library_filesystem'>A Shared Library Filesystem</h2>
+<p>Let&#39;s get rid of shared libraries. No longer will you have &quot;.so&quot; files littering your system. You simply
+do not need them. The main argument is that storage is no longer expensive. I like this argument. It is
+simple: the need no longer exists, but it isn&#39;t sufficient because why not still care about that type of
+efficiency?</p>
+
+<p>No, no. Let&#39;s preserve this efficiency, but do so whenever it happens to come up. Newer filesystem ideas
+are centered around the idea of inverting the structure. Instead of data being in hierarchical directories,
+the data is essentially just floating blobs like that of a lava lamp. They move around and maybe even
+fold into one another. The structure is built on top of it. A series of tags and indexes that give some
+semantic meaning to the blobs that are otherwise just a bunch of raw binary data.</p>
+
+<p>This parallels how we tend to view the Internet, and predates that by how we organized media in libraries.
+Books, passages, newspaper articles are like the oily blobs in that lava lamp. They all tend to look the
+same from a distance. We then took keywords out of them and organized them using metadata. We built
+card catalogs that people could use to look up these individual pieces of writing without having to
+exhaustively search. Card catalogs were certainly hierarchical, but, much like old filesystems, designed
+that way due to technical limitations. Internet search engines prove that such limitations no longer
+exist. We can build indexes that evolve and can capture a type of semantic meaning for what we are
+searching for.</p>
+
+<p>So, as Seltzer argues in 2009, we should very much replace directory-based filesystems on this idea. Directory-based
+filesystem designs are called &quot;named-addressed&quot; or &quot;location-addressed&quot; systems. These tag-based systems
+are called &quot;content-addressed&quot; or &quot;associative-storage&quot; systems. Where the data is looked up based on
+some description or representation of the data itself and not on any arbitrary name.</p>
+
+<p>We can, as implied, pull out words from text and use that as a &quot;tag&quot; to refer to the data itself. That is the
+more familiar search-engine idea. More generally, though, we use a form of &quot;hash&quot; mathematically generated
+from the data itself. It uses this idea that all data is numerical. Mathematicians have devised formulas that
+can take a set of data and produce a much smaller version of that data that will likely represent it. (There
+are many philosophical implications of this being practical that keep me up for days, but discussing how it
+works in too much detail is out of scope, here.)</p>
+
+<p>There are a few interesting ideas to pull out of this idea. First, is that the nature of mathematics is that it
+is true everywhere. So, &quot;Hello World&quot; using the hash algorithm called <strong>MD5</strong> is <code>b10a8db164e0754105b7a99be72e3fe5</code>
+and it is that exact hash on every machine in the entire universe. Another, is that this garbled, unpronounceable
+mess is always the same size (although longer is strictly better for uniqueness) regardless of the size of the
+data. So it is easy to use, store, and you interestingly can know one when you see one. Last, you can hash parts
+of the data independently. So a large file can be split into a bunch of smaller pieces, hashed, and then that file
+is a series of hashes.</p>
+
+<p>Alright. Let&#39;s expand upon this idea a bit. Our new filesystem is a bunch of binary blobs stored on disk. We refer
+to the data using hashes (or we search by tag or keyword or name and the result is a series of hashes). One thing
+we get for free on such a system is that the same file is never stored twice. It just can&#39;t happen. Those two files
+would have the same hash, that is, they&#39;d have the same name, and therefore when you looked either up, it would
+point to the same place. Now, consider that we are splitting large files into smaller pieces. Now, if a file somehow
+has a chunk that is the same as another file, that small chunk now only exists once.</p>
+
+<p>The uses for this are invigorating. The versioning of files is made easier. When you change a file, just store the
+chunk that changed. The old version will still exist and the new still exist without having to copy the entire
+file twice. This is how version control systems such as Git work. If you have ever worked with these systems, the
+commit hash is a content-addressable hash of the data that points you to the series of hashes that represent the
+code at a particular point in time.</p>
+
+<p>But, we can inspire new forms of operating systems, here. That&#39;s what we want to do. Get rid of shared libraries
+as these distinct, separate things we know them to be now.
+If shared libraries are all about space efficiency, and you get a form of that here, I think we&#39;re on the right
+track.</p>
+
+<p>All we would need to do is store the shared code on such a tagged filesystem. However, we no longer have to
+separate it from the program itself. We can compile shared code directly into a program. If two programs have
+both used the same shared code, it will hash to the same place. Even though, if you look at the program, it looks
+like it is quite large... on the system itself, it is split up and organized as efficiently as possible.</p>
+
+<p>Sure, you can still have the code be interchangeable, but you can still pass along a canonical version of the
+code you know works well with it. Other people can decide to replace that code with something else at any
+point... in effect creating a new program in the process that refers to different hashes for the chunks
+related to that functionality. It&#39;s just a natural part of the system, although we may have to start looking at
+code and compilation in different ways.</p>
+
+<p>Oh, and shared library versioning is just something that happens naturally, too.</p>
+
+<p></p><div class='image border'><img style='width: 500;' src='/images/filesystems-what-we-know-what-we-can-learn/memory-breakdown.png' title='' alt='Program A and B, although distinct programs, both share code that relates to drawing to the screen. This code logically exists as a whole in these two different contexts, but only physically exists as a set of chunks referred to by their hash.' /><br /><div class='caption'><p>Program A and B, although distinct programs, both share code that relates to drawing to the screen. This code logically exists as a whole in these two different contexts, but only physically exists as a set of chunks referred to by their hash.</p>
+</div></div><p></p>
+
+<p>We simply don&#39;t need to care about shared libraries as a distinct thing. Just use the code. Have the compiler
+split up the program into reasonable, logical chunks (such as each file or module) and have the storage system
+handle duplication. When programs use the same code, or code that is interchangeable with code the system already
+knows, just link it to the data. If it has never seen that data before, write it to disk. Storage is cheap.
+Networks are versatile to simply let you download parts of a program you need when you download or install it.
+Which brings us to our final topic.</p>
+<h2 id='where_does_data_exist_'>Where Does Data Exist?</h2>
+<p>Now let&#39;s focus on the other now-naive assumption that has been made in the design of filesystems and operating
+systems that has persisted for decades: the idea that data is local. We use package managers to explicitly
+install programs to our disk. This is a by-product of this assumption. Even though programs are almost entirely
+available from another machine, we download the entire copy of it at some point, use it, and then it just sits
+there.</p>
+
+<p></p><div class='image'><img style='width: 500;' src='/images/filesystems-what-we-know-what-we-can-learn/data-ubiquitous.png' title='' alt='Photo of the Earth by [NASA](https://www.nasa.gov/image-feature/nasa-captures-epic-earth-image)' /><br /><div class='caption'><p>Photo of the Earth by <a  href='https://www.nasa.gov/image-feature/nasa-captures-epic-earth-image' title=''>NASA</a></p>
+</div></div><p></p>
+
+<p>With our lack of shared libraries comes a lack of concern about where data actually lives. We don&#39;t live in the
+world where all of our code needs to exist on the disk three feet away from us at every moment of every day. The
+surge of popularity of strictly online applications has proven this time and time again, and will continue to
+do so until we agree about why. The reason why is that we actually want a fundamentally different operating
+system.</p>
+
+<p>Our new filesystem has inspired a new way of linking programs. A new way of organizing code. And therefore, it
+must inspire a new operating system. This hypothetical system will no longer care about whether or not a program
+exists on your machine when you want to run it. Or any part of it. Maybe parts of the program you never seem to
+use can be deleted? Of course, they can! Why not? You aren&#39;t using them and they generally exist somewhere.</p>
+
+<p>Since our hash of data is the same in every inch of the universe, we have a powerful means of identifying the
+code we actually need anywhere in that universe. If I want to run my system&#39;s &quot;calculator&quot; application, it is
+represented by a bunch of chunks of data. Some list of hashes. Some may be stored on my system already, some
+not. I don&#39;t need to install the application, I just need to know what those hashes are... metadata. When I
+go to run it, the system can look and see what chunks of the application I have locally, and then simply
+download the rest.</p>
+
+<p>Modern package managers handle the installation of applications in a fairly centralized manner. You want
+the &quot;calculator&quot; app, you tell it &quot;install calculator&quot; and it will look up the name and install every
+single piece it requires. It will also download and install every single shared library it needs that
+you don&#39;t already have. In our new system, why should we go through that effort? The calculator app is
+a series of hashes that consist of all of the code it needs, some of it may be the same code as other
+programs. Yet, similar to the package managers we already use, we simply need a place to look.</p>
+
+<p>Since this calculator app is a series of hashes, and those hashes are the same everywhere, we can get
+the pieces of the application we don&#39;t have from <em>any</em> machine that has them. In effect, let&#39;s start
+thinking about our computers as having the knowledge from every other machine they can talk to. There
+is no &quot;local&quot; storage in this system. You simply type &quot;run calculator&quot; and it figures out the rest.</p>
+
+<p></p><div class='image border'><img style='width: 500;' src='/images/filesystems-what-we-know-what-we-can-learn/machine-breakdown.png' title='' alt='The same Program A and B from the graphic above are shown here. They don't need to be "whole" to be usable. In fact, Program B doesn't exist locally at all, but it can still be used. Our new operating system sees all blocks as local and can run partial programs by pulling the needed blocks as they are needed and trading blocks that aren't useful to other machines.' /><br /><div class='caption'><p>The same Program A and B from the graphic above are shown here. They don&#39;t need to be &quot;whole&quot; to be usable. In fact, Program B doesn&#39;t exist locally at all, but it can still be used. Our new operating system sees all blocks as local and can run partial programs by pulling the needed blocks as they are needed and trading blocks that aren&#39;t useful to other machines.</p>
+</div></div><p></p>
+
+<p>Now our operating system is the following: a content-addressed filesystem, and the means of downloading
+and uploading chunks of data. That is the smallest an operating system needs to be. It can download the
+rest of itself at this point. It can effectively learn what it doesn&#39;t yet know how to do.</p>
+
+<p>How this generally works is that your system can store a limited set of chunks. We&#39;re still bound by
+the laws of physics and disks are still only finite in size! When we fill up our storage, we start to
+delete chunks we 1) no longer need and 2) feel are replicated elsewhere. To better ensure that data
+actually persists in the universe, we employ a strategy where we don&#39;t actually delete anything, we just
+swap it with the chunk we want from a different machine. That second machine now has the chunk we didn&#39;t
+need, and we have the one we did want. As storage increases exponentially, we can effectively preserve
+useful data. This type of protocol is further explored in current technologies such as
+<a  href='https://en.wikipedia.org/wiki/Kademlia' title=''>Kademlia</a>,
+<a  href='https://www.coralcdn.org/docs/coral-nsdi04.pdf' title=''>Coral</a>,
+<a  href='https://en.wikipedia.org/wiki/BitTorrent' title=''>BitTorrent</a>,
+and specifically the dramatically named <a  href='https://ipfs.io/' title=''>InterPlanetary File System</a>.</p>
+
+<p>At the end of the day, programs no longer need to break themselves into pieces installed independently.
+They do not need to be installed at all... no need to be locally available to use. And they do not have
+to be limited by the imagination of systems designers of the 1960s. Furthermore, as a nice side-effect,
+the software can be preserved for years to come.</p>
+]]></content></entry><entry><title type="html">Interactive Archival of Art and Science at Abstractions</title><link href="http://blog.davewilkinsonii.com/posts/abstractions" rel="alternate" type="text/html"/><published>2016-08-18T00:00:00+02:00</published><updated>2016-08-18T00:00:00+02:00</updated><author><name>wilkie writes a thing</name></author><id>http://blog.davewilkinsonii.com/posts/abstractions</id><summary>These are links to the slides and auxiliary resources on interactive archival.</summary><content type="html" xml:base="http://blog.davewilkinsonii.com/posts/abstractions"><![CDATA[<h2 id='slides'>Slides</h2>
+<p><a  href='/wilkie_abstractions_16.pdf' title=''>Slidedeck (PDF)</a></p>
+<h2 id='archives'>Archives</h2>
+<p><a  href='http://olivearchive.org' title=''>Olive Archive</a> - CMU, Streaming VM Image Archive</p>
+
+<p><a  href='http://bw-fla.uni-freiburg.de/demos.html' title=''>bwFLA</a> - U. of Freiburg, Remote Desktop VMs on Demand</p>
+
+<p><a  href='https://occam.software' title=''>Occam</a> - Flexible VM Building</p>
+<h2 id='demos'>Demos</h2>
+<p><a  href='https://archive.org/details/softwarelibrary_msdos_games?&sort=-downloads' title=''>Internet Archive: DOS Games</a></p>
+
+<p><a  href='https://occam.software/objects/bd4e25a0-5389-11e6-8a01-f23c910a26c8' title=''>Occam: Commander Keen 4</a> - Press Run</p>
+
+<p><a  href='https://occam.software/objects/532ffbfc-68df-11e5-b84a-001fd05bb228' title=''>Occam: One Must Fall 2097</a> - Press Run</p>
+
+<p><a  href='https://occam.software/objects/5d179432-f849-11e5-a18a-001fd05bb228' title=''>Occam: Transport Tycoon</a> - Press Run</p>
+
+<p><a  href='https://occam.software/objects/71b9469e-3690-11e6-ada4-001fd05bb228' title=''>Occam: NES Game: Mad Wizard</a> - Press Run</p>
+
+<p><a  href='https://occam.software/objects/42142ff4-38b0-11e6-913a-f23c910a26c8' title=''>Occam: SNES Game: Classic Kong Complete</a> - Press Run</p>
+
+<p><a  href='https://occam.software/objects/44c6e8bc-64b2-11e6-9901-f23c910a26c8' title=''>Occam: Demoscene: Second Reality</a> - Press Run - Select Soundblaster from menu instead of Gravis</p>
+
+<p><a  href='https://occam.software/objects/50713386-3756-11e6-a7fa-f23c910a26c8' title=''>Occam: ZZT Games (Mods) - Mystery Manor</a> - Press Run</p>
+
+<p><a  href='https://occam.software/objects/f3bceb88-3757-11e6-a7fa-f23c910a26c8' title=''>Occam: ZZT Games (Mods) - Death Gate</a> - Press Run</p>
+]]></content></entry><entry><title type="html">My Response To You</title><link href="http://blog.davewilkinsonii.com/posts/my-response-to-you" rel="alternate" type="text/html"/><published>2015-03-29T00:00:00+01:00</published><updated>2015-03-29T00:00:00+01:00</updated><author><name>wilkie writes a thing</name></author><id>http://blog.davewilkinsonii.com/posts/my-response-to-you</id><summary>This is my response to your comments about what I work on. Enjoy.</summary><content type="html" xml:base="http://blog.davewilkinsonii.com/posts/my-response-to-you"><![CDATA[<h2 id='people_have_tried_to_do_this_before'>People have tried to do this before</h2>
+<p>I&#39;d hope so. we in the real world call this <em>related work</em> or privately refer to it as <em>guidance</em></p>
+<h2 id='but_x_did_this_and_it_was_really_bad'>But X did this and it was really bad</h2>
+<p>true. we call that <em>inspiration</em> and a big reason why we should still publish negative results.</p>
+<h2 id='nobody_will_use_this'>Nobody will use this</h2>
+<p>you mean <em>I won&#39;t use this</em> and that&#39;s fine with me.</p>
+<h2 id='but_x_already_exists_and_people_aren__39_t_going_to_switch_'>But X already exists and people aren&#39;t going to switch.</h2>
+<p>showing that X isn&#39;t enough doesn&#39;t mean I have to destroy X. the contrary actually. I don&#39;t like monoliths so I think people might want two things.</p>
+<h2 id='performance_will_be_slow'>Performance will be slow</h2>
+<p>psychics don&#39;t exist. what is your definition of <a  href='/posts/kaashoeks-law' title=''>performance</a> anyway. oh its a bad one so that you can fake being a scientist while describing a hypothesis as though fact.</p>
+<h2 id='x_did_it_better'>X did it better</h2>
+<p>fine. they have a head start. you seem obsessed with <em>best</em>, which is fair because Pete Best was the best Beatle.</p>
+<h2 id='but_your_design_won__39_t_work_for_this_particular_situation'>But your design won&#39;t work for this particular situation</h2>
+<p>no shit. look at that, we both understand really fundamental design trade-offs. glad we can relate to one another so well.</p>
+<h2 id='don__39_t_you_take_government_defense_money_'>Don&#39;t you take government defense money?</h2>
+<p>all US-based computer scientists do because that&#39;s where all the money is. welcome to the national sciences. talk to your legislators about reforming science funding today! can&#39;t talk more about this... I have to go spend the little money I have on food and perpetual loan interest.</p>
+<h2 id='i_could_do_it_better'>I could do it better</h2>
+<p>shut up and do it.</p>
+]]></content></entry><entry><title type="html">OurCS</title><link href="http://blog.davewilkinsonii.com/posts/our-cs" rel="alternate" type="text/html"/><published>2013-10-25T00:00:00+02:00</published><updated>2013-10-25T00:00:00+02:00</updated><author><name>wilkie writes a thing</name></author><id>http://blog.davewilkinsonii.com/posts/our-cs</id><content type="html" xml:base="http://blog.davewilkinsonii.com/posts/our-cs"><![CDATA[<p></p><div class='image border'><img style='' src='/images/our-cs/our_cs_0_small.JPG' title='' alt='OurCS participants for 2013.' /><br /><div class='caption'><p>OurCS participants for 2013.</p>
+</div></div><p></p>
 
 <p>On October 18th, I spent the weekend leading a team of 4 undergraduate women in an exploration of distributed systems for collaboration. <a  href='http://www.cs.cmu.edu/ourcs/' title=''>OurCS</a>, which stands for <strong>O</strong>pportunities for <strong>U</strong>ndergraduate <strong>R</strong>esearch in <strong>C</strong>omputer <strong>S</strong>cience, held a workshop at <a  href='http://cmu.edu' title=''>CMU</a> with organizers also from the <a  href='http://pitt.edu' title=''>University of Pittsburgh</a> where researchers from many areas in or around computer science led a team of undergraduate women in order to exhibit the wide variety of topics one could study in this field. I was invited along with a dozen other researchers to lead a team through a tough technology problem.</p>
 
-<p></p><div class='image border'><img src='/images/our-cs/degrees.jpg' title='' alt='Computer Science suffers from a declining gender inclusivity.' /><br /><div class='caption'>Computer Science suffers from a declining gender inclusivity.</div></div><p></p>
+<p></p><div class='image border'><img style='' src='/images/our-cs/degrees.jpg' title='' alt='Computer Science suffers from a declining gender inclusivity.' /><br /><div class='caption'><p>Computer Science suffers from a declining gender inclusivity.</p>
+</div></div><p></p>
 
 <p>The motivation for the event is one that I would hope is rather well-known by now. If you aren&#39;t aware, however, the computer science field, and the tech industry at large, has a critical problem with diversity. There is an insurmountable amount of evidence, but for this discussion, I&#39;ll just point to the STEM field degree trends. Computer Science is the only STEM (That is, Science-Technology-Engineering-Mathematics) field with a dramatically negative trend in the gender ratio of the degrees awarded. This workshop is an example of one small event, that must be combined with many others, that serves as a possible <strong>solution</strong> to this incredible social problem.</p>
 <h2 id='speakers'>Speakers</h2>
@@ -34,7 +377,8 @@
 
 <p>From there, I proposed the code sharing design. It is worth explaining a little bit. The motivation stems from <a  href='posts/apples' title=''>this article</a> which calls for a reduction of abstractions. The design of the systems comes from <a  href='posts/djehuty-technical' title=''>another article</a> and this <a  href='https://speakerdeck.com/wilkie/xomb-plus-djehuty-a-remix-os-for-computation-liberation' title=''>talk</a>.</p>
 
-<p></p><div class='image border'><img src='/images/our-cs/our_cs_1_small.JPG' title='' alt='Thinking about distributed systems through implementation' /><br /><div class='caption'>Thinking about distributed systems through implementation</div></div><p></p>
+<p></p><div class='image border'><img style='' src='/images/our-cs/our_cs_1_small.JPG' title='' alt='Thinking about distributed systems through implementation' /><br /><div class='caption'><p>Thinking about distributed systems through implementation</p>
+</div></div><p></p>
 
 <p>Essentially, it is the reduction of code into as small of pieces as you can imagine. Each useful piece of code is given an <strong>interface</strong> (name, description of how to invoke, think function definition). Relationships among interfaces can be thought of as an object-oriented network, however in this system, a single entity does not know of the entire object-oriented graph. A single interface can be passed among many nodes in the system to be <em>discovered</em>. When a system knows of a name for a piece of code (let&#39;s say <code>sort</code> for example) it is now aware that there is some code to invoke that behavior, but it does not know how to do it. So it will ask for an <strong>implementation</strong> of that interface. This is some code that will perform the behavior implied by its name. Now, whenever <code>sort</code> is invoked, it will compute the result with that implementation. Systems can then pass around or even create new implementations as they wish. Multiple implementations are a good thing.</p>
 
@@ -50,7 +394,8 @@
 
 <p>After they were finished, they used a program that implemented the protocol. This was actually the same code running on all machines, including the server I had running the plotter. We looked at how it was implemented and showed the sharing that the system was capable of by downloading the implementations of their fellow students. In the end, we could look at the eventual plots.</p>
 
-<p></p><div class='image border'><img src='/images/our-cs/our_cs_3_small.JPG' title='' alt='After their presentation: Rachel, Grishma, Deeksha, and Lucy.' /><br /><div class='caption'>After their presentation: Rachel, Grishma, Deeksha, and Lucy.</div></div><p></p>
+<p></p><div class='image border'><img style='' src='/images/our-cs/our_cs_3_small.JPG' title='' alt='After their presentation: Rachel, Grishma, Deeksha, and Lucy.' /><br /><div class='caption'><p>After their presentation: Rachel, Grishma, Deeksha, and Lucy.</p>
+</div></div><p></p>
 
 <p>The students were very active in their discussion of the protocol and the system and quickly identified faults and possible problems. They were all pivotal in pushing the idea further and have greatly influenced any further work I may do in this space. It just goes to show that nobody should ever underestimate any student and that this workshop can and does promote confidence and the understanding to every student that they <strong>do</strong> belong and their opinions and thoughts <strong>are</strong> valuable. Such a great experience.</p>
 
@@ -58,12 +403,13 @@
 
 <p>So, to conclude, let&#39;s look at the result. The following five images (a subset chosen from the many permutations) show each of the students (and my original plotter) plot implementations working on Grishma&#39;s dataset. As you can see, Grishma&#39;s original plot is at the top and it is drastically different from the other students. However, by allowing for this type of collaborative code sharing system, she can now see other ideas and be inspired by other techniques. For instance, the bottom chart, which shows a stacked bar graph, may better represent her data. This demonstrates that the system can indeed allow collaboration without explicit human arbitration, and that this is valuable. Now, we can go on to producing a larger system that will extend this idea to all code!</p>
 
-<p></p><div class='image border'><img src='/images/our-cs/grishma_5.gif' title='' alt='!' /></div><p>
-</p><div class='image border'><img src='/images/our-cs/grishma_1.gif' title='' alt='!' /></div><p>
-</p><div class='image border'><img src='/images/our-cs/grishma_3.gif' title='' alt='!' /></div><p>
-</p><div class='image border'><img src='/images/our-cs/grishma_7.gif' title='' alt='!' /></div><p>
-</p><div class='image border'><img src='/images/our-cs/grishma_9.gif' title='' alt='!' /></div><p></p>
-]]></content></entry><entry><title type="html">The Zed Shaw Phenomenon</title><link href="http://blog.davewilkinsonii.com/posts/the-zed-shaw-phenomenon" rel="alternate" type="text/html"/><published>2013-07-22T00:00:00-04:00</published><updated>2013-07-22T00:00:00-04:00</updated><author><name>wilkie writes a thing</name></author><id>http://blog.davewilkinsonii.com/posts/the-zed-shaw-phenomenon</id><summary>A look at how Zed Shaw's behavior contains an insight into a wider, darker trend within our communities: the bully. I look at my interactions with Shaw and his aggression and look at how this impacts the lack of a safe space to learn and contribute within the larger open source community.</summary><content type="html" xml:base="http://blog.davewilkinsonii.com/posts/the-zed-shaw-phenomenon"><![CDATA[<p></p><div class='image border'><img src='/images/the-zed-shaw-phenomenon/zedshaw.png' title='' alt='If you email me, please give me your best shot at describing what a crazy ass tweaker is.' /><br /><div class='caption'>If you email me, please give me your best shot at describing what a crazy ass tweaker is.</div></div><p></p>
+<p></p><div class='image border'><img style='' src='/images/our-cs/grishma_5.gif' title='' alt='!' /></div><p>
+</p><div class='image border'><img style='' src='/images/our-cs/grishma_1.gif' title='' alt='!' /></div><p>
+</p><div class='image border'><img style='' src='/images/our-cs/grishma_3.gif' title='' alt='!' /></div><p>
+</p><div class='image border'><img style='' src='/images/our-cs/grishma_7.gif' title='' alt='!' /></div><p>
+</p><div class='image border'><img style='' src='/images/our-cs/grishma_9.gif' title='' alt='!' /></div><p></p>
+]]></content></entry><entry><title type="html">The Zed Shaw Phenomenon</title><link href="http://blog.davewilkinsonii.com/posts/the-zed-shaw-phenomenon" rel="alternate" type="text/html"/><published>2013-07-22T00:00:00+02:00</published><updated>2013-07-22T00:00:00+02:00</updated><author><name>wilkie writes a thing</name></author><id>http://blog.davewilkinsonii.com/posts/the-zed-shaw-phenomenon</id><summary>A look at how Zed Shaw's behavior contains an insight into a wider, darker trend within our communities: the bully. I look at my interactions with Shaw and his aggression and look at how this impacts the lack of a safe space to learn and contribute within the larger open source community.</summary><content type="html" xml:base="http://blog.davewilkinsonii.com/posts/the-zed-shaw-phenomenon"><![CDATA[<p></p><div class='image border'><img style='' src='/images/the-zed-shaw-phenomenon/zedshaw.png' title='' alt='If you email me, please give me your best shot at describing what a crazy ass tweaker is.' /><br /><div class='caption'><p>If you email me, please give me your best shot at describing what a crazy ass tweaker is.</p>
+</div></div><p></p>
 
 <p>Goodness. The tech world must be really unfriendly, or alternatively I must be the absolute scum of the planet. Let&#39;s figure out what I did.</p>
 <h2 id='indirection_is_not_abstraction'>Indirection Is Not Abstraction</h2>
@@ -103,7 +449,7 @@ reasonable explanation as to why their crap is steaming.</p>
 <h2 id='zed_shaw_responds'>Zed Shaw Responds</h2>
 <p>Apparently the post was well-received enough to catch Zed Shaw&#39;s attention, which I suppose was my first mistake.</p>
 
-<p></p><div class='image border'><img src='/images/the-zed-shaw-phenomenon/zedshaw_3.png' title='' alt='!zedshaw' /></div><p></p>
+<p></p><div class='image border'><img style='' src='/images/the-zed-shaw-phenomenon/zedshaw_3.png' title='' alt='!zedshaw' /></div><p></p>
 
 <p>Zed Shaw&#39;s response was not a very friendly one. He stripped my handle out of the reply to Steve and gives that common criticism of criticism: <em>&quot;you didn&#39;t even read it.&quot;</em> Steve did that thing that your friends do when you are out with them and they run into some Cool People, and he started to distance himself from me like it was coincidence that I was in the same room. That was disappointing, but I agree with Steve&#39;s careful implication that it is a bit confusing that I could both repeat what Shaw said and yet in the same small post also suggest that he was wrong.</p>
 
@@ -127,9 +473,11 @@ reasonable explanation as to why their crap is steaming.</p>
 
 <p>In frustration, Kurtis issues a status about how Zed Shaw attacked rather than reasoned, and I felt the need to express solidarity. This is very much my experience from before where criticism was met with immediate aggression. I tagged Zed&#39;s handle (something he didn&#39;t afford me.) When Zed replied to me, shocked that I would be so brazen, I pointed out the tweet where he had attacked my post while dropping my handle and then... well, head back to the top of this page. He blew up.</p>
 
-<p></p><div class='image border'><img src='/images/the-zed-shaw-phenomenon/zedshaw_5.png' title='' alt='For the record, I've indeed secured funding for students to work on my projects. They were paid a monthly stipend and they acquired attribution and references for their work. It is not only possible to pay undergraduate students through grants, it's as common as it is necessary. But that's a different argument for a different day.' /><br /><div class='caption'>For the record, I've indeed secured funding for students to work on my projects. They were paid a monthly stipend and they acquired attribution and references for their work. It is not only possible to pay undergraduate students through grants, it's as common as it is necessary. But that's a different argument for a different day.</div></div><p></p>
+<p></p><div class='image border'><img style='' src='/images/the-zed-shaw-phenomenon/zedshaw_5.png' title='' alt='For the record, I've indeed secured funding for students to work on my projects. They were paid a monthly stipend and they acquired attribution and references for their work. It is not only possible to pay undergraduate students through grants, it's as common as it is necessary. But that's a different argument for a different day.' /><br /><div class='caption'><p>For the record, I&#39;ve indeed secured funding for students to work on my projects. They were paid a monthly stipend and they acquired attribution and references for their work. It is not only possible to pay undergraduate students through grants, it&#39;s as common as it is necessary. But that&#39;s a different argument for a different day.</p>
+</div></div><p></p>
 
-<p></p><div class='image border'><img src='/images/the-zed-shaw-phenomenon/zedshaw_2.png' title='' alt='The Internet is a magical place where pointing out somebody being a jerk toward you is actually you being mean to them.' /><br /><div class='caption'>The Internet is a magical place where pointing out somebody being a jerk toward you is actually you being mean to them.</div></div><p></p>
+<p></p><div class='image border'><img style='' src='/images/the-zed-shaw-phenomenon/zedshaw_2.png' title='' alt='The Internet is a magical place where pointing out somebody being a jerk toward you is actually you being mean to them.' /><br /><div class='caption'><p>The Internet is a magical place where pointing out somebody being a jerk toward you is actually you being mean to them.</p>
+</div></div><p></p>
 <h2 id='open_source_bullies'>Open-Source Bullies</h2>
 <blockquote>
 <p>@wilkieii The thing you&#39;re leaving out is I&#39;m mean to people like you and KRG who shit on me but think I&#39;m supposed to be nice in reply.</p>
@@ -143,16 +491,16 @@ reasonable explanation as to why their crap is steaming.</p>
 
 <p><em>&quot;Read the Fucking Manual,&quot;</em> they will say. (They like to swear, don&#39;t they?) They will use their established influence to scare even the likes of Steve Klabnik into being a bit more passive. I mean, you don&#39;t want to hurt your chances of being one of the Cool People, right? You don&#39;t want to be seen as the aggressive one. That is, other prominent individuals are not pushing back for the rest of us. <em>&quot;Grow some thicker skin,&quot;</em> they will paraphrase in retort to every accusation. These bullies, such as Shaw, will use their environment to their advantage and make it look like you are in the bad, instead of them.</p>
 
-<p></p><div class='image'><img src='/images/the-zed-shaw-phenomenon/zedshaw_4.png' title='' alt='!zedshaw' /></div><p></p>
+<p></p><div class='image'><img style='' src='/images/the-zed-shaw-phenomenon/zedshaw_4.png' title='' alt='!zedshaw' /></div><p></p>
 
 <p>They are the type of people who like to get the last word.</p>
 <h2 id='the_truth'>The Truth</h2>
 <p>To conclude, we have to come together and accept the truth: <strong>the tech community is an extremely unfriendly place</strong>. We cannot placate such incidents as they hurt our ability to teach and collaborate and thus hinder our progress. It might be <a  href='http://ashedryden.com/blog/the-risk-in-speaking-up' title=''>hard</a>, but let&#39;s make sure we take a stand. Let&#39;s <a  href='http://ashedryden.com/blog/increasing-diversity-at-your-conference' title=''>create</a> a safer space for people to learn. Let&#39;s claim the last word for ourselves, and say, <strong><em>&quot;We can do better without you.&quot;</em></strong></p>
-]]></content></entry><entry><title type="html">Reuleaux Selectors</title><link href="http://blog.davewilkinsonii.com/posts/reuleaux-selectors" rel="alternate" type="text/html"/><published>2013-06-27T00:00:00-04:00</published><updated>2013-06-27T00:00:00-04:00</updated><author><name>wilkie writes a thing</name></author><id>http://blog.davewilkinsonii.com/posts/reuleaux-selectors</id><summary>Gender is a complicated attribute, and as such has been difficult for developers and designers of web services to allow users to describe properly. In this article, we discuss a new type of gender/orientation selector that respects a very broad spectrum of possible values. This selector stresses an incomplete solution to a difficult usecase: a selection that allows a large set of possible values, yet is comparable.</summary><content type="html" xml:base="http://blog.davewilkinsonii.com/posts/reuleaux-selectors"><![CDATA[<p>Whether you believe gender follows essentialist principles or is constructed, the concept of gender identity is a very complicated subject.
+]]></content></entry><entry><title type="html">Reuleaux Selectors</title><link href="http://blog.davewilkinsonii.com/posts/reuleaux-selectors" rel="alternate" type="text/html"/><published>2013-06-27T00:00:00+02:00</published><updated>2013-06-27T00:00:00+02:00</updated><author><name>wilkie writes a thing</name></author><id>http://blog.davewilkinsonii.com/posts/reuleaux-selectors</id><summary>Gender is a complicated attribute, and as such has been difficult for developers and designers of web services to allow users to describe properly. In this article, we discuss a new type of gender/orientation selector that respects a very broad spectrum of possible values. This selector stresses an incomplete solution to a difficult usecase: a selection that allows a large set of possible values, yet is comparable.</summary><content type="html" xml:base="http://blog.davewilkinsonii.com/posts/reuleaux-selectors"><![CDATA[<p>Whether you believe gender follows essentialist principles, is constructed, or something in between, the concept of gender identity is a very complicated subject.
 Contrary to unfortunately popular belief, gender is not chosen from a binary as though it were conjured at the whim of a coin-toss.
 Gender is different for just about every individual and as infinite as our collective imaginations can bear.</p>
 
-<p>In this post, we describe a new form of gender selection interface (the <a  href='https://github.com/wilkie/blog/blob/master/public/javascript/reuleaux-selectors/reuleaux-selectors.js' title=''>code</a> is open and in need of refactoring).
+<p>In this post, we (<a  href='http://rarlindseysmash.com' title=''>Lindsey Bieda</a> and wilkie) describe a new form of gender selection interface (the <a  href='https://github.com/wilkie/blog/blob/master/public/javascript/reuleaux-selectors/reuleaux-selectors.js' title=''>code</a> is open and in need of refactoring).
 It is worth noting this disclaimer: we are not trying to develop the perfect representation.
 For decades, the computer science community has not explored new approaches to this problem, and thus for decades people have been excluded based on not being able to fully reflect themselves.
 There are a few reasons why&mdash; particularly computer science&#39;s predilection toward metrics and peer-review which hurt divisive, intentionally vague, or exploratory work.
@@ -167,7 +515,8 @@ If you still can&#39;t say no, use a text field.</p>
 Many people will be surprised at the amazing rainbow-like diversity of gender that the universe contains.
 It is perfectly acceptable to be unaware, but as we build social spaces and as we interact with a diversity of people, we should certainly make an attempt to empathize.</p>
 <h3 id='gender_binary'>Gender binary</h3>
-<p></p><div class='image border'><img src='/images/reuleaux-selectors/gender-binary.png' title='' alt='The gender binary is enforced by culture' /><br /><div class='caption'>The gender binary is enforced by culture</div></div><p></p>
+<p></p><div class='image border'><img style='' src='/images/reuleaux-selectors/gender-binary.png' title='' alt='The gender binary is enforced by culture' /><br /><div class='caption'><p>The gender binary is enforced by culture</p>
+</div></div><p></p>
 
 <p>The prevailing, yet optimistically evolving, perspective of gender throughout society remains mostly that of a binary.
 You are either a man or a woman and if you are not one of those two, you are pushed into situations where you have to choose. Our social networks, dating services, and other online communities should not enforce this broad and unfair generalization.</p>
@@ -176,11 +525,13 @@ You are either a man or a woman and if you are not one of those two, you are pus
 
 <p>There is no room for diversity here. A person could be on that fuzzy (and ever-changing) line between men and women. What pronouns do we use? Well, we should use what pronouns they prefer, and should ask for such. As it stands, though, we are still pushing this individual to select between two choices, when in fact, they may prefer another option. This choice is perfectly, and naturally, acceptable.</p>
 <h3 id='gender_scale'>Gender scale</h3>
-<p></p><div class='image'><img src='/images/reuleaux-selectors/gender-scale.png' title='' alt='The gender scale allows for bigender/intersex individuals, but not agender' /><br /><div class='caption'>The gender scale allows for bigender/intersex individuals, but not agender</div></div><p></p>
+<p></p><div class='image'><img style='' src='/images/reuleaux-selectors/gender-scale.png' title='' alt='The gender scale allows for bigender/intersex individuals, but not agender' /><br /><div class='caption'><p>The gender scale allows for bigender/intersex individuals, but not agender</p>
+</div></div><p></p>
 
 <p>Given that a binary system is inadequate for individuals not self-identifying at extremes, another option that people have presented to define gender is a sliding scale with male at one end and female at the other. This is better, because we can now represent more feminine men, masculine women, intersex, bigender, and some androgynous people. However, this scale actually still supports the concept of gender binary, and as such does not respect individuals that exist outside of its normative bounds. For instance, where does one go in the scale that have no self-identifiable gender characteristics? Frankly, an individual that is neither man nor woman is not necessarily in the middle of one particular scale.</p>
 <h3 id='gender_spectrum'>Gender spectrum</h3>
-<p></p><div class='image'><img src='/images/reuleaux-selectors/gender-spectrum.png' title='' alt='The gender spectrum is a continuum that allows for a variety of genders and allows for a diversity of non-conformity' /><br /><div class='caption'>The gender spectrum is a continuum that allows for a variety of genders and allows for a diversity of non-conformity</div></div><p></p>
+<p></p><div class='image'><img style='' src='/images/reuleaux-selectors/gender-spectrum.png' title='' alt='The gender spectrum is a continuum that allows for a variety of genders and allows for a diversity of non-conformity' /><br /><div class='caption'><p>The gender spectrum is a continuum that allows for a variety of genders and allows for a diversity of non-conformity</p>
+</div></div><p></p>
 
 <p>The reason gender is so hard to define as an input method is that, in reality, gender is more of a spectrum of possibility. Male and female are not truly endpoints, but rather simply points in the spectrum.</p>
 
@@ -191,7 +542,8 @@ Agender individuals, represented here as &#9898;, are within the broad spectrum 
 
 <p>That is, it is good for representing the qualification of gender, but not very good for comparison.</p>
 
-<p></p><div class='image'><img src='/images/reuleaux-selectors/gender-triangle.png' title='' alt='The gender triangle represents the spectrum yet allows the middle point of agender to be the farthest point from any extreme' /><br /><div class='caption'>The gender triangle represents the spectrum yet allows the middle point of agender to be the farthest point from any extreme</div></div><p></p>
+<p></p><div class='image'><img style='' src='/images/reuleaux-selectors/gender-triangle.png' title='' alt='The gender triangle represents the spectrum yet allows the middle point of agender to be the farthest point from any extreme' /><br /><div class='caption'><p>The gender triangle represents the spectrum yet allows the middle point of agender to be the farthest point from any extreme</p>
+</div></div><p></p>
 
 <p>Therefore, a triangle would represent the same idea. It does make certain landmarks clear by placing familiar gender identities in the corners. However, this should help individuals choose by selecting a gender identity relative to those landmarks.
 Also, by placing agender at the midpoint, bigender at the bottom center, and polygender at the top, eschewing gender is always a matter of going toward the center without having to move through genders to be rid of them.</p>
@@ -213,7 +565,8 @@ The corners, by being corners, could not capture the fluidity of the spectrum.</
 <h3 id='reuleaux_triangles'>Reuleaux triangles</h3>
 <p>To revise the triangle to better reflect the gender spectrum, we expanded the center point to better accommodate agender qualities.</p>
 
-<p></p><div class='image'><img src='/images/reuleaux-selectors/gender-reuleaux.png' title='' alt='The Reuleaux ring is the result of considering better representations and visibility for agender/asexual individuals' /><br /><div class='caption'>The Reuleaux ring is the result of considering better representations and visibility for agender/asexual individuals</div></div><p></p>
+<p></p><div class='image'><img style='' src='/images/reuleaux-selectors/gender-reuleaux.png' title='' alt='The Reuleaux ring is the result of considering better representations and visibility for agender/asexual individuals' /><br /><div class='caption'><p>The Reuleaux ring is the result of considering better representations and visibility for agender/asexual individuals</p>
+</div></div><p></p>
 
 <p>When you take a triangle and blow out its center point, you produce an interesting piece of geometry. It is essentially a three-sided ring defined by two similar <a  href='http://en.wikipedia.org/wiki/Reuleaux_triangle' title=''>Reuleaux triangles</a>.</p>
 
@@ -239,10 +592,12 @@ The selection is given as a strict choice normally between two different values:
 <p>The dropdown is the traditional gender selector. Generally, it seems developers tend to only allot the two familiar choices. Even social services proud to be used by millions of people, such as facebook, have long fought offering any amount of choice, even under <a  href='http://www.zdnet.com/blog/facebook/nepal-asks-facebook-for-third-sex-option/11117' title=''>heavy criticism</a>. Interestingly, facebook has always contained internal support for a third gender that users were <a  href='http://www.youtube.com/watch?v=rb68sPtblyo' title=''>able to enable through a hack</a> which then used non-gendered pronouns to refer to them to friends.</p>
 
 <p>Eventually, <a  href='http://abcnews.go.com/blogs/headlines/2014/02/heres-a-list-of-58-gender-options-for-facebook-users/' title=''>facebook added</a> a curated list of gender options, most of which are just variants along the cis/trans binary and vague angrogynous terms.
-Notably, facebook hid their list of acceptable genders and employed in place of a drop-down an auto-complete text field, which is certainly an implicit drop-down.
+Notably, facebook hid their list of acceptable genders and employed (in place of a drop-down) an auto-complete text field.
+That is: an implicit drop-down.
 However, with this change, they also ask for pronouns and allow people to select a long-supported non-gendered &#39;their&#39;.</p>
 
-<p></p><div class='image border'><img src='/images/reuleaux-selectors/fb_gender.png' title='' alt='Facebook, a social network with millions of users, allows basic non-binary genders if you can guess the terms they support.' /><br /><div class='caption'>Facebook, a social network with millions of users, allows basic non-binary genders if you can guess the terms they support.</div></div><p></p>
+<p></p><div class='image border'><img style='' src='/images/reuleaux-selectors/fb_gender.png' title='' alt='Facebook, a social network with millions of users, allows basic non-binary genders if you can guess the terms they support. Image from [Will Oremus's article](http://www.slate.com/blogs/future_tense/2014/02/13/facebook_custom_gender_options_here_are_all_56_custom_options.html).' /><br /><div class='caption'><p>Facebook, a social network with millions of users, allows basic non-binary genders if you can guess the terms they support. Image from <a  href='http://www.slate.com/blogs/future_tense/2014/02/13/facebook_custom_gender_options_here_are_all_56_custom_options.html' title=''>Will Oremus&#39;s article</a>.</p>
+</div></div><p></p>
 
 <p>There was a conscious effort of developers in general (facebook avoided this trend), perhaps to retrofit a proactive model with an existing system, to add a third catch-all option usually titled &quot;other.&quot;
 This is an incorrect solution because culturally it paints the image that this third option represents a third gender, when it really collects those strictly outside of the cultural gender-binary.
@@ -259,7 +614,8 @@ This is, of course, a simple textfield.
 This solution is generally seen as a versatile solution that allows a wealth of choices.
 It is a solution that is used, perhaps slightly strategically, by facebook&#39;s cultural competitor <a  href='http://www.sarahmei.com/blog/2010/11/26/disalienation/' title=''>Diaspora</a>.</p>
 
-<p></p><div class='image border'><img src='/images/reuleaux-selectors/diaspora-gender.png' title='' alt='The change to a text field for gender was a divisive issue for Diaspora, shown here, but not for Metafilter who originally had such a field for over 10 years. [1]' /><br /><div class='caption'>The change to a text field for gender was a divisive issue for Diaspora, shown here, but not for Metafilter who originally had such a field for over 10 years. [1]</div></div><p></p>
+<p></p><div class='image border'><img style='' src='/images/reuleaux-selectors/diaspora-gender.png' title='' alt='The change to a text field for gender was a divisive issue for Diaspora, shown here, but not for Metafilter who originally had such a field for over 10 years. [1]' /><br /><div class='caption'><p>The change to a text field for gender was a divisive issue for Diaspora, shown here, but not for Metafilter who originally had such a field for over 10 years. [1]</p>
+</div></div><p></p>
 
 <p>However, it is not without fault. A textfield cannot describe all options because it is limited by language. It also does not represent degrees of gender. That is, one person can say &quot;male&quot;
 and so can the next, yet, we cannot tell if such a set of individuals was presented with a scale, would they then say that they are 80% male and 70% male?
@@ -273,7 +629,8 @@ however, you would then have to manually assign weights in order to determine ho
 <h2 id='the_selectors'>The selectors</h2>
 <p>We believe the Reuleaux gender selector solves the issues apparent in other approaches. It provides a broad range of gender identities in a way that is fairly easy to use. Furthermore, it results in a quantifiable value, a three-dimensional coordinate, which can be used for comparison.</p>
 
-<p></p><div class='image'><img src='/images/reuleaux-selectors/gender-chart.png' title='' alt='The selector can identify a wide variety of genders independently giving freedom to the degree of strength of the identification.' /><br /><div class='caption'>The selector can identify a wide variety of genders independently giving freedom to the degree of strength of the identification.</div></div><p></p>
+<p></p><div class='image'><img style='' src='/images/reuleaux-selectors/gender-chart.png' title='' alt='The selector can identify a wide variety of genders independently giving freedom to the degree of strength of the identification.' /><br /><div class='caption'><p>The selector can identify a wide variety of genders independently giving freedom to the degree of strength of the identification.</p>
+</div></div><p></p>
 <h3 id='sexual_orientation_selector'>Sexual orientation selector</h3>
 <p>One of the interesting extensions of the gender selector is also using it for sexual orientation.
 This presents some issues and complications, but using the gender selector to also select for orientation works fairly well.
@@ -322,7 +679,7 @@ However, in cases where this type of input is very useful (such as with dating s
 </div>
 
 <p>Please experiment with the selectors above to create your identity profile below.</p>
-<h3 id='describe_yourself'>Describe yourself</h3>
+
 <p></p>
 
 <div class="image">
@@ -370,12 +727,14 @@ This would show the intention of the selectors and also help the assumed majorit
 <p>If you add a gender field to your project, you must ask yourself the question: what do the users gain from being able to report this value?
 The general advice that one can give is to drop it altogether, especially if there is nothing directly related to the service you are providing that benefits from gender.</p>
 
-<p></p><div class='image border'><img src='/images/reuleaux-selectors/gender-rdio.png' title='' alt='Imagine you are a person that does not fall cleanly into one of these two categories. You are now presented with a bright red flag that will not let you continue until you choose. How would you feel? (Image is rdio's registration and courtesy of @carols10cents)' /><br /><div class='caption'>Imagine you are a person that does not fall cleanly into one of these two categories. You are now presented with a bright red flag that will not let you continue until you choose. How would you feel? (Image is rdio's registration and courtesy of <a href="https://www.rstat.us/updates/50e8a221aeb89a00020202e4">@carols10cents</a>)</div></div><p></p>
+<p></p><div class='image border'><img style='' src='/images/reuleaux-selectors/gender-rdio.png' title='' alt='Imagine you are a person that does not fall cleanly into one of these two categories. You are now presented with a bright red flag that will not let you continue until you choose. How would you feel? (Image is rdio's registration and courtesy of @carols10cents)' /><br /><div class='caption'><p>Imagine you are a person that does not fall cleanly into one of these two categories. You are now presented with a bright red flag that will not let you continue until you choose. How would you feel? (Image is rdio&#39;s registration and courtesy of <a href="https://www.rstat.us/updates/50e8a221aeb89a00020202e4">@carols10cents</a>)</p>
+</div></div><p></p>
 
 <p>A common reason for including gender, even if only privately stored and never publicly displayed, is to provide humanization through gendered language, such as personalizing text with the correct pronouns.
 If this is the case, then the correct action is to just simply ask the user for their preferred pronouns and allow for a non-gendered form if language permits (which <a  href='http://en.wikipedia.org/wiki/Gender-neutral_pronoun#Summary' title=''>English does</a>).</p>
 
-<p></p><div class='image border'><img src='/images/reuleaux-selectors/gender-rdio-response.png' title='' alt='Rdio only uses their gender information to provide linguistics. We recommend that pronouns be explicitly asked for in place of gender, and that you allow a non-gendered option (his/her/their.)' /><br /><div class='caption'>Rdio only uses their gender information to provide linguistics. We recommend that pronouns be explicitly asked for in place of gender, and that you allow a non-gendered option (his/her/their.)</div></div><p></p>
+<p></p><div class='image border'><img style='' src='/images/reuleaux-selectors/gender-rdio-response.png' title='' alt='Rdio only uses their gender information to provide linguistics. We recommend that pronouns be explicitly asked for in place of gender, and that you allow a non-gendered option (his/her/their.)' /><br /><div class='caption'><p>Rdio only uses their gender information to provide linguistics. We recommend that pronouns be explicitly asked for in place of gender, and that you allow a non-gendered option (his/her/their.)</p>
+</div></div><p></p>
 
 <p>When you are providing a social service, users may wish to publicly display their gender.
 In these cases, since it directly benefits their ability to express their identity, you should allow for a free range of choice.
@@ -399,7 +758,7 @@ gender is meaningful to also be willing to include individuals that fall outside
 We do not believe this is the end-all solution, but we do believe it is progress in a space that
 lacks new ideas and it is our ultimate goal that it motivates discussion and even fresher solutions.</p>
 <h3 id='references'>References</h3><ol><a id='ref_1'></a><li>Interesting statistics about textfield usage at Metafilter and relation to Diaspora&#39;s decision in Carina C. Zona&#39;s talk <a  href='http://confreaks.com/videos/1120-gogaruco2012-schemas-for-the-real-world' title=''>Schemas for the Real World</a>, 2012 Golden Gate Ruby Conference, exact reference is ~17:00.
-</li></ol>]]></content></entry><entry><title type="html">Stop Benchmarking Your Software Design</title><link href="http://blog.davewilkinsonii.com/posts/kaashoeks-law" rel="alternate" type="text/html"/><published>2013-06-23T00:00:00-04:00</published><updated>2013-06-23T00:00:00-04:00</updated><author><name>wilkie writes a thing</name></author><id>http://blog.davewilkinsonii.com/posts/kaashoeks-law</id><content type="html" xml:base="http://blog.davewilkinsonii.com/posts/kaashoeks-law"><![CDATA[<p>In our world, programmers look into producing better designs and software practices
+</li></ol>]]></content></entry><entry><title type="html">Stop Benchmarking Your Software Design</title><link href="http://blog.davewilkinsonii.com/posts/kaashoeks-law" rel="alternate" type="text/html"/><published>2013-06-23T00:00:00+02:00</published><updated>2013-06-23T00:00:00+02:00</updated><author><name>wilkie writes a thing</name></author><id>http://blog.davewilkinsonii.com/posts/kaashoeks-law</id><content type="html" xml:base="http://blog.davewilkinsonii.com/posts/kaashoeks-law"><![CDATA[<p>In our world, programmers look into producing better designs and software practices
 in order to push progress. Researchers have generally accepted that we compare two designs by measuring
 their relative performance. The metrics consist not only of the obvious time and space, but also power,
 safety, and so on. In such cases, a new approach may come along for which programmers
@@ -499,7 +858,7 @@ Symposium on Operating Systems Design and Implementation</em> (OSDI ’10), Vanc
 </li><a id='ref_4'></a><li><p>P. Druschel, V. Pai, and W. Zwaenepoel. Extensible kernels are leading os research astray.
 In <em>Proceedings of the 6th Workshop on Hot Topics in Operating Systems</em> (HotOS-VI), pages 38–,
 Washington, DC, USA, 1997. IEEE Computer Society.</p>
-</li></ol>]]></content></entry><entry><title type="html">The Freedom to Compute (Repost from FidoNews)</title><link href="http://blog.davewilkinsonii.com/posts/fidonet-the-freedom-to-compute" rel="alternate" type="text/html"/><published>2013-05-19T00:00:00-04:00</published><updated>2013-05-19T00:00:00-04:00</updated><author><name>wilkie writes a thing</name></author><id>http://blog.davewilkinsonii.com/posts/fidonet-the-freedom-to-compute</id><summary>A reposting of a FidoNews editorial about the threat of government control of computation.</summary><content type="html" xml:base="http://blog.davewilkinsonii.com/posts/fidonet-the-freedom-to-compute"><![CDATA[<p><strong><em>This is a <a  href='http://www.wps.com/J/FidoNet/FidoNews/1986/FIDO311.NWS' title=''>reposting</a>
+</li></ol>]]></content></entry><entry><title type="html">The Freedom to Compute</title><link href="http://blog.davewilkinsonii.com/posts/fidonet-the-freedom-to-compute" rel="alternate" type="text/html"/><published>2013-05-19T00:00:00+02:00</published><updated>2013-05-19T00:00:00+02:00</updated><author><name>wilkie writes a thing</name></author><id>http://blog.davewilkinsonii.com/posts/fidonet-the-freedom-to-compute</id><summary>A reposting of a FidoNews editorial about the threat of government control of computation.</summary><content type="html" xml:base="http://blog.davewilkinsonii.com/posts/fidonet-the-freedom-to-compute"><![CDATA[<p><strong><em>This is a <a  href='http://www.goto10.fr/fidonews/1986/fido311.nws' title=''>reposting</a>
 of an editorial written in FidoNews published on March
 17th, 1986 by Mike Guffey. FidoNews is the newsletter of the FidoNet distributed network which
 was a network of dialup BBSes that could share information. It was the first wide network that
@@ -628,7 +987,7 @@ dedicated to the network you can <a  href='https://www.youtube.com/watch?v=QlXNX
 from the great Jason Scott documentary, <a  href='http://www.bbsdocumentary.com/' title=''>BBS Documentary</a>.
 DVDs of the creative commons content are available on the website for the documentary.
 Very much a recommended watch (this episode and the HPAC episode especially.)</p>
-]]></content></entry><entry><title type="html">A Language for Interfaces</title><link href="http://blog.davewilkinsonii.com/posts/a-language-for-interfaces" rel="alternate" type="text/html"/><published>2013-01-13T00:00:00-05:00</published><updated>2013-01-13T00:00:00-05:00</updated><author><name>wilkie writes a thing</name></author><id>http://blog.davewilkinsonii.com/posts/a-language-for-interfaces</id><summary>We need to have a language that can describe behaviors concisely including their name, their inputs, their namespace, and their outputs. With respect to input, we need to know information dealing with the mutability of data, which includes concisely describing state. That ideal language is Rust minus much of that language's memory model and concurrency, which can be relegated to libraries or Rust proper within implementations.</summary><content type="html" xml:base="http://blog.davewilkinsonii.com/posts/a-language-for-interfaces"><![CDATA[<p>In my <a  href='/posts/djehuty-technical' title=''>technical description</a>, I described the motivation for a new infrastructure for software to stress a decentralized code ecosystem. From there I discuss the <a  href='/posts/infrastructure' title=''>finer details of such an infrastructure</a>. I recommend reading these before you read this article. The gist is that we want to describe behaviors distinctly from the choices made within implementations. Think C&#39;s header files versus the corresponding source files, but with far more purpose.</p>
+]]></content></entry><entry><title type="html">A Language for Interfaces</title><link href="http://blog.davewilkinsonii.com/posts/a-language-for-interfaces" rel="alternate" type="text/html"/><published>2013-01-13T00:00:00+01:00</published><updated>2013-01-13T00:00:00+01:00</updated><author><name>wilkie writes a thing</name></author><id>http://blog.davewilkinsonii.com/posts/a-language-for-interfaces</id><summary>We need to have a language that can describe behaviors concisely including their name, their inputs, their namespace, and their outputs. With respect to input, we need to know information dealing with the mutability of data, which includes concisely describing state. That ideal language is Rust minus much of that language's memory model and concurrency, which can be relegated to libraries or Rust proper within implementations.</summary><content type="html" xml:base="http://blog.davewilkinsonii.com/posts/a-language-for-interfaces"><![CDATA[<p>In my <a  href='/posts/djehuty-technical' title=''>technical description</a>, I described the motivation for a new infrastructure for software to stress a decentralized code ecosystem. From there I discuss the <a  href='/posts/infrastructure' title=''>finer details of such an infrastructure</a>. I recommend reading these before you read this article. The gist is that we want to describe behaviors distinctly from the choices made within implementations. Think C&#39;s header files versus the corresponding source files, but with far more purpose.</p>
 <h2 id='what_we_need'>What we need</h2>
 <p>As discussed in a <a  href='/posts/infrastructure' title=''>prior post</a>, we require the ability to describe a set of facets of a behavior:</p>
 <ul><li>We must have a language that describes behavior void of policy
@@ -657,7 +1016,8 @@ Very much a recommended watch (this episode and the HPAC episode especially.)</p
 <h2 id='the_interface_language'>The Interface Language</h2>
 <p>The language that I feel fits these constraints is a subset of Rust. What we will do is take Rust and remove its concurrency model, thus it&#39;s process model, and then we remove some of the strictness and garbage collected nature of its memory model. This requires negating some of the strengths of its concurrency safety, but that can be added back in by using Rust as the implementation language. It also removes the utility of Rust&#39;s managed boxes, since we do not imply a garbage collector (again the implementor&#39;s choice.)</p>
 
-<p></p><div class='image'><img src='/images/a-language-for-interfaces/rust.png' title='' alt='The Rust programming language, developed by Mozilla Research, is an ideal platform for an interface language' /><br /><div class='caption'>The Rust programming language, developed by Mozilla Research, is an ideal platform for an interface language</div></div><p></p>
+<p></p><div class='image'><img style='' src='/images/a-language-for-interfaces/rust.png' title='' alt='The Rust programming language, developed by Mozilla Research, is an ideal platform for an interface language' /><br /><div class='caption'><p>The Rust programming language, developed by Mozilla Research, is an ideal platform for an interface language</p>
+</div></div><p></p>
 
 <p>Essentially, although we don&#39;t need a full language, the resulting language would be a C replacement on its own. It is interesting that we continue to replace C++ or some higher-level languages over C, which has not seen as much progress. It would stress the following:</p>
 <ul><li>The type safety of Rust (to counter the lack of proper type checking in C)
@@ -667,15 +1027,18 @@ Very much a recommended watch (this episode and the HPAC episode especially.)</p
 </li><li>Mutability adjectives for inputs and outputs and fields of structs/datatypes
 </li></ul>
 <p>We do not need the full C-replacement language for simply defining interfaces. Initially, we only need the ability to describe and thus a simple lexer/parser. But the full thing would be nice to have as a consequence! I encourage anybody with the desire to do this.</p>
-]]></content></entry><entry><title type="html">Learning Mistakes from Doom Masters</title><link href="http://blog.davewilkinsonii.com/posts/learning-mistakes-from-doom-masters" rel="alternate" type="text/html"/><published>2013-01-08T00:00:00-05:00</published><updated>2013-01-08T00:00:00-05:00</updated><author><name>wilkie writes a thing</name></author><id>http://blog.davewilkinsonii.com/posts/learning-mistakes-from-doom-masters</id><summary>We all make mistakes regardless of how good people think you are. Speedrunners show us that our mistakes can be fun, and we shouldn't be ashamed of them. We look at the video game Doom and the bugs that allow speedrunners to break the game all in good fun.</summary><content type="html" xml:base="http://blog.davewilkinsonii.com/posts/learning-mistakes-from-doom-masters"><![CDATA[<p>So, right now, and every year, the Speedrun Demos Archive (<a  href='http://speeddemosarchive.com' title=''>speeddemosarchive.com</a>) runs a marathon (I&#39;m not directly involved) where they play video games and exploit glitches 24 hours a day for 7 days. They are promoting a great charity called the <a  href='http://preventcancer.org' title=''>Prevent Cancer Foundation</a> which hopes to aid in the research effort for better detection of cancer in hopes of eradicating it forever.</p>
+]]></content></entry><entry><title type="html">Learning Mistakes from Doom Masters</title><link href="http://blog.davewilkinsonii.com/posts/learning-mistakes-from-doom-masters" rel="alternate" type="text/html"/><published>2013-01-08T00:00:00+01:00</published><updated>2013-01-08T00:00:00+01:00</updated><author><name>wilkie writes a thing</name></author><id>http://blog.davewilkinsonii.com/posts/learning-mistakes-from-doom-masters</id><summary>We all make mistakes regardless of how good people think you are. Speedrunners show us that our mistakes can be fun, and we shouldn't be ashamed of them. We look at the video game Doom and the bugs that allow speedrunners to break the game all in good fun.</summary><content type="html" xml:base="http://blog.davewilkinsonii.com/posts/learning-mistakes-from-doom-masters"><![CDATA[<p>This article was published in Game Developer Magazine, March 2013; editor Patrick Miller. It goes into a little more detail, so I recommend it! You can download that article <a  href='/images/learning-mistakes-from-doom-masters/gdm_march_2013_wilkie.pdf' title=''>here</a>. For the entire backlog for this magazine, <a  href='http://www.gdcvault.com/gdmag' title=''>go here</a>.</p>
 
-<p></p><div class='image'><img src='/images/learning-mistakes-from-doom-masters/prevent-cancer.png' title='' alt='!Prevent Cancer logo' /></div><p></p>
+<p>So, every year, the Speedrun Demos Archive (<a  href='http://speeddemosarchive.com' title=''>speeddemosarchive.com</a>) runs a marathon (I&#39;m not directly involved) where they play video games and exploit glitches 24 hours a day for 7 days. They are promoting a great charity called the <a  href='http://preventcancer.org' title=''>Prevent Cancer Foundation</a> which hopes to aid in the research effort for better detection of cancer in hopes of eradicating it forever.</p>
+
+<p></p><div class='image'><img style='' src='/images/learning-mistakes-from-doom-masters/prevent-cancer.png' title='' alt='!Prevent Cancer logo' /></div><p></p>
 
 <p>As a hobby speedrunner, programmer and hater of cancer, in my own way to promote their event, I am inspired to talk about how these two concepts (our code and our mistakes) can be used to create art.</p>
 
 <p>Let&#39;s be very clear: we all make mistakes. We cannot learn unless we fail, otherwise there is never an incentive to improve. We may look up to many who have more experience than us, but we should never emphasize their achievements over our own. In the end, what we are capable of is never defined by what others can do. Nor are the mistakes we make indicative of our failure or depict our work as flawed.</p>
 
-<p></p><div class='image'><img src='/images/learning-mistakes-from-doom-masters/doom.gif' title='' alt='Doom, released in 1993, is now open source-- and riddled with interesting programming mistakes.' /><br /><div class='caption'>Doom, released in 1993, is now open source-- and riddled with interesting programming mistakes.</div></div><p></p>
+<p></p><div class='image'><img style='' src='/images/learning-mistakes-from-doom-masters/doom.gif' title='' alt='Doom, released in 1993, is now open source-- and riddled with interesting programming mistakes.' /><br /><div class='caption'><p>Doom, released in 1993, is now open source-- and riddled with interesting programming mistakes.</p>
+</div></div><p></p>
 
 <p>As proof of this point, we will look at bugs humbly illustrated by <a  href='http://en.wikipedia.org/wiki/John_D._Carmack' title=''>John Carmack</a>, a programmer chiefly responsible for the video game <a  href='http://en.wikipedia.org/wiki/Doom_(video_game)' title=''>Doom</a>. Carmack is very well known for his programming prowess. However, just like the rest of us, he is actually human and makes the very simplest of mistakes.</p>
 
@@ -683,7 +1046,8 @@ Very much a recommended watch (this episode and the HPAC episode especially.)</p
 <h2 id='speedrun_strategies'>Speedrun Strategies</h2>
 <p>For speedrunning, you are obviously looking for any strategy that allows you to move just a bit faster. There are strategies for speedrunning particular levels of Doom, however there are several general techniques, which prove to be invaluable across the entire game. For Doom, it just so happens that we have the speedrunner&#39;s dream: a simple glitch in the movement code allows us to move faster than intended.</p>
 
-<p></p><div class='image'><img src='/images/learning-mistakes-from-doom-masters/doom-e1m4-gap.png' title='' alt='This gap contains the end of the level and normally requires a switch past this yellow door, which in turn requires a blue key. Crossing this gap is possible with a bug that allows you to move more quickly, skipping all keys, and finishing the level in a record 12 seconds.' /><br /><div class='caption'>This gap contains the end of the level and normally requires a switch past this yellow door, which in turn requires a blue key. Crossing this gap is possible with a bug that allows you to move more quickly, skipping all keys, and finishing the level in a record 12 seconds.</div></div><p></p>
+<p></p><div class='image'><img style='' src='/images/learning-mistakes-from-doom-masters/doom-e1m4-gap.png' title='' alt='This gap contains the end of the level and normally requires a switch past this yellow door, which in turn requires a blue key. Crossing this gap is possible with a bug that allows you to move more quickly, skipping all keys, and finishing the level in a record 12 seconds.' /><br /><div class='caption'><p>This gap contains the end of the level and normally requires a switch past this yellow door, which in turn requires a blue key. Crossing this gap is possible with a bug that allows you to move more quickly, skipping all keys, and finishing the level in a record 12 seconds.</p>
+</div></div><p></p>
 
 <p>This has broad implications. Moving faster means jumping higher and farther (In Doom&#39;s case, you cannot jump, but you can cross wider gaps!) Some levels intend you to go out of your way to find a switch to raise a bridge, for instance. With a trick that lets you move faster, you might be able to cross the gap without the platform, which means skipping much of the level.</p>
 
@@ -693,9 +1057,10 @@ Very much a recommended watch (this episode and the HPAC episode especially.)</p
 </li></ul>
 <p>Check out how this speedrunner runs:</p>
 
-<p></p><div class='image'><div class='youtube'><div class='youtube_fixture'><img src='/images/youtube_placeholder.png' /><iframe class='youtube_frame' src='http://www.youtube.com/embed/M6PK9bd_uUs'></iframe></div></div><br /><div class='caption'>Rarely will this runner ever travel in the direction the player is facing.</div></div><p></p>
+<p></p><div class='image'><div class='yt'><div class='yt_fixture'><img style='' src='/images/yt_placeholder.png' /><iframe class='yt_frame' src='http://www.youtube.com/embed/1-7Ig-1FTiE'></iframe></div></div><br /><div class='caption'><p>Rarely will this runner ever travel in the direction the player is facing.</p>
+</div></div><p></p>
 <h2 id='looking_at_the_code'>Looking at the code</h2>
-<p>Let&#39;s now investigate why these particular bugs happen. Doom is written in [C](http://en.wikipedia.org/wiki/C<em>(programming</em>language)), which is a very low-level programming language, meaning it is designed for speed and not particularly for programmer comfort. This was a very common language to write games in at the time since the language allowed you to write very optimized code so one could push the limits of the technology.</p>
+<p>Let&#39;s now investigate why these particular bugs happen. Doom is written in <a  href='http://en.wikipedia.org/wiki/C_(programming_language)' title=''>C</a>, which is a very low-level programming language, meaning it is designed for speed and not particularly for programmer comfort. This was a very common language to write games in at the time since the language allowed you to write very optimized code so one could push the limits of the technology.</p>
 
 <p>In the <a  href='https://github.com/osgcc/doom' title=''>Doom source</a>, there are several functions that deal with moving the player. The gist of them is that each frame before it draws the screen, it will decide how to move the player. It looks at which keys are pressed, and if, for instance, the walk forward key is down, it will update the player&#39;s position to move them forward. It may then look at collisions and react to running into monster projectiles, but let&#39;s just focus on the movement part.</p>
 <h3 id='strafe_40'>Strafe 40</h3>
@@ -726,7 +1091,8 @@ Very much a recommended watch (this episode and the HPAC episode especially.)</p
 
 <p>From here, we can see the mistake. We can move forward or strafe independently, and it would work as expected. However, if we move forward <strong>and</strong> strafe, the player will thrust forward, and then afterward, thrust sideways. However, these two movements are done at the same time from the perspective of the game and player because both are done before the screen is drawn and enemies react. Therefore, the actual speed is given by the sum of the vectors; that is, the length of the hypotenuse in the following simple diagram:</p>
 
-<p></p><div class='image'><img src='/images/learning-mistakes-from-doom-masters/doom-strafe40.svg' title='' alt='Strafe 40: By strafing and moving forward independently, we actually move to the far corner, which covers the distance of the hypotenuse during the same amount of time, thus going faster.' /><br /><div class='caption'><strong>Strafe 40</strong>: By strafing and moving forward independently, we actually move to the far corner, which covers the distance of the hypotenuse during the same amount of time, thus going faster.</div></div><p></p>
+<p></p><div class='image'><img style='' src='/images/learning-mistakes-from-doom-masters/doom-strafe40.svg' title='' alt='Strafe 40: By strafing and moving forward independently, we actually move to the far corner, which covers the distance of the hypotenuse during the same amount of time, thus going faster.' /><br /><div class='caption'><p><strong>Strafe 40</strong>: By strafing and moving forward independently, we actually move to the far corner, which covers the distance of the hypotenuse during the same amount of time, thus going faster.</p>
+</div></div><p></p>
 <h3 id='fixing_strafe_40'>Fixing strafe 40</h3>
 <p>There are of course many ways to repair this bug and handle movement more correctly. One way is to, instead of positioning the player twice, determine the angle of the movement, and always use the same distance. That is, instead of moving in the player&#39;s direction and then moving again in another direction for the strafe, simply calculate the movement angle (around 50 degrees for walking and strafing), and <code>P_Thrust</code> only once in that direction.</p>
 
@@ -803,7 +1169,8 @@ Very much a recommended watch (this episode and the HPAC episode especially.)</p
 
 <p>The diagram becomes:</p>
 
-<p></p><div class='image'><img src='/images/learning-mistakes-from-doom-masters/doom-strafe50.svg' title='' alt='Strafe 50: By strafing using both the strafe key and using the strafe toggle, we trick the game into strafing more than once and go just a bit faster.' /><br /><div class='caption'><strong>Strafe 50</strong>: By strafing using both the strafe key and using the strafe toggle, we trick the game into strafing more than once and go just a bit faster.</div></div><p></p>
+<p></p><div class='image'><img style='' src='/images/learning-mistakes-from-doom-masters/doom-strafe50.svg' title='' alt='Strafe 50: By strafing using both the strafe key and using the strafe toggle, we trick the game into strafing more than once and go just a bit faster.' /><br /><div class='caption'><p><strong>Strafe 50</strong>: By strafing using both the strafe key and using the strafe toggle, we trick the game into strafing more than once and go just a bit faster.</p>
+</div></div><p></p>
 <h3 id='fixing_strafe_50'>Fixing strafe 50</h3>
 <p>Even though this bug seems more severe and tricky, it&#39;s far easier to solve than strafe 40. All you need to do is put the code in section <code>2</code> into the else block after section <code>1</code> such that the normal strafe is only considered if strafe toggle is off.</p>
 
@@ -816,14 +1183,14 @@ else if (side &lt; -sidemove[speed])
 </code></pre>
 <p>This will ensure strafe 50 is no longer a problem. You will now not be able to do any better than the original strafe 40.</p>
 <h2 id='your_turn'>Your turn</h2>
-<p>You can try these tricks as well! <a  href='http://store.steampowered.com/app/2280' title=''>Grab a copy</a> of Doom and try running through the levels. Use the cheat code <code>idclev14</code> to go to the level the screen cap above illustrates. You can find a guide to other strategies <a  href='http://doomwiki.org/wiki/E1M4' title=''>here</a>.</p>
+<p>You can try these tricks as well! <a  href='https://www.gog.com/game/the_ultimate_doom' title=''>Grab a copy</a> of Doom and try running through the levels. Use the cheat code <code>idclev14</code> to go to the level the screen cap above illustrates. You can find a guide to other strategies <a  href='http://doomwiki.org/wiki/E1M4' title=''>here</a>.</p>
 
-<p>On Thursday at around 8:45pm EST, the Speed Demos Archive charity will be live speed demoing the entire Doom game while giving further commentary on the techniques. Please, <a  href='http://marathon.speeddemosarchive.com/' title=''>go watch</a> (right now, in fact, for other games!) and consider donating to Prevent Cancer for prizes and general well-being. Here is a <a  href='http://marathon.speeddemosarchive.com/schedule' title=''>schedule</a>.</p>
+<p>On Thursday at around 8:45pm EST, the Speed Demos Archive charity will be live speed demoing the entire Doom game while giving further commentary on the techniques. Please, <a  href='https://gamesdonequick.com/' title=''>go watch</a> (right now, in fact, for other games!) and consider donating to Prevent Cancer for prizes and general well-being. Here is a <a  href='https://gamesdonequick.com/schedule' title=''>schedule</a>.</p>
 <h2 id='making_mistakes'>Making mistakes</h2>
 <p>As you can see, these mistakes were made by otherwise great programmers. These bugs are very simple, although a little hard to spot. All of us are capable of writing code and only considering one case at a time (does moving forward work? good. Does moving sideways work? Awesome,) and never considering somebody will mash all of the keys at once. We&#39;re all human.</p>
 
 <p>We must understand one thing: It&#39;s not the end of the world. With every bug we make, we learn. In fact, sometimes our bugs make somebody&#39;s day! Speedrunning is an artform that proves that our code and our mistakes can be turned into a beautiful spectacle that we should never be ashamed of.</p>
-]]></content></entry><entry><title type="html">Conferences Must Be Active to Promote Diversity</title><link href="http://blog.davewilkinsonii.com/posts/conference_diversity" rel="alternate" type="text/html"/><published>2012-11-19T00:00:00-05:00</published><updated>2012-11-19T00:00:00-05:00</updated><author><name>wilkie writes a thing</name></author><id>http://blog.davewilkinsonii.com/posts/conference_diversity</id><summary>Conferences are being criticized by the lack of diversity in their speaker lineup. This has led to such a criticism causing the cancellation of a conference. I argue that this is correct as the conference is devalued by its lack of diversity, and it should have been more active in its promotion of voice.</summary><content type="html" xml:base="http://blog.davewilkinsonii.com/posts/conference_diversity"><![CDATA[<p>In the spring of 2012, the <a  href='http://britruby.com' title=''>BritRuby</a> conference presented their speaker lineup. They decide to invite 15 speakers and then
+]]></content></entry><entry><title type="html">Conferences Must Be Active to Promote Diversity</title><link href="http://blog.davewilkinsonii.com/posts/conference_diversity" rel="alternate" type="text/html"/><published>2012-11-19T00:00:00+01:00</published><updated>2012-11-19T00:00:00+01:00</updated><author><name>wilkie writes a thing</name></author><id>http://blog.davewilkinsonii.com/posts/conference_diversity</id><summary>Conferences are being criticized by the lack of diversity in their speaker lineup. This has led to such a criticism causing the cancellation of a conference. I argue that this is correct as the conference is devalued by its lack of diversity, and it should have been more active in its promotion of voice.</summary><content type="html" xml:base="http://blog.davewilkinsonii.com/posts/conference_diversity"><![CDATA[<p>In the spring of 2012, the <a  href='http://britruby.com' title=''>BritRuby</a> conference presented their speaker lineup. They decide to invite 15 speakers and then
 allot 5 more to select later based on submissions. However, their speaker lineup was later <a  href='https://twitter.com/joshsusser/status/269844125363339264' title=''>contested heavily on twitter</a> due to consisting of all white men. Due to this,
 the organizers decided to <a  href='http://2013.britruby.com/' title=''>cancel</a> the conference altogether.</p>
 
@@ -905,42 +1272,78 @@ a simulation experiment that shows just how unlikely the situation that resulted
 really is. This simulation should affirm the mathematics as well.</p>
 <h3 id='blind_review_correlation'>Blind Review Correlation</h3>
 <p>Some have pointed out that comparing the handpicking scenario of BritRuby does not compare to the blind evaluation presented here. However, it does indeed compare. If your handpicking process is blind to gender (assuming that intellectual capacities are also gender-neutral) then your process will yield the same gender distribution as a blind review. The point is that their process did not do so, and now we can draw valid conclusions about the bias that exists. We can now say, &quot;their selection process is biased against women.&#39; Furthermore, we can draw some hypotheses that the representation of minorities is also not being considered. This is damning. We must also conclude that bringing awareness to this issue was correct as long as we suggest that bias should not occur in speaker selection at conferences.</p>
-]]></content></entry><entry><title type="html">Curriculum Vitae</title><link href="http://blog.davewilkinsonii.com/posts/cv" rel="alternate" type="text/html"/><published>2012-11-11T00:00:00-05:00</published><updated>2012-11-11T00:00:00-05:00</updated><author><name>wilkie writes a thing</name></author><id>http://blog.davewilkinsonii.com/posts/cv</id><content type="html" xml:base="http://blog.davewilkinsonii.com/posts/cv"><![CDATA[<p>My name is Dave Wilkinson, better known as <strong><em>wilkie</em></strong>. I develop large scale distributed systems and am looking for a position that will allow me to use that specialization to make better the open web. I have a strong desire to develop technology that can be accessed by anybody and push progress of a public commons without constraint. I specialize in the research and development of low-level distributed systems that reduce barriers of entry and push more control, authority, and rights to those that use the system. My overall goal is to provide a system that guarantees the freedom to compute.</p>
+]]></content></entry><entry><title type="html">Curriculum Vitae</title><link href="http://blog.davewilkinsonii.com/posts/cv" rel="alternate" type="text/html"/><published>2012-11-11T00:00:00+01:00</published><updated>2012-11-11T00:00:00+01:00</updated><author><name>wilkie writes a thing</name></author><id>http://blog.davewilkinsonii.com/posts/cv</id><content type="html" xml:base="http://blog.davewilkinsonii.com/posts/cv"><![CDATA[<p>My name is <strong><em>wilkie</em></strong>. I develop large scale distributed systems and am looking for a position that will allow me to use that specialization to make better the open web. I have a strong desire to develop technology that can be accessed by anybody and push progress of a public commons without constraint. I specialize in the research and development of low-level distributed systems that reduce barriers of entry and push more control, authority, and rights to those that use the system. My overall goal is to provide a system that guarantees the freedom to compute.</p>
 <h2 id='education'>Education</h2><ul><li><strong>College</strong>: University of Pittsburgh, 2005-2009
 </li><li><strong>Degree</strong>: Bachelors with Honors, Computer Science
-</li><li><strong>Post-Bachelors</strong>: Graduate study in CS, University of Pittsburgh, 2009-2012
-</li></ul><h2 id='speaking'>Speaking</h2><ul><li><p><strong><em>Operating System Fundamentalism</em></strong> - <em>SOSP 2011</em> - Stressed new concerns and models for modern OS/kernel architectures to an audience of established systems researchers at a top systems conference. <a  href='http://sigops.org/sosp/sosp11/posters/summaries/sosp11-final39.pdf' title=''>Paper</a>. <a  href='http://sigops.org/sosp/sosp11/posters/posters/sosp11-display-poster39.pdf' title=''>Poster</a>.</p>
-</li><li><p><strong><em>XOmB+Djehuty: Platform for Code Remix</em></strong> - <em>CSA 2013</em> - Discussed an operating system architecture that promotes better diversity and involvement of non-systems people in its creation and maintenance and how to promote better code reuse. Afterward, my co-speaker and I were invited to help plan and review proposals for the panel for next year. <a  href='https://speakerdeck.com/wilkie/xomb-plus-djehuty-a-remix-os-for-computation-liberation' title=''>Slides</a>.</p>
-</li><li><p><strong><em>Social Computation and the Freedom to Compute</em></strong> - <em>PGHTechFest 2013</em> - A political view of the open source culture and how it actively discourages participation from the commons and is driven from a centralized, authoritarian development model and new models of systems that would solve these problems. <a  href='https://speakerdeck.com/wilkie/social-computation-the-freedom-to-compute' title=''>Slides</a>.</p>
-</li></ul><h2 id='writing'>Writing</h2><ul><li><p><strong><em>XOmB: an Exokernel for Modern 64-bit Multicore Hardware</em></strong> - WSO - VII Workshop de Sistemas Operacionais - Belo Horizonte, Brasil - July, 2010. Describes the system architecture, technical merit, and novelty of a new kernel built without the legacy of prior abstractions. <a  href='http://www.inf.pucminas.br/sbc2010/anais/pdf/wso/st02_02.pdf' title=''>Full paper</a>.</p>
-</li><li><p><strong><em>Balancing Performance, Accuracy, and Precision for Secure Cloud Transactions</em></strong> - IEEE Transactions on Parallel and Distributed Systems - August, 2013. Proposes new database consistency algorithms for emerging distributed data solutions to account for finer-grained privacy control within an eventually consistent environment. <a  href='/images/cv/TPDS_revision.pdf' title=''>Full paper</a>.</p>
-</li><li><p><strong><em>Studying Speedrunners</em></strong> - Game Developer Magazine - March, 2013. A look at the bugs in the popular game DOOM that have been discovered over the years by enthusiast players. I examine the released source code to explain why certain tricks work and discuss why having bugs in your games can be part of its appeal, not a drawback or mistake. <a  href='http://gamedeveloper.texterity.com/gamedeveloper/201303?pg=57#article_id=262899' title=''>Full article</a>.</p>
+</li><li><strong>Post-Bachelors</strong>: Master of Science, Computer Science, University of Pittsburgh, 2009-2014
+</li></ul><h2 id='speaking'>Speaking</h2><ul><li><p><strong><em>Operating System Fundamentalism</em></strong> - <em>SOSP 2011</em> - Stressed new concerns and models for modern OS/kernel architectures to an audience of established systems researchers at a top systems conference. <a  href='http://sigops.org/sosp/sosp11/posters/summaries/sosp11-final39.pdf' title=''>Paper</a>. <a  href='http://sigops.org/sosp/sosp11/posters/posters/sosp11-display-poster39.pdf' title=''>Poster</a></p>
+</li><li><p><strong><em>XOmB+Djehuty: Platform for Code Remix</em></strong> - <em>CSA 2013</em> - Discussed an operating system architecture that promotes better diversity and involvement of non-systems people in its creation and maintenance and how to promote better code reuse. Afterward, my co-speaker and I were invited to help plan and review proposals for the panel for next year. <a  href='https://speakerdeck.com/wilkie/xomb-plus-djehuty-a-remix-os-for-computation-liberation' title=''>Slides</a></p>
+</li><li><p><strong><em>Social Computation and the Freedom to Compute</em></strong> - <em>PGHTechFest 2013</em> - A political view of the open source culture and how it actively discourages participation from the commons and is driven from a centralized, authoritarian development model and new models of systems that would solve these problems. <a  href='https://speakerdeck.com/wilkie/social-computation-the-freedom-to-compute' title=''>Slides</a></p>
+</li><li><p><strong><em>Preserving Digital Art and Games for 100 Years!</em></strong> - <em>!!Con 2016</em> - A short talk on what it means to potentially archive interactivity for a century. The slides are an interactive ZZT level, adding to the fun. <a  href='https://occam.software/QmPZFsSqgdSaxQki1nSYPze8wpv2iDEBeij2krieR14Meu/5drm1eZqaCtzDrhVvYDNfX91NDNhQE/view' title=''>&quot;Slides&quot;</a> <a  href='http://youtube.com/watch?v=R9b5TNOlyRo' title=''>Video</a></p>
+</li><li><p><strong><em>Interactive Software Archival</em></strong> - <em>Abstractions 2016</em> - A look at the domain of interactive archival, some misconceptions people have about how permanent digital information is (it’s not), the odd definition of “what is software” and “what is interaction,” and how we might create tools/systems to preserve the digital world. <a  href='https://speakerdeck.com/wilkie/interactive-software-archival' title=''>Slides</a></p>
+</li></ul><h2 id='writing'>Writing</h2><ul><li><p><strong><em>XOmB: an Exokernel for Modern 64-bit Multicore Hardware</em></strong> - <em>WSO - VII Workshop de Sistemas Operacionais</em> - Belo Horizonte, Brasil - July, 2010. Describes the system architecture, technical merit, and novelty of a new kernel built without the legacy of prior abstractions. <a  href='http://www.inf.pucminas.br/sbc2010/anais/pdf/wso/st02_02.pdf' title=''>Full paper</a>.</p>
+</li><li><p><strong><em>Balancing Performance, Accuracy, and Precision for Secure Cloud Transactions</em></strong> - <em>IEEE Transactions on Parallel and Distributed Systems</em> - August, 2013. Proposes new database consistency algorithms for emerging distributed data solutions to account for finer-grained privacy control within an eventually consistent environment. <a  href='/images/cv/TPDS_revision.pdf' title=''>Full paper</a>.</p>
+</li><li><p><strong><em>Studying Speedrunners</em></strong> - <em>Game Developer Magazine</em> - March, 2013. A look at the bugs in the popular game DOOM that have been discovered over the years by enthusiast players. I examine the released source code to explain why certain tricks work and discuss why having bugs in your games can be part of its appeal, not a drawback or mistake. <a  href='http://gamedeveloper.texterity.com/gamedeveloper/201303?pg=57#article_id=262899' title=''>Full article</a>.</p>
+</li><li><p><strong><em>Evaluating Interactive Archives</em></strong> - <em>Gateways 2017</em> - October 2017. Posits a metric for comparing various archive projects for their ability to preserve the interactivity of software. <a  href='https://figshare.com/articles/Evaluating_Interactive_Archives/5483836' title=''>Paper</a></p>
+</li><li><p><strong><em>Software Provenance: Track the Reality not the Virtual Machine</em></strong> - <em>P-RECS 2018</em> - June 2018. Describes a mechanism for generating virtual machines on-the-fly in support of software preservation versus storing VMs. <a  href='https://gitlab.com/occam-archive/occam/uploads/18c7e3f666d743bc1453c891fe7935db/software-provenance-track.pdf' title=''>Paper</a></p>
 </li></ul><h2 id='teaching'>Teaching</h2><ul><li><p><strong><em>Introduction to Java</em></strong> - Instructor, University of Pittsburgh - 2010-2011 - Taught for 3 consecutive semesters with an above-average student-evaluated teaching rating. Instructs beginner level Java programming for non-computer-science majors. Had full control over curriculum and planning devising homework assignments and exams. My curriculum experimented with interweaving computer art and culture into the discussion. One of my more celebrated/hated classes involved a group discussion of ethics involving free information and hacktivism, types of activities that programming skill may unlock.</p>
 </li><li><p><strong><em>Introduction to Systems</em></strong> - Lab Instructor, University of Pittsburgh - 2011-2012 - Taught for 2 semesters. Taught C to computer science minors/majors with an emphasis on systems and low-level programming. Included labs on Makefiles, filesystem programming, and adding system calls to Linux.</p>
-</li><li><p><strong><em>Open Source Game Coding Competition</em></strong> - Event organizer - 2009-present - Yearly competition that attracts around 30 participants per year devoted to beginners to motivate them to form teams with experienced programmers to pair and build video games to be released open source to help jumpstart similar beginners outside of the competition. I won the competition in its 2nd year and have ran the competition since then for the last 4 years. My responsibilities are to fund the event through sponsorship, advertise, organize judging, and make sure everybody is having fun. <a  href='http://osgcc.github.io' title=''>Website</a>. <a  href='https://github.com/osgcc' title=''>Competition Code</a>.</p>
+</li><li><p><strong><em>Open Source Game Coding Competition</em></strong> - Event organizer - 2009-2013 - Yearly competition that attracts around 30 participants per year devoted to beginners to motivate them to form teams with experienced programmers to pair and build video games to be released open source to help jumpstart similar beginners outside of the competition. I won the competition in its 2nd year and have ran the competition since then for the last 4 years. My responsibilities are to fund the event through sponsorship, advertise, organize judging, and make sure everybody is having fun. <a  href='http://osgcc.github.io' title=''>Website</a>. <a  href='https://github.com/osgcc' title=''>Competition Code</a>.</p>
+</li><li><p><strong><em>Introduction to Computer Organization and Assembly</em></strong> - Instructor, University of Pittsburgh - 2018-2019 - Taught several semesters of introductory MIPS assembly and digital logic and electronics to students intending to major or minor in Computer Science. Also maintained the software (MARS, Java-based MIPS simulator) for the other ongoing sections of the course taught by other instructors.</p>
 </li></ul><h2 id='work_experience'>Work Experience</h2><ul><li><p><strong><em>Software Engineer</em></strong> - Vocollect - Summer of 2008 - Worked on their flagship product, a hand-held, voice-activated, programmable device typically used for warehouse workers or carriers for hands-free inventory. Embedded C/C++. Rewrote very low-level, core pieces of code to optimize and reduce initialization time by around 60 percent, a significant feat.</p>
 </li><li><p><strong><em>Freelance Work</em></strong> - Summer of 2009 - Implemented a contract work within the period of two weeks to develop an iPhone application generator for the syndication of RSS/Atom feeds of audio/video podcasts into a custom styled app used to play the various episodes.</p>
 </li><li><p><strong><em>Student Researcher</em></strong> - University of Pittsburgh - 2009-2012 - Researched operating system designs and distributed systems with an emphasis on building new systems.</p>
-</li><li><p><strong><em>Teaching Fellow</em></strong> - University of Pittsburgh - 2010-2012 - Responsible for curriculum in introductory programming courses. See <a  href='#teaching' title=''>Teaching</a> section.</p>
-</li></ul><h2 id='software'>Software</h2><h3 id='rstat_us__ruby_rails__javascript_coffeescript____web_application'>rstat.us (ruby/rails, javascript/coffeescript) - Web Application</h3><ul><li><strong><em>Source:</em></strong> <a  href='https://github.com/hotsh/rstat.us' title=''>github</a>
+</li><li><p><strong><em>Teaching Fellow</em></strong> - University of Pittsburgh - 2010-2014 - Responsible for curriculum in introductory programming courses. See <a  href='#teaching' title=''>Teaching</a> section.</p>
+</li><li><p><strong><em>Freelance Work</em></strong> - 2013-2015 - Implemented a variety of contract work, mostly web-based, that can be elaborated upon request.</p>
+</li><li><p><strong><em>Lead Research Engineer</em></strong> - University of Pittsburgh - 2014- - Designing and developing the Occam software archival project.</p>
+</li></ul><h2 id='software'>Software</h2>
+<p class="justify" hidden></p>
+<h3 id='occam__ruby_sinatra__python__javascript_webpack_babel____software_archive'>Occam (ruby/sinatra, python, javascript/webpack+babel) - Software Archive</h3><ul><li><strong><em>Source:</em></strong> <a  href='https://gitlab.com/occam-archive' title=''>gitlab</a>
+</li><li><strong><em>Website:</em></strong> <a  href='https://occam.software/about' title=''>occam.software</a>
+</li><li><strong><em>License:</em></strong> AGPL 3.0, various
 </li></ul>
-<p></p><div class='image right border'><img src='/images/cv/rstatus.png' title='' alt='!rstatus screenshot' /></div><p></p>
+<p></p><div class='image right border'><img style='width: 600px;' src='/images/cv/WordStar_Doc_File.jpg' title='' alt='!Occam screenshot' /></div><p></p>
+
+<p>Occam is a free and open-source (AGPL 3.0), federated software preservation and archival system.
+This system, designed by myself over several years and developed by a team at the University of Pittsburgh, serves to solve an increasingly dire problem: the degradation of software and digital data.
+To offset this peril, the system is designed to generate virtual machines (VMs) through Vagrant or Docker to build and run packaged software.
+Much like a package manager, the system can derive a VM based on a small description of software and then rake its dependencies which are themselves preserved objects.
+It then recursively preserves each package in a way that can be distributed and extensibly executed as a virtual machine on current and future hardware.</p>
+
+<p>One novelty is that VMs are generated on-the-fly and can make use of preserved software, such as emulators, to provide means of executing obsolete software.
+These emulators can be introduced to the system (and learned over time) at any point to provide more functionality to patrons of the archive.
+In this way, new emulators can be introduced and selected as needed without having to change the system or force the system to store large, complete virtual machines that are built around particular emulation targets.</p>
+
+<p>On top of the backend infrastructure, which is a sophisticated object store using python, git, and PostgreSQL, there exists a web portal frontend that allows the execution of software within a browser environment.
+For instance, software objects may target the browser itself and run (contained within sandboxes) within the browser.
+Such objects might be emulators, such as Em-DOSBox, which allow for software to be executed within a native emulator (via Docker) or executed within the JS version of the emulator on-the-fly.</p>
+<h3 id='rars__ruby_sinatra__javascript_webpack_babel_emscripten____educational_tool'>RARS (ruby/sinatra, javascript/webpack+babel+emscripten) - Educational Tool</h3><ul><li><strong><em>Source:</em></strong> <a  href='https://gitlab.com/wilkie/rars' title=''>gitlab</a>
+</li><li><strong><em>Website:</em></strong> <a  href='https://wilkie.gitlab.io/rars' title=''>wilkie.gitlab.io/rars</a>
+</li><li><strong><em>License:</em></strong> AGPL 3.0
+</li></ul>
+<p></p><div class='image left border'><img style='width: 600px;' src='/images/cv/RARS.png' title='' alt='!RARS screenshot' /></div><p></p>
+
+<p>The RISC-V Assembler and Runtime Simulator (RARS) is a learning-focused toolchain that incorporates an assembler, debugger, and RISC-V kernel together entirely within a static website.
+To this end, a GNU toolchain consisting of binutils and the RISC-V emulator TinyEMU where cross-compiled to JavaScript WebAssembly using <a  href='https://emscripten.org/' title=''>emscripten</a>.
+This allows these sophisticated and time-proven applications to be usable directly within a browser environment without having students install anything to their local machines.
+This side-steps a huge problem we have had with even Java-based toolchains such as the namesake MARS program.</p>
+
+<p>Overall, this work-in-progress educational tool should provide a nice stepping stone for educators to move from MIPS based education to a RISC-V based environment.
+By being a web-based tool, it is my hope that this lowers the barrier-to-entry for learning assembly and systems curricula, and overall make this material more accessible to all.</p>
+
+<p>Play and learn <a  href='https://wilkie.gitlab.io/rars/' title=''>here</a>!</p>
+<h3 id='rstat_us__ruby_rails__javascript_coffeescript____web_application'>rstat.us (ruby/rails, javascript/coffeescript) - Web Application</h3><ul><li><strong><em>Source:</em></strong> <a  href='https://github.com/hotsh/rstat.us' title=''>github</a>
+</li><li><strong><em>License:</em></strong> CC0 1.0 Universal
+</li></ul>
+<p></p><div class='image right border'><img style='' src='/images/cv/rstatus.png' title='' alt='!rstatus screenshot' /></div><p></p>
 
 <p>A free and open-source, federated microblogging platform I founded with a team of friends, resembling twitter and status.net, that emphasizes personal use and self-ownership of data. That is, this software is designed to be easily deployed on a hosting service or a personal server. The ownership and authority over the content is primarily in the hands of the individual, instead of a company that runs a centralized service such as twitter. It uses the <a  href='http://www.w3.org/community/ostatus/' title=''>ostatus</a> protocol to distribute content within a social graph to nodes and servers maintained by other people.</p>
 
 <p>Considering it is a social system at heart that attempts to liberate data to individuals, rstat.us became very successful. The rate of adoption out-paced app.net with 6,000 unique users in our opening week. We have over 60 <a  href='https://rstat.us/about' title=''>contributors</a> from all across the world which further suggests its appeal and need in the global world. I am a core maintainer along with <a  href='http://carol-nichols.com/' title=''>Carol Nichols</a>, and help organize new feature efforts and review pull requests, although our development model allows for any past contributor to commit and merge at any time.</p>
-<h3 id='lotus__ruby_sinatra__javascript____web_framework'>lotus (ruby/sinatra, javascript) - Web Framework</h3><ul><li><strong><em>Source:</em></strong> <a  href='https://github.com/hotsh/lotus' title=''>github</a>
-</li></ul>
-<p></p><div class='image right border'><img src='/images/cv/lotus.png' title='' alt='!lotus screenshot' /></div><p></p>
-
-<p>Building off of the experience of building rstat.us, I started the Lotus project. While rstat.us was engineered to be a federated microblogging solution, it was not very conducive to building new types of federated, self-hosted websites. Therefore, I ripped out the backend of rstat.us and refined it. Lotus contains several sub-repositories that will allow you to build a federated website using simple building blocks.</p>
-
-<p>This is very much an experiment in modular MVC. The <a  href='https://github.com/hotsh/lotus' title=''>lotus</a> base project contains the non-persistent models which define the data and relationships, useful for clients. The <a  href='https://github.com/hotsh/lotus-mongodb' title=''>lotus-mongodb</a> project adds persistence using mongodb, a useful key-value store for extensible data (where the schema is unknown.) The <a  href='https://github.com/hotsh/rack-lotus' title=''>rack-lotus</a> project contains the controllers and routes that drive the web API. To give you a base to start out from, the <a  href='https://github.com/hotsh/lotus-site' title=''>lotus-site</a> project gives a set of views and javascript already designed to produce a responsive website that can be easily extended. Furthermore, the <a  href='https://github.com/hotsh/lotus-i18n' title=''>lotus-i18n</a> project adds internationalization that will be shared among all federated sites.</p>
-
-<p>With these base projects I have implemented a distributed, federated social framework for microblogging (tweets), blogging, and image sharing. It will be easy to add other types of sharable objects, and external systems hosted by others will gracefully support them even if they do not understand them. Any site that you produce with the framework will be easily deployable to enjoy a low barrier of entry for non-technical folks.</p>
 <h3 id='xomb__d__assembly____systems_design_and_implementation'>xomb (D, assembly) - Systems Design and Implementation</h3><ul><li><strong><em>Source:</em></strong> <a  href='https://github.com/xomboverlord/xomb' title=''>github</a>
+</li><li><strong><em>License:</em></strong> WTFPL v2
 </li></ul>
-<p></p><div class='image right border'><img src='/images/cv/xomb.png' title='' alt='!xomb screenshot' /></div><p></p>
+<p></p><div class='image left border'><img style='' src='/images/cv/xomb.png' title='' alt='!xomb screenshot' /></div><p></p>
 
 <p>XOmB is a novel exokernel-inspired operating system project aimed at developing the most
 flexible OS architecture possible as a means of building more efficient systems and building systems more efficiently.
@@ -953,22 +1356,24 @@ state from the applications or incurring additional overheads (e.g. implementing
 introduces numerous inefficiencies). Due to minimizing abstractions imposed by the OS, XOmB will be able to
 provide a software base sufficient to build new interfaces without having to tear down or re-engineer the kernel.</p>
 
-<p>We (myself and <a  href='http://wolfwood.github.io/2013/06/20/interface-fidelity.html' title=''>James Larkby-Lahet</a>) diverge significantly from prior efforts in our treatment of state with the XOmB exokernel. We relegate even
+<p>We (myself and <a  href='http://wolfwood.github.io/2013/06/20/interface-fidelity.html' title=''>James Larkby-Lahet</a>) diverge significantly from prior efforts in our treatment of state with the XOmB exokernel, and in many ways predicted the rise of Xen-like hypervisors. We relegate even
 more kernel code to userspace libraries, which are untrusted and can be customized (completely modified or replaced)
 on a per-application basis. We do so by extracting two key components of the exokernel: device drivers and system
 state. These components are implemented in userspace where they are met with easy debugging and hardware enforced safety.</p>
 <h3 id='gutenberg__ruby__javascript_jquery____content_generation'>gutenberg (ruby, javascript/jQuery) - Content Generation</h3><ul><li><strong><em>Source:</em></strong> <a  href='https://github.com/wilkie/gutenberg' title=''>github</a>
+</li><li><strong><em>License:</em></strong> CC0 1.0 Universal
 </li></ul>
-<p></p><div class='image right border'><img src='/images/cv/gutenberg.png' title='' alt='!gutenberg screenshot' /></div><p></p>
+<p></p><div class='image right border'><img style='' src='/images/cv/gutenberg.png' title='' alt='!gutenberg screenshot' /></div><p></p>
 
-<p>I am very interested in hypermedia and exploring its use to transform traditional media into something more substantial in this information era. To that end, <em>gutenberg</em> is a project that turns a flavor of <a  href='http://daringfireball.net/projects/markdown/' title=''>markdown</a> into a website that is typeset using javascript code on the client side. The idea is that books can contain links to other books and other external information and to provide, eventually, a seamless experience in reading this information.</p>
+<p>I am very intrigued by typesetting and often find myself writing typesetting tools instead of actual writing, which is what I should be doing.
+More to the point, I am very interested in hypermedia and exploring its use to transform traditional media into something more substantial in this information era. To that end, <em>gutenberg</em> is a project that turns a flavor of <a  href='http://daringfireball.net/projects/markdown/' title=''>markdown</a> into a website that is typeset using javascript code on the client side. The idea is that books can contain links to other books and other external information and to provide, eventually, a seamless experience in reading this information.</p>
 
 <p>The project consists of ruby code that will render the markup into html, css, and images and package them with javascript. It is designed such that without javascript or using a screenreader (typically used by blind individuals), the book is still readable as a basic webpage. The book output can also be easily parsed by html parsers and generates a very minimal markup. The rest of the work to make the book into a dynamic frame with full typesetting is done completely in javascript. Styling can be provided by stylesheets and images provided by the library or easily extended by adding custom css and javascript.</p>
 
-<p>An example of the project in action can be found <a  href='http://derailingfordummi.es' title=''>here</a> and compare this to the plain html without any javascript <a  href='http://derailingfordummi.es/?plain' title=''>here</a>.</p>
+<!--An example of the project in action can be found [here](http://derailingfordummi.es) and compare this to the plain html without any javascript [here](http://derailingfordummi.es/?plain).-->
 <h3 id='reuleaux_selectors__javascript____user_human_interfaces'>reuleaux-selectors (javascript) - User/Human Interfaces</h3><ul><li><strong><em>Source:</em></strong> <a  href='https://github.com/wilkie/reuleaux-selectors' title=''>github</a>
 </li></ul>
-<p></p><div class='image right border'><img src='/images/cv/reuleaux-selectors.png' title='' alt='!gutenberg screenshot' /></div><p></p>
+<p></p><div class='image left border'><img style='' src='/images/cv/reuleaux-selectors.png' title='' alt='!gutenberg screenshot' /></div><p></p>
 
 <p>As a queer individual, I&#39;m concerned with forms of available representation and allowances of diversity in the technological space. The role of personal gender identification is a part of human interfaces that has been untouched regardless of the fact that dropdown gender selection of simply male and female is unacceptable. Textfields, while better, allow for so much choice that people may pigeonhole themselves and would be otherwise incomparable.</p>
 
@@ -976,8 +1381,9 @@ state. These components are implemented in userspace where they are met with eas
 
 <p>Play around with the selectors <a  href='http://wilkie.github.io/reuleaux-selectors/' title=''>here</a>.</p>
 <h3 id='apsis__c____assembly__glsl____general_purpose_game_engine'>apsis (C++, assembly, GLSL) - General-Purpose Game Engine</h3><ul><li><strong><em>Source:</em></strong> <a  href='https://github.com/wilkie/apsis' title=''>github</a>
+</li><li><strong><em>License:</em></strong> WTFPL v2
 </li></ul>
-<p></p><div class='image right border'><img src='/images/cv/apsis.png' title='' alt='!apsis screenshot' /></div><p></p>
+<p></p><div class='image right border'><img style='' src='/images/cv/apsis.png' title='' alt='!apsis screenshot' /></div><p></p>
 
 <p>Going along with my <a  href='http://osgcc.github.io' title=''>open source game coding competition</a>, I am currently developing a free and open-source (early stages) game engine builder. To jumpstart games and creative expression, I have created a framework that gives you the building blocks for creating game engines.</p>
 
@@ -986,14 +1392,15 @@ state. These components are implemented in userspace where they are met with eas
 <p>By building games via a set of rules, you can be provided a set of predefined rules to quickly make traditional games, but also allow extensibility by defining new rules. This will be perfect in an educational environment where predefined rules can be used to get things rolling, but programming concepts can be introduced gradually to beginners when they want to do something fancy.</p>
 
 <p>I hope to bind the logic and rule creation to a language that is better suited for beginners such as Lua or Ruby. That way, the game engine itself is written in OpenGL/C++ but the extensible components can be an easy to use scripting language.</p>
-<h2 id='occasional_contribution'>Occasional Contribution</h2><ul><li><a  href='https://github.com/gittip/www.gittip.com/' title=''>gittip</a> - Python-based website for weekly tips to online creators.
+<h2 id='open_source_contributions'>Open-Source Contributions</h2><ul><li><a  href='https://github.com/socketry/rackula' title=''>rackula</a> - Ruby static site generator of rack-based websites.
 </li><li><a  href='https://github.com/sinatra/sinatra' title=''>sinatra</a> - Ruby rack-based web micro-framework.
 </li><li><a  href='https://github.com/shoes/shoes' title=''>shoes</a> - C library backend for the shoes ruby GUI framework.
 </li><li><a  href='https://github.com/hacketyhack/hacketyhack' title=''>hackety-hack</a> - Ruby educational tool to teach programming visually to beginners.
 </li><li><a  href='https://github.com/seangeo/ratom' title=''>ratom</a> - Ruby library for Atom feed generation.
 </li><li><a  href='https://github.com/ldc-developers/ldc' title=''>ldc</a> - D compiler frontend to LLVM.
 </li><li><a  href='https://github.com/intridea/redfinger' title=''>redfinger</a> - Ruby library for webfinger (distributed identity) polling.
-</li></ul>]]></content></entry><entry><title type="html">Projects I am Involved With</title><link href="http://blog.davewilkinsonii.com/posts/projects" rel="alternate" type="text/html"/><published>2012-11-11T00:00:00-05:00</published><updated>2012-11-11T00:00:00-05:00</updated><author><name>wilkie writes a thing</name></author><id>http://blog.davewilkinsonii.com/posts/projects</id><content type="html" xml:base="http://blog.davewilkinsonii.com/posts/projects"><![CDATA[<h2 id='founded'>Founded</h2><h3 id='rstat_us'>rstat.us</h3><ul><li><strong><em>Language</em></strong> ruby
+</li><li><a  href='https://github.com/gratipay/gratipay.com' title=''>gratipay</a> - Python-based website for weekly tips to online creators.
+</li></ul>]]></content></entry><entry><title type="html">Projects I am Involved With</title><link href="http://blog.davewilkinsonii.com/posts/projects" rel="alternate" type="text/html"/><published>2012-11-11T00:00:00+01:00</published><updated>2012-11-11T00:00:00+01:00</updated><author><name>wilkie writes a thing</name></author><id>http://blog.davewilkinsonii.com/posts/projects</id><content type="html" xml:base="http://blog.davewilkinsonii.com/posts/projects"><![CDATA[<h2 id='founded'>Founded</h2><h3 id='rstat_us'>rstat.us</h3><ul><li><strong><em>Language</em></strong> ruby
 </li><li><strong><em>Status</em></strong> gamma
 </li><li><strong><em>Source</em></strong> <a  href='https://github.com/hotsh/rstat.us' title=''>github</a>
 </li></ul>
@@ -1043,12 +1450,13 @@ state. These components are implemented in userspace where they are met with eas
 </li><li><a  href='https://github.com/seangeo/ratom' title=''>ratom</a>
 </li><li><a  href='https://github.com/ldc-developers/ldc' title=''>ldc</a>
 </li><li><a  href='https://github.com/intridea/redfinger' title=''>redfinger</a>
-</li></ul>]]></content></entry><entry><title type="html">The Djehuty Project - For The Technical Lot</title><link href="http://blog.davewilkinsonii.com/posts/djehuty-technical" rel="alternate" type="text/html"/><published>2012-10-25T00:00:00-04:00</published><updated>2012-10-25T00:00:00-04:00</updated><author><name>wilkie writes a thing</name></author><id>http://blog.davewilkinsonii.com/posts/djehuty-technical</id><summary>I have a dream that we can solve the current crisis that is software. To do this, and this might seem ambitious but bear with me, we must burn every piece of structure we have to the ground. We must replace the structure around our software with a new infrastructure that gives us more sustainability and versatility. In the process we gain various technological and socialogical advantages.</summary><content type="html" xml:base="http://blog.davewilkinsonii.com/posts/djehuty-technical"><![CDATA[<p><a  href='/posts/who-am-i' title=''>I</a> have a dream that we can solve the current crisis that is software. To do this, and this might seem ambitious but bear with me, we must burn every piece of structure we have to the ground. We must replace the structure around our software with a new infrastructure that gives us more sustainability and versatility. In the process we gain various technological and socialogical advantages.</p>
+</li></ul>]]></content></entry><entry><title type="html">The Djehuty Project - For The Technical Lot</title><link href="http://blog.davewilkinsonii.com/posts/djehuty-technical" rel="alternate" type="text/html"/><published>2012-10-25T00:00:00+02:00</published><updated>2012-10-25T00:00:00+02:00</updated><author><name>wilkie writes a thing</name></author><id>http://blog.davewilkinsonii.com/posts/djehuty-technical</id><summary>I have a dream that we can solve the current crisis that is software. To do this, and this might seem ambitious but bear with me, we must burn every piece of structure we have to the ground. We must replace the structure around our software with a new infrastructure that gives us more sustainability and versatility. In the process we gain various technological and socialogical advantages.</summary><content type="html" xml:base="http://blog.davewilkinsonii.com/posts/djehuty-technical"><![CDATA[<p><a  href='/posts/who-am-i' title=''>I</a> have a dream that we can solve the current crisis that is software. To do this, and this might seem ambitious but bear with me, we must burn every piece of structure we have to the ground. We must replace the structure around our software with a new infrastructure that gives us more sustainability and versatility. In the process we gain various technological and socialogical advantages.</p>
 <h2 id='what_we_have_now'>What we have now</h2>
 <p>What are we burning to the ground, you ask? Well, a system of organization that ignores the decentralized world we built out of it.
 We build software in a centralized manner. It has one blessed location where it exists, the pieces used to build it (libraries, frameworks) are all built in a centralized manner and exist in generally one place, and we generally hold a relationship between a set of a few people as being in control of that code (and we bless them, perhaps religiously in some cases.)</p>
 
-<p></p><div class='image'><img src='/images/djehuty-technical/apocalypse.jpg' title='' alt='Ok. It's not *that* bad, but we can do better. [1]' /><br /><div class='caption'>Ok. It's not *that* bad, but we can do better. [1]</div></div><p></p>
+<p></p><div class='image'><img style='' src='/images/djehuty-technical/apocalypse.jpg' title='' alt='Ok. It's not *that* bad, but we can do better. [1]' /><br /><div class='caption'><p>Ok. It&#39;s not <em>that</em> bad, but we can do better. [1]</p>
+</div></div><p></p>
 
 <p>This has resulted in a tolerable, yet inefficient ecosystem where we tend to rewrite instead of reuse.
 This is due to spirited debates about abstractions, expression, and simply how likable a set of people are.
@@ -1069,7 +1477,8 @@ large yet invisible section of humanity.</p>
 <h2 id='the_hardware'>The hardware</h2>
 <p>Regarding the left side of the interface which implements well-defined behavior, it is interesting that since such an implementation is a black box, it may be implemented as hardware. We live in a world where 3d-printed hardware is increasingly available. Now, we can find a bottleneck in our software and have our computers print a hardware implementation to solve the performance issue. We can plug in a hardware solution and have it transparently affect any software which uses that interface immediately.</p>
 
-<p></p><div class='image'><img src='/images/djehuty-technical/printer.jpg' title='' alt='Although not feasible yet, printable conductive gels exist and could make circuit printing available in the home. [2]' /><br /><div class='caption'>Although not feasible yet, <a href="http://news.stanford.edu/news/2012/june/printable-electrical-hydrogel-062712.html">printable conductive gels</a> exist and could make circuit printing available in the home. [2]</div></div><p></p>
+<p></p><div class='image'><img style='' src='/images/djehuty-technical/printer.jpg' title='' alt='Although not feasible yet, printable conductive gels exist and could make circuit printing available in the home. [2]' /><br /><div class='caption'><p>Although not feasible yet, <a href="http://news.stanford.edu/news/2012/june/printable-electrical-hydrogel-062712.html">printable conductive gels</a> exist and could make circuit printing available in the home. [2]</p>
+</div></div><p></p>
 
 <p>By using this software infrastructure, we make 3d-printed hardware more meaningful and easier to use for less technical users. We allow anybody with hardware knowledge the ability to contribute to opensource hardware communities by giving them the ability to easily solve any computational problem at any granularity (write a hardware implementation for a yaml parser, or maybe just write a hardware tokenizer, hardware string routines... you decide.) All in all, we will promote the much needed involvement from the electrical/computer/etc engineers and makers.</p>
 <h2 id='the_network'>The network</h2>
@@ -1080,7 +1489,8 @@ large yet invisible section of humanity.</p>
 <p>Frankly, the internet as it stands strengthens the argument for this style of encapsulation of interfaces.
 It supports a decentralized model where we can ask a question and get an answer. &quot;I need a way to compute a sort of a list of numbers&quot; can retrieve an implementation for quicksort, or maybe on another day will retrieve an implementation of insertion sort. Who knows. All we have to have here, as a basic minimum, is the ability to get <em>any implementation</em> that fulfills the specification, of which you retrieve once.</p>
 
-<p></p><div class='image'><img src='/images/djehuty-technical/peer-to-peer.png' title='' alt='A peer-to-peer network should be the base model of the infrastructure. [3]' /><br /><div class='caption'>A peer-to-peer network should be the base model of the infrastructure. [3]</div></div><p></p>
+<p></p><div class='image'><img style='' src='/images/djehuty-technical/peer-to-peer.png' title='' alt='A peer-to-peer network should be the base model of the infrastructure. [3]' /><br /><div class='caption'><p>A peer-to-peer network should be the base model of the infrastructure. [3]</p>
+</div></div><p></p>
 
 <p>Now, with clever use of DNS and frontend servers, we can have a single name resolve to different resources. This is typically done to route resources to the nearest server geographically in order to balance demand and increase responsiveness on popular websites. However, here, we want to get an implementation of a behavior. We can co-opt the internet to get this behavior the same way that bittorrent does in order to create a network without an owner or central authority.</p>
 
@@ -1106,7 +1516,7 @@ It supports a decentralized model where we can ask a question and get an answer.
 <h3 id='references'>References</h3><ol><a id='ref_1'></a><li>Artist&#39;s depiction of apocalypse from <a  href='http://pierremassine.deviantart.com/art/Apocalypse-145369171' title=''>here</a>.
 </li><a id='ref_2'></a><li>Discussion of affordable 3d printing <a  href='http://www.engadget.com/2012/09/26/form-1-delivers-high-end-3d-printing-for-an-affordable-price/' title=''>here</a>, which the image was taken.
 </li><a id='ref_3'></a><li>The minimalistic image of a peer-to-peer network and a simple description of what that is can be found <a  href='http://www.freelan.org/' title=''>here</a>.
-</li></ol>]]></content></entry><entry><title type="html">The Antirez Principle</title><link href="http://blog.davewilkinsonii.com/posts/the-antirez-principle" rel="alternate" type="text/html"/><published>2012-10-17T00:00:00-04:00</published><updated>2012-10-17T00:00:00-04:00</updated><author><name>wilkie writes a thing</name></author><id>http://blog.davewilkinsonii.com/posts/the-antirez-principle</id><summary>Redis hacker, antirez, wrote an article on sexism that promoted the notion that discussion of sexism and any special treatment of women in technology constituted oppression and sexism toward women. He states we should simply treat everybody as human, instead of focusing on gender. Although an obvious goal, he ignores the cause and history of oppression and its psychological affects on our reasoning.</summary><content type="html" xml:base="http://blog.davewilkinsonii.com/posts/the-antirez-principle"><![CDATA[<p>On Saturday, October 13th 2012, Salvatore Sanfilippo, also known as antirez,
+</li></ol>]]></content></entry><entry><title type="html">The Antirez Principle</title><link href="http://blog.davewilkinsonii.com/posts/the-antirez-principle" rel="alternate" type="text/html"/><published>2012-10-17T00:00:00+02:00</published><updated>2012-10-17T00:00:00+02:00</updated><author><name>wilkie writes a thing</name></author><id>http://blog.davewilkinsonii.com/posts/the-antirez-principle</id><summary>Redis hacker, antirez, wrote an article on sexism that promoted the notion that discussion of sexism and any special treatment of women in technology constituted oppression and sexism toward women. He states we should simply treat everybody as human, instead of focusing on gender. Although an obvious goal, he ignores the cause and history of oppression and its psychological affects on our reasoning.</summary><content type="html" xml:base="http://blog.davewilkinsonii.com/posts/the-antirez-principle"><![CDATA[<p>On Saturday, October 13th 2012, Salvatore Sanfilippo, also known as antirez,
 an influential hacker who maintains redis, published a blog entry entitled
 &quot;<a  href='http://oldblog.antirez.com/post/different-take-sexism-it.html' title=''>A different take on sexism in IT</a>.&quot;
 It made its way onto <a  href='http://news.ycombinator.com/item?id=4648625' title=''>Hacker News</a>, and received, according to his own website, over 20,000 views.</p>
@@ -1277,7 +1687,108 @@ people 100 years ago expected us to solve by now. We don&#39;t discuss these iss
 police.&quot; We bring these things up over and over again because these <a  href='http://geekfeminism.wikia.com/wiki/Category:Incidents' title=''>issues simply keep occurring</a>, because the
 facts support our claim, and because we know that if the issue is dropped or becomes less visible, it will not be solved. And because, at the end of the day, women <em>indeed</em> deserve respect because they are capable and smart, and furthermore
 they deserve respect because they are women.</p>
-]]></content></entry><entry><title type="html">An Infrastructure to Promote Sustainable Software</title><link href="http://blog.davewilkinsonii.com/posts/infrastructure" rel="alternate" type="text/html"/><published>2012-10-06T00:00:00-04:00</published><updated>2012-10-06T00:00:00-04:00</updated><author><name>wilkie writes a thing</name></author><id>http://blog.davewilkinsonii.com/posts/infrastructure</id><summary>Given that we have a problem with the organization of code to provide better objective reuse, we can solve this by using a language to describe computational behaviors and specifications and define absolutely nothing else. Implementations of these behaviors can contain isolated abstractions, and applications as a whole can use abstractions to glue together computations. This simple infrastructure provides not just technical benefits but also illustrates many social merits.</summary><content type="html" xml:base="http://blog.davewilkinsonii.com/posts/infrastructure"><![CDATA[<p>We have long promoted the idea of the re-usability of our code. After an era of writing for our machines instead of ourselves, we discovered that human literacy was preferred over performance. From this notion, we developed higher level languages that started to abstract and even completely obscure the underlying machine. A beautiful era emerged where the Turing machine was our model, and humans our audience.</p>
+]]></content></entry><entry><title type="html">Coding Naturally: How to Achieve Sustainable Software</title><link href="http://blog.davewilkinsonii.com/posts/apples" rel="alternate" type="text/html"/><published>2012-10-06T00:00:00+02:00</published><updated>2012-10-06T00:00:00+02:00</updated><author><name>wilkie writes a thing</name></author><id>http://blog.davewilkinsonii.com/posts/apples</id><summary>We tend to use too many opinions in our comparisons of libraries and frameworks. This is systemic and relates to a problem that we, socially, are not organizing code effectively for objective reuse. We can fix this with a better infrastructure that puts objective metrics first and describes computation rather than human expression. We can find better ways of expression using abstractions on top.</summary><content type="html" xml:base="http://blog.davewilkinsonii.com/posts/apples"><![CDATA[<p></p><div class='image'><img style='' src='/images/apples/corgi.png' title='' alt='Corgi wants to be tall. [1]' /><br /><div class='caption'><p>Corgi wants to be tall. [1]</p>
+</div></div><p></p>
+
+<p>Here is a <a  href='https://imgur.com/r/corgi' title=''>corgi</a>. It&#39;s a puppy. And it is the absolute cutest thing. Ever. I&#39;m only slightly pandering.
+But seriously, puppies are far superior to kittens. Dogs are more loyal than cats. I&#39;m not sure why the
+internet has given cats so much attention. They suck.</p>
+<h2 id='which_is_better_'>Which is better?</h2>
+<p>Alright. I may be biased. This happens. Throughout our lives we very often find ourselves in the situation where we are presented two items and
+expected to choose between them. So much so, that no matter how much we actually know about something, we
+have decided ourselves experts.</p>
+
+<p></p><div class='image'><img style='' src='/images/apples/apples.png' title='' alt='A braeburn and a pippin, which is better?' /><br /><div class='caption'><p>A braeburn and a pippin, which is better?</p>
+</div></div><p></p>
+
+<p>Don&#39;t act all high-and-mighty. Look, we all know at the grocery store in the
+produce section, you, like everybody else, are there squeezing all of the fruit. What exactly are you
+looking for? What makes one apple better than the other?</p>
+
+<p>We look at the color, the shininess and luster, the size, and the smoothness. Why? Because we believe these
+to be all great indicators of the quality of taste. They are all qualities that we see and perhaps feel.
+However, are these the qualities of a great apple? It is a matter of perspective.</p>
+<h2 id='what_is_an_apple_'>What is an apple?</h2>
+<p>The attributes of an apple which we find pleasing are not indicative of what makes a great apple. These
+traits do not concern the apple and its role and its function. The perception of an apple with respect to
+these qualities ignores what an apple actually is. We just want to eat them.</p>
+
+<p></p><div class='image'><img style='' src='/images/apples/apples_full_small.png' title='' alt='Taking a step back, how different can they be? [2]' /><br /><div class='caption'><p>Taking a step back, how different can they be? [2]</p>
+</div></div><p></p>
+
+<p>However, an apple, being a fruit and a <a  href='http://en.wikipedia.org/wiki/Pome' title=''>pome</a>, is a container for seeds. They
+are designed to perform one function: <em>to create new trees</em>. If you start to look at the bigger picture,
+the differences among the apples become meaningless. Shininess does not make one apple a better container than
+another.</p>
+
+<p>All of those inconsequential features we tend to look at are very much masking what is truly important, which
+is the seed. These seeds are fundamentally the same in all apples and serve the same purpose and do so equally
+well regardless of outer shell and presentation.</p>
+<h2 id='learning_from_nature'>Learning from Nature</h2>
+<p>In the software and engineering world, the concept of discussing irrelevant details that do not pertain to the
+function of a system is called <em>bikeshedding</em>. That is, nobody argues over the function of the bike shed but
+rather insist on its color.</p>
+
+<p>In the software world, such discussion is only avoidable if we separate human opinion from computation, which is based upon fact. In
+other words, if it were clear where the computation ended and the abstractions began, we could argue about the
+expressive aspects of the code since changing them does not impact the choices on how the behavior is implemented.
+In fact, it is the opposite, we argue precisely because we cannot see the line between computation and abstraction.</p>
+
+<p></p><div class='image'><img style='' src='/images/apples/apples_full_smallest.png' title='' alt='Can the number of apples in the wild become overwhelming?' /><br /><div class='caption'><p>Can the number of apples in the wild become overwhelming?</p>
+</div></div><p></p>
+
+<p>That is, in the case of the apple, there is always some seed that is fundamentally the same in every argument. There
+is a level where you cannot argue against the behavior of some functionality. Array sort <em>must</em> take some set of data
+and arrange it <em>some well-defined</em> way. How you sort the array, well.</p>
+
+<p>If we again consider the apple, we would have seeds and skins. To make the metaphor a bit more concrete: <em>Seeds</em> would be 
+strictly computation. This is code that
+is written for performance and behavior. Its interface is unchangeable and well-known. You cannot argue about
+the interface without making factual comparisons about performance or correctness. You must
+prove you are correct with a metric or test.</p>
+
+<p>Then you have the <em>skin</em>, or your abstraction layer. It is simply a language that maps expressions to the interface of the seed.
+Since the seeds are well-known, many competing skins can exist. Since the interface is strict, many seeds can exist as well.
+Both sides of the interface become interchangeable. And thus, bikeshedding becomes irrelevant to providing computation
+since anyone can implement
+a new skin without interfering with others.</p>
+
+<p>If competing technologies would standardize to an interface (create a seed), then we could use either or both depending
+on our needs without any effort. We could use the abstraction of one with the implementation of the other, in fact. I call
+this <em>sustainable design</em>.</p>
+<h2 id='sustainable_design'>Sustainable Design</h2>
+<p>To promote sustainable design, a software developer must consider the line drawn between expressing behavior and allowing
+human expression through abstraction. To transform existing projects, collaboration between competitors (odd concept, eh?)
+to define a seed is necessary. For instance, the back-ends for QT and GTK could be consolidated into a new project which implement
+the same interface (seed) and then QT and GTK become the abstractions (skins) around it. In this case you could say C and C++ are then the
+abstractions we choose. That&#39;s fine. In this world, the languages we choose are to better allow us to use existing code and get applications
+written. We do not inherit a policy or a set of standard libraries that may or may not work well.</p>
+
+<p></p><div class='image'><img style='' src='/images/apples/apples_drawing.svg' title='' alt='Behaviors are what we care about in the end.' /><br /><div class='caption'><p>Behaviors are what we care about in the end.</p>
+</div></div><p></p>
+
+<p>To provide such a design when writing new projects, write them as libraries with functions that are very specifically tied to behavior. This way, alternative
+implementations may exist. Use abstractions in a separate layer (create that skin with all the luster you want) that makes using the library cleaner. You benefit
+by allowing for better experimentation with new abstractions while isolating core behaviors. You also gain the audience of many languages.
+You also benefit from a much easier and more intuitive ability to refactor implementations while isolating them from their abstractions. To do this, simply
+reimplement the interface and link in the new code.</p>
+
+<p>If you are writing a library, determine if prior work exists and implement your library using that interface (make use of an existing seed.) You will gain quick
+adoption by being able to assert facts about performance gains over existing implementations, while also being able to be
+quickly used by existing programs that already make use of the other implementations. If you are writing an abstraction, you can leverage
+existing implementations and focus only on refining the language (implement for humans without hindering performance facts.) Existing programs may not easily adopt your new abstraction,
+but they do not need to in order to benefit from performance improvements. When you write abstractions, you are worried about new, that is non-existing, programs.</p>
+
+<p>Once we have such modularity in place, we can write an infrastructure that manages the code. It can do objective analysis on whatever
+benchmarks are deemed important and throw out code that doesn&#39;t perform and replace it with same random implementation that fares well.
+This system will push good implementations over the bad and can even collectively rate them among machines. Code can be verified as
+working before it is used to ensure bugs are limited. You as a developer may develop with one module, but in the future, without your
+awareness, a bug was caught, patched, and automatically retrieved to build your software. Fantastic.</p>
+
+<p>For an introduction to the language we need to describe behaviors, <a  href='/posts/infrastructure' title=''>read on</a>.</p>
+<h3 id='references'>References</h3><ol><a id='ref_1'></a><li>Corgi picture adorably used from <a  href='http://www.coloradocorgi.org' title=''>here</a>.
+</li><a id='ref_2'></a><li>Pictures shamelessly used from <a  href='http://www.foodsubs.com/Apples.html' title=''>here</a>.
+</li></ol>]]></content></entry><entry><title type="html">An Infrastructure to Promote Sustainable Software</title><link href="http://blog.davewilkinsonii.com/posts/infrastructure" rel="alternate" type="text/html"/><published>2012-10-06T00:00:00+02:00</published><updated>2012-10-06T00:00:00+02:00</updated><author><name>wilkie writes a thing</name></author><id>http://blog.davewilkinsonii.com/posts/infrastructure</id><summary>Given that we have a problem with the organization of code to provide better objective reuse, we can solve this by using a language to describe computational behaviors and specifications and define absolutely nothing else. Implementations of these behaviors can contain isolated abstractions, and applications as a whole can use abstractions to glue together computations. This simple infrastructure provides not just technical benefits but also illustrates many social merits.</summary><content type="html" xml:base="http://blog.davewilkinsonii.com/posts/infrastructure"><![CDATA[<p>We have long promoted the idea of the re-usability of our code. After an era of writing for our machines instead of ourselves, we discovered that human literacy was preferred over performance. From this notion, we developed higher level languages that started to abstract and even completely obscure the underlying machine. A beautiful era emerged where the Turing machine was our model, and humans our audience.</p>
 
 <p>However, these methods of human expression are not compatible. Although they all express and run upon the same theoretical basis, they cannot collaborate effectively. This is due, ironically, to the constraints set upon the languages at the machine level. For instance, {Rust, D, Java} implies a garbage collector to allow object expressions that ignore allocations and to better analyze the lifetimes of these objects. When the language constrains the type of garbage collector policy, this constrains the languages that can be used together.</p>
 
@@ -1332,103 +1843,7 @@ function Array.sort(immutable int[] input) : int[] {
 <p>This has another benefit of greatly reducing the cost of entry for using technology. We only need to provide simple hardware with network capability, network driver, and a simple buildtool and dependency grapher to determine what code we need to build the rest of the system. From there it can acquire that code, verify its correctness, and compile the rest of the system. This means 3d-printed hardware can become more feasible as it would have less software requirements out of the box to get it working and deployed on a large scale. We may require a better network infrastructure to support the peer-to-peer nature of the system where new (untrusted) nodes can enter at anytime, perhaps toward a mesh network or some hybrid mesh-network and typical centralized structure.</p>
 
 <p>I must defer to the hardware and network communities for their input, as it is not my area of expertise.</p>
-]]></content></entry><entry><title type="html">Coding Naturally: How to Achieve Sustainable Software</title><link href="http://blog.davewilkinsonii.com/posts/apples" rel="alternate" type="text/html"/><published>2012-10-06T00:00:00-04:00</published><updated>2012-10-06T00:00:00-04:00</updated><author><name>wilkie writes a thing</name></author><id>http://blog.davewilkinsonii.com/posts/apples</id><summary>We tend to use too many opinions in our comparisons of libraries and frameworks. This is systemic and relates to a problem that we, socially, are not organizing code effectively for objective reuse. We can fix this with a better infrastructure that puts objective metrics first and describes computation rather than human expression. We can find better ways of expression using abstractions on top.</summary><content type="html" xml:base="http://blog.davewilkinsonii.com/posts/apples"><![CDATA[<p></p><div class='image'><img src='/images/apples/corgi.png' title='' alt='Corgi wants to be tall. [1]' /><br /><div class='caption'>Corgi wants to be tall. [1]</div></div><p></p>
-
-<p>Here is a <a  href='https://imgur.com/r/corgi' title=''>corgi</a>. It&#39;s a puppy. And it is the absolute cutest thing. Ever. I&#39;m only slightly pandering.
-But seriously, puppies are far superior to kittens. Dogs are more loyal than cats. I&#39;m not sure why the
-internet has given cats so much attention. They suck.</p>
-<h2 id='which_is_better_'>Which is better?</h2>
-<p>Alright. I may be biased. This happens. Throughout our lives we very often find ourselves in the situation where we are presented two items and
-expected to choose between them. So much so, that no matter how much we actually know about something, we
-have decided ourselves experts.</p>
-
-<p></p><div class='image'><img src='/images/apples/apples.png' title='' alt='A braeburn and a pippin, which is better?' /><br /><div class='caption'>A braeburn and a pippin, which is better?</div></div><p></p>
-
-<p>Don&#39;t act all high-and-mighty. Look, we all know at the grocery store in the
-produce section, you, like everybody else, are there squeezing all of the fruit. What exactly are you
-looking for? What makes one apple better than the other?</p>
-
-<p>We look at the color, the shininess and luster, the size, and the smoothness. Why? Because we believe these
-to be all great indicators of the quality of taste. They are all qualities that we see and perhaps feel.
-However, are these the qualities of a great apple? It is a matter of perspective.</p>
-<h2 id='what_is_an_apple_'>What is an apple?</h2>
-<p>The attributes of an apple which we find pleasing are not indicative of what makes a great apple. These
-traits do not concern the apple and its role and its function. The perception of an apple with respect to
-these qualities ignores what an apple actually is. We just want to eat them.</p>
-
-<p></p><div class='image'><img src='/images/apples/apples_full_small.png' title='' alt='Taking a step back, how different can they be? [2]' /><br /><div class='caption'>Taking a step back, how different can they be? [2]</div></div><p></p>
-
-<p>However, an apple, being a fruit and a <a  href='http://en.wikipedia.org/wiki/Pome' title=''>pome</a>, is a container for seeds. They
-are designed to perform one function: <em>to create new trees</em>. If you start to look at the bigger picture,
-the differences among the apples become meaningless. Shininess does not make one apple a better container than
-another.</p>
-
-<p>All of those inconsequential features we tend to look at are very much masking what is truly important, which
-is the seed. These seeds are fundamentally the same in all apples and serve the same purpose and do so equally
-well regardless of outer shell and presentation.</p>
-<h2 id='learning_from_nature'>Learning from Nature</h2>
-<p>In the software and engineering world, the concept of discussing irrelevant details that do not pertain to the
-function of a system is called <em>bikeshedding</em>. That is, nobody argues over the function of the bike shed but
-rather insist on its color.</p>
-
-<p>In the software world, such discussion is only avoidable if we separate human opinion from computation, which is based upon fact. In
-other words, if it were clear where the computation ended and the abstractions began, we could argue about the
-expressive aspects of the code since changing them does not impact the choices on how the behavior is implemented.
-In fact, it is the opposite, we argue precisely because we cannot see the line between computation and abstraction.</p>
-
-<p></p><div class='image'><img src='/images/apples/apples_full_smallest.png' title='' alt='Can the number of apples in the wild become overwhelming?' /><br /><div class='caption'>Can the number of apples in the wild become overwhelming?</div></div><p></p>
-
-<p>That is, in the case of the apple, there is always some seed that is fundamentally the same in every argument. There
-is a level where you cannot argue against the behavior of some functionality. Array sort <em>must</em> take some set of data
-and arrange it <em>some well-defined</em> way. How you sort the array, well.</p>
-
-<p>If we again consider the apple, we would have seeds and skins. To make the metaphor a bit more concrete: <em>Seeds</em> would be 
-strictly computation. This is code that
-is written for performance and behavior. Its interface is unchangeable and well-known. You cannot argue about
-the interface without making factual comparisons about performance or correctness. You must
-prove you are correct with a metric or test.</p>
-
-<p>Then you have the <em>skin</em>, or your abstraction layer. It is simply a language that maps expressions to the interface of the seed.
-Since the seeds are well-known, many competing skins can exist. Since the interface is strict, many seeds can exist as well.
-Both sides of the interface become interchangeable. And thus, bikeshedding becomes irrelevant to providing computation
-since anyone can implement
-a new skin without interfering with others.</p>
-
-<p>If competing technologies would standardize to an interface (create a seed), then we could use either or both depending
-on our needs without any effort. We could use the abstraction of one with the implementation of the other, in fact. I call
-this <em>sustainable design</em>.</p>
-<h2 id='sustainable_design'>Sustainable Design</h2>
-<p>To promote sustainable design, a software developer must consider the line drawn between expressing behavior and allowing
-human expression through abstraction. To transform existing projects, collaboration between competitors (odd concept, eh?)
-to define a seed is necessary. For instance, the back-ends for QT and GTK could be consolidated into a new project which implement
-the same interface (seed) and then QT and GTK become the abstractions (skins) around it. In this case you could say C and C++ are then the
-abstractions we choose. That&#39;s fine. In this world, the languages we choose are to better allow us to use existing code and get applications
-written. We do not inherit a policy or a set of standard libraries that may or may not work well.</p>
-
-<p></p><div class='image'><img src='/images/apples/apples_drawing.svg' title='' alt='Behaviors are what we care about in the end.' /><br /><div class='caption'>Behaviors are what we care about in the end.</div></div><p></p>
-
-<p>To provide such a design when writing new projects, write them as libraries with functions that are very specifically tied to behavior. This way, alternative
-implementations may exist. Use abstractions in a separate layer (create that skin with all the luster you want) that makes using the library cleaner. You benefit
-by allowing for better experimentation with new abstractions while isolating core behaviors. You also gain the audience of many languages.
-You also benefit from a much easier and more intuitive ability to refactor implementations while isolating them from their abstractions. To do this, simply
-reimplement the interface and link in the new code.</p>
-
-<p>If you are writing a library, determine if prior work exists and implement your library using that interface (make use of an existing seed.) You will gain quick
-adoption by being able to assert facts about performance gains over existing implementations, while also being able to be
-quickly used by existing programs that already make use of the other implementations. If you are writing an abstraction, you can leverage
-existing implementations and focus only on refining the language (implement for humans without hindering performance facts.) Existing programs may not easily adopt your new abstraction,
-but they do not need to in order to benefit from performance improvements. When you write abstractions, you are worried about new, that is non-existing, programs.</p>
-
-<p>Once we have such modularity in place, we can write an infrastructure that manages the code. It can do objective analysis on whatever
-benchmarks are deemed important and throw out code that doesn&#39;t perform and replace it with same random implementation that fares well.
-This system will push good implementations over the bad and can even collectively rate them among machines. Code can be verified as
-working before it is used to ensure bugs are limited. You as a developer may develop with one module, but in the future, without your
-awareness, a bug was caught, patched, and automatically retrieved to build your software. Fantastic.</p>
-
-<p>For an introduction to the language we need to describe behaviors, <a  href='/posts/infrastructure' title=''>read on</a>.</p>
-<h3 id='references'>References</h3><ol><a id='ref_1'></a><li>Corgi picture adorably used from <a  href='http://www.coloradocorgi.org' title=''>here</a>.
-</li><a id='ref_2'></a><li>Pictures shamelessly used from <a  href='http://www.foodsubs.com/Apples.html' title=''>here</a>.
-</li></ol>]]></content></entry><entry><title type="html">You want freedom? Build it.</title><link href="http://blog.davewilkinsonii.com/posts/you-want-freedom-build-it" rel="alternate" type="text/html"/><published>2012-08-12T00:00:00-04:00</published><updated>2012-08-12T00:00:00-04:00</updated><author><name>wilkie writes a thing</name></author><id>http://blog.davewilkinsonii.com/posts/you-want-freedom-build-it</id><summary>It is easy to build federated systems since the infrastructure exists. Therefore, if you do not trust a centralized system, then build a new system that the people can control. Github is a good example, but not the only choice.</summary><content type="html" xml:base="http://blog.davewilkinsonii.com/posts/you-want-freedom-build-it"><![CDATA[<p>There has been <a  href='http://bytbox.net/blog/2012/08/leaving-github.html' title=''>many</a> a <a  href='http://news.ycombinator.com/item?id=4220353' title=''>debate</a> about the recent, somehow surprising discovery that github is a company with <a  href='http://peter.a16z.com/2012/07/09/software-eats-software-development/' title=''>interests</a> that are perhaps beyond our own. Whatever. Honestly, github is replaceable. The real issue is the one we as developers, creatives, and people who like difficult problems should be talking about: WTF is a centralized website doing wrapping a distributed protocol?</p>
+]]></content></entry><entry><title type="html">You want freedom? Build it.</title><link href="http://blog.davewilkinsonii.com/posts/you-want-freedom-build-it" rel="alternate" type="text/html"/><published>2012-08-12T00:00:00+02:00</published><updated>2012-08-12T00:00:00+02:00</updated><author><name>wilkie writes a thing</name></author><id>http://blog.davewilkinsonii.com/posts/you-want-freedom-build-it</id><summary>It is easy to build federated systems since the infrastructure exists. Therefore, if you do not trust a centralized system, then build a new system that the people can control. Github is a good example, but not the only choice.</summary><content type="html" xml:base="http://blog.davewilkinsonii.com/posts/you-want-freedom-build-it"><![CDATA[<p>There has been <a  href='http://bytbox.net/blog/2012/08/leaving-github.html' title=''>many</a> a <a  href='http://news.ycombinator.com/item?id=4220353' title=''>debate</a> about the recent, somehow surprising discovery that github is a company with <a  href='http://peter.a16z.com/2012/07/09/software-eats-software-development/' title=''>interests</a> that are perhaps beyond our own. Whatever. Honestly, github is replaceable. The real issue is the one we as developers, creatives, and people who like difficult problems should be talking about: WTF is a centralized website doing wrapping a distributed protocol?</p>
 <h2 id='the_problem'>The Problem</h2>
 <p>I propose a simple, real-world problem: make code as available as possible and ensure that it is correct when retrieved and from the source you desire it. You may give up confidentiality and consistency since this is <a  href='http://en.wikipedia.org/wiki/Information_security' title=''>impos</a>-<a  href='http://en.wikipedia.org/wiki/CAP_theorem' title=''>sible</a> given our goal. Can you provide this with high probability that code cannot be destroyed permanently?</p>
 
@@ -1491,7 +1906,7 @@ awareness, a bug was caught, patched, and automatically retrieved to build your 
 <p>Determining that the origin of some information is who you think it is, and furthermore that one&#39;s attribution can be ensured through private keys and self-hosted identity (through something like <a  href='http://code.google.com/p/webfinger/' title=''>webfinger</a>, Blaine Cook reminds me that it is encouraged to <a  href='http://blog.romeda.org/2011/03/private-webhooks-private-feeds.html' title=''>separate authenticity</a> and I&#39;ll add it is important to be able to self-host and control one&#39;s identity).</p>
 
 <p>Put all of these in the same bowl. Mix. Enjoy.</p>
-]]></content></entry><entry><title type="html">Who Am I?</title><link href="http://blog.davewilkinsonii.com/posts/who-am-i" rel="alternate" type="text/html"/><published>2012-07-07T00:00:00-04:00</published><updated>2012-07-07T00:00:00-04:00</updated><author><name>wilkie writes a thing</name></author><id>http://blog.davewilkinsonii.com/posts/who-am-i</id><summary>I am an androgynous, pansexual, agender individual that survived a series of unknowns and violence called childhood. I didn't have it completely bad. I've crawled up using privilege and luck. I want to write code that benefits all of society and free computation. I need help to do so.</summary><content type="html" xml:base="http://blog.davewilkinsonii.com/posts/who-am-i"><![CDATA[<p>My life has not been perfect, prestine, or predictable. From youth to adulthood, I have not been what most would consider normal or everyday. I believe strongly in myself and I have spent a lot of effort meditating and reflecting upon my life. I generally understand where I come from.</p>
+]]></content></entry><entry><title type="html">Who Am I?</title><link href="http://blog.davewilkinsonii.com/posts/who-am-i" rel="alternate" type="text/html"/><published>2012-07-07T00:00:00+02:00</published><updated>2012-07-07T00:00:00+02:00</updated><author><name>wilkie writes a thing</name></author><id>http://blog.davewilkinsonii.com/posts/who-am-i</id><summary>I am an androgynous, pansexual, agender individual that survived a series of unknowns and violence called childhood. I didn't have it completely bad. I've crawled up using privilege and luck. I want to write code that benefits all of society and free computation. I need help to do so.</summary><content type="html" xml:base="http://blog.davewilkinsonii.com/posts/who-am-i"><![CDATA[<p>My life has not been perfect, prestine, or predictable. From youth to adulthood, I have not been what most would consider normal or everyday. I believe strongly in myself and I have spent a lot of effort meditating and reflecting upon my life. I generally understand where I come from.</p>
 
 <p>I am a hacker and computer scientist. I am considered quite a heretic from the experts in my field. My mentors and idols have luckily convinced me to follow my heart. However, I need the help of many, and that burden upon you requires trust. So, I&#39;d like to have a conversation about who I am and what motivates me.</p>
 <h2 id='my_father'>My Father</h2>
@@ -1505,7 +1920,8 @@ awareness, a bug was caught, patched, and automatically retrieved to build your 
 
 <p>I was introduced to code at around 6 years old with Basic, QBasic, and Visual Basic. It was a means of competition between me and my brother who is ten years older. Our competitions would consist of us writing a program called &quot;Change the Letters&quot; which demoed a technique that we had learned. The only rule was the program had to update the text in the title bar dynamically. We would go back and forth (incrementing the version number every time) trying to outdo the other. We wrote applications spanning from a simple calculator, to a simple renderer, to a word processor, to a media player. At some point, my brother asked me to code something for him. That&#39;s when I knew. I had won.</p>
 
-<p></p><div class='image'><img src='/images/who-am-i/qbasic.jpg' title='' alt='This doesn't call me names unless I tell it to.' /><br /><div class='caption'>This doesn't call me names unless I tell it to.</div></div><p></p>
+<p></p><div class='image'><img style='' src='/images/who-am-i/qbasic.jpg' title='' alt='This doesn't call me names unless I tell it to.' /><br /><div class='caption'><p>This doesn&#39;t call me names unless I tell it to.</p>
+</div></div><p></p>
 
 <p>Meanwhile, my father kept attempting to live his dream of starting a restaurant. He started a sandwich shop called the &quot;Dilly Delly&quot; (Yep. That&#39;s what it is called. I just can&#39;t make that stuff up, although my father apparently can.) It was in a terrible part of town: a poor residential area with no businesses around it. The venture turned out to be a complete failure. What did my father do? He turned it into a bar. Yep. My previously alcoholic father... owns a bar.</p>
 
@@ -1533,7 +1949,8 @@ awareness, a bug was caught, patched, and automatically retrieved to build your 
 
 <p>At home, it was no better. We had little money and sometimes food was hard to get. My mother went through one abusive relationship after another. I was assaulted there as well. In one case, one was brought up on domestic abuse charges and got 24 hours time served and 20 hours community service. I figured hitting my mother was worth more, but alas, that is not how the world works. But by a combination of going through garbage for recyclables and sharing meals with friends, I made it through ok.</p>
 
-<p></p><div class='image'><img src='/images/who-am-i/sailboats.jpg' title='' alt='An optimistic artist's rendition of the Bay that spat out Madonna' /><br /><div class='caption'>An optimistic artist's rendition of the Bay that spat out Madonna</div></div><p></p>
+<p></p><div class='image'><img style='' src='/images/who-am-i/sailboats.jpg' title='' alt='An optimistic artist's rendition of the Bay that spat out Madonna' /><br /><div class='caption'><p>An optimistic artist&#39;s rendition of the Bay that spat out Madonna</p>
+</div></div><p></p>
 
 <p>It was not long until we were being threatened by her first boyfriend that my mother and I had to move to Bay City out of fear. I slept with a knife under my pillow. I moved to yet another school. I decided to be popular instead of a pincushion and sat at the popular table. I cracked a few jokes and quickly realized how fake the world really is. It all felt wrong. I was not at all comfortable. I moved back to Johnstown for high school, but ultimately I didn&#39;t feel comfortable until college. This seems to be rather typical.</p>
 <h2 id='why_i_code'>Why I Code</h2>
@@ -1547,7 +1964,7 @@ awareness, a bug was caught, patched, and automatically retrieved to build your 
 <p>I write code because I am aware of adversity and the lack of diversity. Understand that I had it good. I really did. I believe that by utilizing code, and with the immense help of others, we can curb any societal disadvantages. We can, for instance, free information such that education is available at little cost to all of the world. We can build what I call sustainable operating systems where computation is provided to all without the need for centralized maintenance. I will later attempt to describe how these systems work from the perspective of my specialization: software systems.</p>
 
 <p>That&#39;s where each and every one of you come in. Obviously, I can&#39;t build these myself. All of your skills, regardless of ability, regardless of who you are or what people say of you, regardless of who I am and what I can do, can aid in the creation of a world where technology allows an evolution of society. Where my expertise fails, somebody else must contribute. I cannot build these within the bounds of the institutions, academic or otherwise, that exist. These aren&#39;t products; they are environments that provide technology as a healthy lifestyle. So, I will devote all of my energy to defining these systems and implementing them on my own if necessary. I will devote my time to this because I feel I must. I hope you will help me.</p>
-]]></content></entry><entry><title type="html">tmux Configuration for Great Good</title><link href="http://blog.davewilkinsonii.com/posts/tmux-configuration-for-great-good" rel="alternate" type="text/html"/><published>2012-02-06T00:00:00-05:00</published><updated>2012-02-06T00:00:00-05:00</updated><author><name>wilkie writes a thing</name></author><id>http://blog.davewilkinsonii.com/posts/tmux-configuration-for-great-good</id><summary>tmux is a great tool for productivity in the terminal. Since you are going to use it extensively, then you should customize it to work better for *you*. Here are some very common configurations you should have as defaults.</summary><content type="html" xml:base="http://blog.davewilkinsonii.com/posts/tmux-configuration-for-great-good"><![CDATA[<p>The tmux (terminal multiplexor) tool is a great way to manage the hellspawn of
+]]></content></entry><entry><title type="html">tmux Configuration for Great Good</title><link href="http://blog.davewilkinsonii.com/posts/tmux-configuration-for-great-good" rel="alternate" type="text/html"/><published>2012-02-06T00:00:00+01:00</published><updated>2012-02-06T00:00:00+01:00</updated><author><name>wilkie writes a thing</name></author><id>http://blog.davewilkinsonii.com/posts/tmux-configuration-for-great-good</id><summary>tmux is a great tool for productivity in the terminal. Since you are going to use it extensively, then you should customize it to work better for *you*. Here are some very common configurations you should have as defaults.</summary><content type="html" xml:base="http://blog.davewilkinsonii.com/posts/tmux-configuration-for-great-good"><![CDATA[<p>The tmux (terminal multiplexor) tool is a great way to manage the hellspawn of
 computational evolution and TERMINFO hurdling that is the <em>modern</em> terminal. If
 you spawn multiple terminals, or even multiple terminal tabs, to manage your
 terminal space... stop that immediately.</p>
@@ -1561,7 +1978,7 @@ export to our bashrc. Put this line at the end:</p>
 </code></pre>
 <p>Alternatively, (if you don&#39;t want to do that for some reason) we can just alias the tmux command
 to set that variable only for tmux:</p>
-<pre><code class='lang-'>alias tmux='TERM=xterm-256color tmux'
+<pre><code class='lang-'>alias tmux=&#39;TERM=xterm-256color tmux&#39;
 </code></pre>
 <p>Now, to support 256 colors <strong>within</strong> tmux, we add the following line to the end
 of our bashrc:</p>
@@ -1577,7 +1994,8 @@ home folder. Create one if it doesn&#39;t exist.</p>
 set  -g mouse-select-pane on # Mouse can select the current pane
 </code></pre><h3 id='vi_style_commands'>Vi-Style Commands</h3><pre><code class='lang-'>setw -g mode-keys vi         # vi-style commands in copy-mode
 </code></pre><h3 id='ui_color_scheme'>UI Color Scheme</h3>
-<p></p><div class='image'><img src='/images/tmux-configuration-for-great-good/256-color-palette.png' title='' alt='256-color terminal palette' /><br /><div class='caption'>256-color terminal palette</div></div><p></p>
+<p></p><div class='image'><img style='' src='/images/tmux-configuration-for-great-good/256-color-palette.png' title='' alt='256-color terminal palette' /><br /><div class='caption'><p>256-color terminal palette</p>
+</div></div><p></p>
 
 <p>While refering to the palette above, set each of these
 values to something you find appealing but not distracting. Here
@@ -1605,7 +2023,7 @@ set-window-option -g pane-active-border-fg colour70
 <pre><code class='lang-'>tmux attach
 </code></pre>
 <p>And you&#39;re all set.</p>
-]]></content></entry><entry><title type="html">Traditional Mistakes in C Programming</title><link href="http://blog.davewilkinsonii.com/posts/traditional-mistakes-in-c-programming" rel="alternate" type="text/html"/><published>2012-01-16T00:00:00-05:00</published><updated>2012-01-16T00:00:00-05:00</updated><author><name>wilkie writes a thing</name></author><id>http://blog.davewilkinsonii.com/posts/traditional-mistakes-in-c-programming</id><summary>C is a tricky language. For beginners, it can be daunting. It is, however, a very very simple language at its core. Once you commit yourself to avoiding certain fallacies or style mishaps, you can very easily write good C that both humans and machines understand.</summary><content type="html" xml:base="http://blog.davewilkinsonii.com/posts/traditional-mistakes-in-c-programming"><![CDATA[<p>When you approach a procedural language from an object-oriented, (mostly) type-safe language such as Java, there are certain concepts that do not make the best translation. Of course, the main topic is that of pointers. Frankly, the memory model being exposed to you, unlike the memory abstractions of Java, is a daunting thing at first. It does not have to be!</p>
+]]></content></entry><entry><title type="html">Traditional Mistakes in C Programming</title><link href="http://blog.davewilkinsonii.com/posts/traditional-mistakes-in-c-programming" rel="alternate" type="text/html"/><published>2012-01-16T00:00:00+01:00</published><updated>2012-01-16T00:00:00+01:00</updated><author><name>wilkie writes a thing</name></author><id>http://blog.davewilkinsonii.com/posts/traditional-mistakes-in-c-programming</id><summary>C is a tricky language. For beginners, it can be daunting. It is, however, a very very simple language at its core. Once you commit yourself to avoiding certain fallacies or style mishaps, you can very easily write good C that both humans and machines understand.</summary><content type="html" xml:base="http://blog.davewilkinsonii.com/posts/traditional-mistakes-in-c-programming"><![CDATA[<p>When you approach a procedural language from an object-oriented, (mostly) type-safe language such as Java, there are certain concepts that do not make the best translation. Of course, the main topic is that of pointers. Frankly, the memory model being exposed to you, unlike the memory abstractions of Java, is a daunting thing at first. It does not have to be!</p>
 <h2 id='pointers_in_java'>Pointers in Java</h2>
 <p>In Java, we have pointers. In the Java world, they are called references. However, they come with rules that stem from their role as referrers for <em>objects</em>. Since there exists a relationship among objects, the compiler can enforce rules that govern how such a pointer may be used or dereferenced. For instance, you cannot (typically) use a Scanner reference as though it were a FileReader reference. Such a thing would be disastrous as much as it is useless! If there is an is-a relationship created via inheritance, then such a pointer cast is possible. A BufferedFileReader can be used as a FileReader, for instance.</p>
 <h2 id='breaking_the_rules'>Breaking the Rules</h2>
@@ -1634,12 +2052,12 @@ strcpy(str, &quot;Hello World&quot;);
 
 <p>The strcpy function, much like any function that expects some data or a place to put data, expects that the pointer it receives actually refers to a buffer large enough to do the job at hand. It <strong>cannot</strong> allocate anything for you the way it stands. Why? Well, look at the strcpy function:</p>
 <pre><code class='lang-c'>char* strcpy(char *dest, const char *source) {
-  while(*source != '\0') {
+  while(*source != &#39;\0&#39;) {
     *dest = *source;
     source++;
     dest++;
   }
-  *dest = '\0';
+  *dest = &#39;\0&#39;;
   return dest;
 }
 </code></pre>
@@ -1674,7 +2092,7 @@ void* my_bestfit_malloc(size_t amount) {
 </code></pre>
 <p>No no no no no! :) Here, the code has done a <strong>deep copy</strong> of the data in the data structure. This is good when you want to copy the data and preserve it before destroying the data in the global data structure. However, if you mutate the data in the copy, it will obviously not persist in the real thing. In this case, the highlighted line (best.free = 0;) will update the local copy and set it to allocated. The data structure itself will not see that. It might allocate this space again, which is pretty terrible!</p>
 
-<p>What you want here is a <strong>shallow copy</strong> of the data. That is, don&#39;t copy the data... copy the value that indicates where the data lives. Which, of course, is a pointer. Always refer to the data via indirection so that when you mutate it, it updates both the copy you are reading and the global data structure at the same time. There is no excuse for this mistake. If you are doing this to avoid the -> syntax, I empathize, but that notation is common and should be used.</p>
+<p>What you want here is a <strong>shallow copy</strong> of the data. That is, don&#39;t copy the data... copy the value that indicates where the data lives. Which, of course, is a pointer. Always refer to the data via indirection so that when you mutate it, it updates both the copy you are reading and the global data structure at the same time. There is no excuse for this mistake. If you are doing this to avoid the -&gt; syntax, I empathize, but that notation is common and should be used.</p>
 <h2 id='mistake__3___pointer_arithmetic'>Mistake #3 - Pointer Arithmetic</h2>
 <p>Ok. Pointer math is weird. Enough said.</p>
 
