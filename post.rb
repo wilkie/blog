@@ -112,15 +112,20 @@ class Post
 
       classes = "image"
 
+      style = ""
+
       if options
         options.split('|').each do |option|
-          case option
+          key, value = option.split('=', 2)
+          case key
           when "border"
             classes << " border"
           when "right"
             classes << " right"
           when "left"
             classes << " left"
+          when "width"
+            style = "width: #{value};"
           end
         end
       end
@@ -130,12 +135,12 @@ class Post
       caption = Redcarpet::Markdown.new(self.class.new(@slug)).render(caption)
       alt_text = Nokogiri::HTML(alt_text).xpath("//text()").remove
 
-      img_source = "<img src='#{link}' title='#{title}' alt='#{alt_text}' />"
+      img_source = "<img style='#{style}' src='#{link}' title='#{title}' alt='#{alt_text}' />"
 
       if link.match "http[s]?://(www.)?youtube.com"
         # embed the youtube link
         youtube_hash = link.match("youtube.com/.*=(.*)$")[1]
-        img_source = "<div class='yt'><div class='yt_fixture'><img src='/images/yt_placeholder.png' /><iframe class='yt_frame' src='http://www.youtube.com/embed/#{youtube_hash}'></iframe></div></div>"
+        img_source = "<div class='yt'><div class='yt_fixture'><img style='#{style}' src='/images/yt_placeholder.png' /><iframe class='yt_frame' src='http://www.youtube.com/embed/#{youtube_hash}'></iframe></div></div>"
       end
 
       caption = "<br /><div class='caption'>#{caption}</div>" unless caption == ""

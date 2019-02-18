@@ -75,6 +75,7 @@ body, html {
   font-weight: 300;
 	color: rgb(73, 76, 230);
 	color: rgb(118, 118, 228);
+  color: rgb(78, 78, 158);
 	font-size: 18px;
 	margin-bottom: 13px;
   margin-left: 21px;
@@ -132,6 +133,10 @@ body, html {
 	line-height: 1.3em;
 }
 
+p.justify ~ p {
+  text-align: justify;
+}
+
 @media (max-width: 450px) {
   .post p {
     text-align: justify;
@@ -176,6 +181,10 @@ body, html {
 }
 
 .post strong {
+	font-weight: 600;
+}
+
+.post strong em {
 	font-weight: 600;
 }
 
@@ -371,11 +380,12 @@ body, html {
 .post .image.left {
   float:left;
   margin-right: 25px;
+  margin-left: 10px;
 }
 
 .post .image > img, .post .image > div {
 	padding: 7px;
-  max-width: 100%;
+  max-width: calc(100% - 20px);
   margin: 0 auto;
 }
 
