@@ -18,32 +18,32 @@ Now, that community has a grievance and a dastardly dilemma: how to prevent furt
 
 ## Code of Ethics
 
-Following the discourse, a strong consensus is forming around a particular solution.
-To start, much of the open-source community is built around the ideals of sharing the burden: I give you my code, you improve it, you share that with everybody all the same.
-This axiom defines the spirit of this community and it is represented, legally, in the form of several compatible copyright licenses, the most significant arguably being the [GPL](https://www.gnu.org/licenses/gpl-3.0.en.html), which is the software license Linux and its GNU commands use.
+It seems a weak consensus is forming around a particular solution.
+To start, much of the open-source community is built around ideals of sharing burden: I give you my code, you improve it, you share that with everybody all the same.
+This axiom defines the community spirit and represented, legally, in the form of several copyright licenses, the most significant arguably being the [GPL](https://www.gnu.org/licenses/gpl-3.0.en.html), which is the license Linux and its GNU commands use.
 
 I mention this specifically because the ideals and mechanism are so well-established: share and share-alike, and the copyright license respectively.
-The  solution, then, is to do the same, but imbue another set of ideals: ethics/morality.
-The community simply creates a software license that has an added set of constraints, much like the existing "you must share changes," stating something like, "you must do no harm."
+The  solution, so far, is to do the same, but imbue another set of ideals: ethics/morality.
+The community simply creates a software license with additional constraints, much like the existing "you must share changes," except something like, "you must do no harm."
 A type of hippocratic-inspired contract between coder and user.
-Although there have been historical examples, the modern attempts include the [Do No Harm License](https://github.com/raisely/NoHarm), which excludes profiting from violence and environmental destruction, and the aptly-named [Hippocratic License](https://firstdonoharm.dev/), which directly references the UN definition of human rights.
+Beyond historical examples, modern attempts include the [Do No Harm License](https://github.com/raisely/NoHarm), which excludes profiting from violence and environmental destruction, and the aptly-named [Hippocratic License](https://firstdonoharm.dev/), which directly references the UN definition of human rights.
 
 ![The logo for the hippocratic license, one example of a modification to an open-source license to add ethical usage requirements.](hippocratic.png)
 
-However, there are a few reasons why "share" and "do no harm" are not quite the same ideas and somewhat strange when included as a copyright provision.
+However, there are a few reasons why "share" and "do no harm" are not quite the same ideas and strange when included as a copyright provision.
 Copyright licensing is generally bound to the act of distribution.
 If you hoard your changes and never share them, that's technically allowed.
-That's generally a good thing. If you needed to patch something for your own personal use, it would be quite restrictive (and possibly personally sensitive) to then have to publish a description of your change.
-Although the GPL upholds the ideal of "you are always allowed to modify and run," it does so by the same act of distribution. That is, by always forcing code to be available, any usage is also valid.
+That's a good thing. If you needed to patch something for your own personal use, it would be restrictive (and possibly personally sensitive) to have to publish a description of that change.
+Although the GPL upholds the ideal of "you are always allowed to modify and run," it does so by the same act of distribution. That is, by always forcing code to be available, any usage is also held valid.
 
 Now, I'm not a lawyer. My student loans are high enough already. But, I work in archival (it has lots of [ethical software issues](social-archival), too) and I'm absolutely terrified of copyright.
-Copyright is hard to leverage.
-More to the point, it has been, historically, very difficult to enforce some implied usage agreement via copyright.
+Copyright is hard to leverage and harder to comprehend.
+More to the point, it has been, historically, very difficult to enforce implied usage via copyright.
 The case that comes to mind is the [PC-MOS v. Arizona Retail Systems](https://cyber.harvard.edu/property00/alternatives/arizona.html) where shrink-wrap agreements seemed to not be binding.
 
 Another is some thankfully good court opinions with respect to interpreting reverse-engineering (something licenses attempt to enforce in terms of usage).
 The courts ruled that reverse-engineering can be fair-use such as with the famous [Sega v. Accolade](https://www.copyright.gov/fair-use/summaries/segaenters-accolade-9thcir1992.pdf) with other courts setting the bounds to exclude, naturally, [cases where that effort is redistributed](https://www.hklaw.com/en/insights/publications/2018/01/reverse-engineering-source-code-of-software-is-not).
-In these cases, distribution (and intent) is key. All other usage governed by copyright could be strongly argued as fair-use.
+In these cases, distribution (and intent) is key. All other usage governed by copyright could be vaguely argued as fair-use. And then, who knows if that is right?
 Every other rule would be expected to be clarified in a contractual agreement, which a distributed software license would not be... [kinda...](https://www.theregister.co.uk/2017/05/13/gnu_gpl_enforceable_contract/) it's complicated.
 
 ## Can Ethical Enforcement Encourage Ethical Use?
@@ -65,12 +65,13 @@ You are placing all of the burden of appropriately using the code on the next de
 
 Code that actively hurts people written by an unaware developer could certainly have such an ethical license.
 Code with the license could be used by a developer that makes something unintentionally damaging.
+These are not a single person's fault, but are more avoidable if more than one person were involved in development.
 
 To be fair, the licenses linked above only trigger on "knowing" ethical abuses clearly targetting corporate and government misuse.
 Furthermore, it is classically difficult to separate ethics, morality, and harm from context, and I certainly won't attempt that here.
 Yet, there are victims that could still be better served by providing them better software that protects them from such harm in the first place.
-Along with that statement of intent on how the software is to be used, we have to provide guidance and more strongly define such potential harm.
-Otherwise, we have created an excuse. Something small that is not actually actionable, but makes a developer feel like they have contributed to the safety of others.
+Along with that statement of intent on how the software is to be used (do no harm!), we have to provide guidance and more strongly define potential harm.
+Otherwise, we have created an excuse. Something small that is not actually actionable, but makes a developer falsely feel like they have contributed to the safety of others.
 
 ## We Need an Ethical Professional Organization
 
@@ -79,13 +80,13 @@ We need an ethical profession, not just a copy-and-paste statement of intent.
 We need to reörient our community so our best effort is facing forward.
 And be constantly held to that ever-self-reflective standard.
 
-The community has an existing set of ideals which are well-established and well-understood.
+The community has an existing set of ideals which are well-established and well-understood: shift control of technology from tech leaders to everyday people.
 As argued by others, we no longer need to organize solely around software freedom, and can and should push the domain of freedom further.
 This new organization, replacing the role the [FSF](https://www.fsf.org) had in promoting software freedom, will uphold software ethics.
-It will continue to uphold traditional software freedoms as greater access to ethical software is a valuable goal.
+It will continue to uphold traditional software freedoms as greater access to ethical software is still a valuable and complementary goal.
 
 With modern technology companies and products always quick to ignore certain parts of the population, we need to create this organization with the most diverse and motivated leadership.
-To build off of the established labor of the free-software movement, the community should reclaim its collective ownership of that software.
+To build off of the established labor of the free-software movement, the community must reassert its claim to collective ownership of that software.
 One benefit, here, is that open-source software that would otherwise not apply an ethical license (due to stubbornness, conservatism, or its owner is, well, dead... it happens) can still be part of a new whole due to it already being unburdened by the existing GPL.
 The community can then make use of the current work defining software ethics and reappropriate that to the task of software guidance and review in order to curate this existing body of work into a catalog of ethical software.
 
@@ -112,6 +113,8 @@ Furthermore and perhaps controversally, while companies lose access to developer
 This will work well in an organization that can help relocate a worker from one company to another.
 Companies have a vested interest in supporting a community that performs maintenance labor on collectively useful software and will be expected, beyond its ethical duties, to fund its ongoing operating costs in order to be held in good standing.
 
+Do you want to be the tech company that does not have the approval of the tech collective that assesses tech ethics?
+We need to create this anxiety in order to alleviate our own.
 
 ## In Summary
 
