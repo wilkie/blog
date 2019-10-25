@@ -115,8 +115,8 @@ Companies have a vested interest in supporting a community that performs mainten
 
 ## In Summary
 
-Have I invented a union?
-Yes.
+Have I done the tech thing and reinvented something obvious?
+Yes. I reinvented a type of worker collective or union.
 I dream big. It's what I want.
 I'm turning this big ship around and pointing the blame right back at us, where it should be... where it can be acted upon.
 I want to use the catalog of open source software toward collective action, while improving the body of software to care about the people dependent on it.
