@@ -110,6 +110,9 @@ class Post
 
       alt_text.gsub!(/^.*\|/, "")
 
+      caption = ""
+      caption = alt_text unless alt_text.start_with? "!"
+
       classes = "image"
 
       style = ""
@@ -126,21 +129,23 @@ class Post
             classes << " left"
           when "width"
             style = "width: #{value};"
+          when "alt"
+            alt_text = value
           end
         end
       end
 
-      caption = ""
-      caption = alt_text unless alt_text.start_with? "!"
       caption = Redcarpet::Markdown.new(self.class.new(@slug)).render(caption)
-      alt_text = Nokogiri::HTML(alt_text).xpath("//text()").remove
+      alt_text = alt_text || caption
+      alt_text = Nokogiri::HTML(alt_text).xpath("//text()").remove.to_s
+      alt_text = CGI.escapeHTML(alt_text)
 
       img_source = "<img style='#{style}' src='#{link}' title='#{title}' alt='#{alt_text}' />"
 
       if link.match "http[s]?://(www.)?youtube.com"
         # embed the youtube link
         youtube_hash = link.match("youtube.com/.*=(.*)$")[1]
-        img_source = "<div class='yt'><div class='yt_fixture'><img style='#{style}' src='/images/yt_placeholder.png' /><iframe class='yt_frame' src='http://www.youtube.com/embed/#{youtube_hash}'></iframe></div></div>"
+        img_source = "<div class='yt'><div class='yt_fixture'><img style='#{style}' src='/images/yt_placeholder.png' /><iframe class='yt_frame' src='https://www.youtube.com/embed/#{youtube_hash}'></iframe></div></div>"
       end
 
       caption = "<br /><div class='caption'>#{caption}</div>" unless caption == ""

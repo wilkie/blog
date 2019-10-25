@@ -48,6 +48,9 @@ body, html {
 
 .post a {
 	color: #d6d;
+	font-weight: 600;
+  font-family: "Open Sans", sans-serif;
+  font-size: 13.5pt;
 }
 
 .post a:visited {
@@ -100,7 +103,7 @@ body, html {
 
 .post h2.subtitle {
 	font-family: 'Marcellus SC', 'Cinzel', serif;
-	color: rgb(61, 61, 125);
+	color: rgb(136, 105, 136);
   text-align: center;
   font-size: 30px;
   background-color: #e8d2e8;
@@ -115,7 +118,7 @@ body, html {
 
 .post h2, .post h2 a, .post h2 a:visited {
 	color: rgb(88, 90, 209);
-	color: rgb(118, 118, 228); //rgb(72, 74, 171);
+	color: rgb(118, 118, 228);
   color: rgb(34, 153, 170);
 }
 
@@ -126,7 +129,7 @@ body, html {
 
   color: rgb(70,70,70);
 
-	font-size: 14pt;
+	font-size: 16pt;
 	font-family: "Lato", sans-serif;
   font-weight: 400;
 
@@ -141,6 +144,11 @@ p.justify ~ p {
   .post p {
     text-align: justify;
   }
+
+  .post .caption p {
+    text-align: center;
+  }
+
   .post ul *, .post li * {
     text-align: left;
   }
@@ -174,14 +182,16 @@ p.justify ~ p {
 
 .post em {
 	font-style: italic;
-	color: rgb(78, 78, 158);
+	color: rgb(54, 54, 54);
   font-family: 'Open Sans', 'Philosopher', serif;
   font-weight: 400;
-  font-size: 90%;
+  font-size: 13.5pt;
 }
 
 .post strong {
 	font-weight: 600;
+  font-family: "Open Sans", sans-serif;
+  font-size: 13.5pt;
 }
 
 .post strong em {
@@ -207,7 +217,7 @@ p.justify ~ p {
 }
 
 .post p code {
-	font-size: 14px;
+	font-size: 16px;
   line-height: 18px;
   display: inline-block;
 	font-family: 'Inconsolata', monospace;
@@ -315,9 +325,10 @@ p.justify ~ p {
 	z-index: 1;
 }
 
+.post .citation a,
 .post .citation {
 	line-height: 1em;
-	font-size: 12px;
+	font-size: 14px;
 	font-family: 'Metrophobic';
 	font-style: italic;
 	color: #888;
@@ -395,7 +406,8 @@ p.justify ~ p {
 }
 
 .post .image .caption,
-.post .image .caption p {
+.post .image .caption p,
+.post .image .caption p a {
 	font-family: 'Judson', sans-serif;
   font-size: 13px;
   line-height: 1.3em;
@@ -425,7 +437,7 @@ p.justify ~ p {
 }
 
 .post p.footer ~ * {
-	background-color: #352c35;
+	background-color: #312131;
   margin: 0;
   padding-left: 20px;
   padding-right: 20px;
@@ -440,7 +452,7 @@ p.justify ~ p {
 .image > .yt {
   position: relative;
   width: 100%;
-  max-width: 420px;
+  max-width: 520px;
   margin: 0 auto;
 }
 
@@ -448,12 +460,12 @@ p.justify ~ p {
   position: relative;
   width: 100%;
   margin: 0 auto;
-  max-width: 420px;
+  max-width: 520px;
 }
 
 .image > .yt > .yt_fixture > img {
   width: 100%;
-  max-width: 420px;
+  max-width: 520px;
 }
 
 .image > .yt > .yt_fixture > .yt_frame {
@@ -462,7 +474,7 @@ p.justify ~ p {
   left: 0px;
   width: 100%;
   height: 100%;
-  max-width: 420px;
+  max-width: 520px;
 }
 
 .post {

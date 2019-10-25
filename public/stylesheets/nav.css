@@ -1,7 +1,7 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600|Lato:300|Philosopher|Source+Sans+Pro|News+Cycle:400|Marcellus|Marcellus+SC|Cinzel:700|Forum|Archivo+Narrow|Inconsolata|Metrophobic|Judson:400');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600|Lato:300,600,800,1000|Philosopher|Source+Sans+Pro|News+Cycle:400|Marcellus|Marcellus+SC|Cinzel:700|Forum|Archivo+Narrow|Inconsolata|Metrophobic|Judson:400');
 
 .container {
-	background-color: #443044;
+	background-color: #482c48;
   border-right: 1px solid #4e3d4e;
   border-left: 1px solid #5a405a;
 }
@@ -23,7 +23,7 @@ nav .hidden {
   margin-right:auto;
   padding-left: 9px;
   padding-bottom: 15px;
-	background-color: #443044;
+	background-color: #482c48;
   #5a405a;
 }
 

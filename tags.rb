@@ -26,12 +26,16 @@ class Tags
     parent = "/"
     hierarchy.each do |tag|
       filename = "tags#{parent}#{tag}.md"
-      parent << tag + "/"
       begin
-        ret << markdown.render(File.read(filename))
+        preamble = ""
+        if parent != "/"
+          preamble = "**#{tag}**: "
+        end
+        ret << markdown.render(preamble + File.read(filename))
       rescue
         nil
       end
+      parent << tag + "/"
     end
     ret
   end
