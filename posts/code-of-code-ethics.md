@@ -12,7 +12,7 @@ How do we stop this evil?
 And, to be frank, it is evil. An evil that has existed for quite some time, but never with this type of attention.
 The internet, in spite of its faults, has a potent ability to shine a bright light on blight.
 
-Within the tech space, under that illumination, we found a shadow feebly hiding an unsurprising collaboration between government agencies, such as ICE, and technology giants, such as Microsoft, Google, and Amazon.
+Within the tech space, under that illumination, we found a shadow feebly hiding an unsurprising collaboration between government agencies, such as ICE, and technology giants, such as [Microsoft](https://www.nytimes.com/2018/07/26/technology/microsoft-ice-immigration.html), [Google](https://www.theverge.com/2019/8/29/20838201/google-cloud-immigration-uscis-protests), and Microsoft's new problematic child, [GitHub](https://www.washingtonpost.com/technology/2019/10/09/employees-ask-github-cancel-ice-contract-we-cannot-offset-human-lives-with-money/).
 The tech world, including these companies and their products, has greatly benefited from decades of community labor in the form of free and open-source software.
 Now, that community has a grievance and a dastardly dilemma: how to prevent further misappropriation of that labor without hurting the community it originally meant to bolster?
 
