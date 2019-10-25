@@ -6,7 +6,7 @@ Bundler.require
 require_relative 'blog'
 require_relative 'post'
 
-DOMAIN = "http://blog.davewilkinsonii.com"
+DOMAIN = "https://wilkie.how"
 
 posts = []
 
