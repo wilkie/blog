@@ -23,7 +23,7 @@ To start, much of the open-source community is built around the ideals of sharin
 This axiom defines the spirit of this community and it is represented, legally, in the form of several compatible copyright licenses, the most significant arguably being the [GPL](https://www.gnu.org/licenses/gpl-3.0.en.html), which is the software license Linux and its GNU commands use.
 
 I mention this specifically because the ideals and mechanism are so well-established: share and share-alike, and the copyright license respectively.
-The  solution, then, is to do the same, but imbue another set of ideals: ethics or morality.
+The  solution, then, is to do the same, but imbue another set of ideals: ethics/morality.
 The community simply creates a software license that has an added set of constraints, much like the existing "you must share changes," stating something like, "you must do no harm."
 A type of hippocratic-inspired contract between coder and user.
 Although there have been historical examples, the modern attempts include the [Do No Harm License](https://github.com/raisely/NoHarm), which excludes profiting from violence and environmental destruction, and the aptly-named [Hippocratic License](https://firstdonoharm.dev/), which directly references the UN definition of human rights.
