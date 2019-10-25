@@ -36,7 +36,7 @@ If you hoard your changes and never share them, that's technically allowed.
 That's generally a good thing. If you needed to patch something for your own personal use, it would be quite restrictive (and possibly personally sensitive) to then have to publish a description of your change.
 Although the GPL upholds the ideal of "you are always allowed to modify and run," it does so by the same act of distribution. That is, by always forcing code to be available, any usage is also valid.
 
-Now, I'm not a lawyer. My student loans are high enough already. But, I work in archival and I'm absolutely terrified of copyright.
+Now, I'm not a lawyer. My student loans are high enough already. But, I work in archival (it has lots of [ethical software issues](social-archival), too) and I'm absolutely terrified of copyright.
 Copyright is hard to leverage.
 More to the point, it has been, historically, very difficult to enforce some implied usage agreement via copyright.
 The case that comes to mind is the [PC-MOS v. Arizona Retail Systems](https://cyber.harvard.edu/property00/alternatives/arizona.html) where shrink-wrap agreements seemed to not be binding.
@@ -49,7 +49,7 @@ Every other rule would be expected to be clarified in a contractual agreement, w
 ## Can Ethical Enforcement Encourage Ethical Use?
 
 Yet, some dismiss enforcement as a concern.
-Chris Jensen, co-creator of the Do No Harm License, writes in [6 Myths about Ethical Open Source Licenses](https://hackernoon.com/6-myths-about-ethical-open-source-licenses-3bfbd042b1dc) that "Enforcement isn't the point." They write, 
+Chris Jensen, co-creator of the Do No Harm License, writes in [6 Myths about Ethical Open Source Licenses](https://hackernoon.com/6-myths-about-ethical-open-source-licenses-3bfbd042b1dc) that "Enforcement isn't the point." They continue, 
 
 > The GPL wasn't written so that developers could haul big companies to court for misusing open source code. Yes, it's legally specific in it's construction and possible to enforce, but that wasn't the purpose the authors had in mind for it. They created the GPL to spread an idea-- the idea that software and it's source should be freely shared.
 
