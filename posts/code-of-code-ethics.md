@@ -1,6 +1,6 @@
 ---
 title: Code of Code Ethics
-subtitle: When Good Code Goes Bad
+subtitle: The Only Thing That Can Stop Bad Code is Good Code
 summary: There is much discourse on software for good and how to enforce the ethical consumption of open code. We need a diverse professional ethics organization. We need it desparately. We need it more than a feel-good do-good-license.
 tags: ["programming", "programming/ethics"]
 date: 2019-10-25
