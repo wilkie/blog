@@ -93,10 +93,16 @@ The community can then make use of the current work defining software ethics and
 
 The professional organization will take new software projects under their wing if and only if they uphold such a review.
 Specifically, software can be assessed by a diverse group for the attention it places toward the safety and security of its patrons.
-Social media applications can be reviewed for their moderation features, for instance, such that they are less likely to be used and operated in a way that makes less technical and/or younger users vulnerable.
 Reviews will give feedback on development changes which, through iteration, strengthens software toward the goal of being more accessible and safe.
 Developers that are part of the organization can then help maintain and patch software in support of the established ethics and to support the community's most vulnerable and to train junior members.
 Inclusion of software into the professional domain, then, strongly implies that software has been appropriately designed for ethical use.
+
+Let's pull out a perhaps prescient example.
+Social media applications can be reviewed for their moderation features such that they are less likely to be used and operated in a way that makes less technical and/or younger users vulnerable.
+Does your social media software focus too much on solving the technical challenge of scaling to millions of users?
+Where are your moderation tools?
+Ah, well, just because the software **can** scale does not mean you or any person can reasonably support the moderation of those potential millions of users.
+The guidance could be, then, to constrain the design to build social media software that emphasizes building smaller communities and scaling softly and carefully.
 
 As the catalog of software grows, so does the possible leverage the organization can apply to misappropriating entities.
 When a tech giant uses software for an evil purpose, the community has a vehicle for not only voicing those concerns, but disrupting that activity.
