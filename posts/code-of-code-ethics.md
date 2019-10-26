@@ -44,7 +44,7 @@ The case that comes to mind is the [PC-MOS v. Arizona Retail Systems](https://cy
 Another is some thankfully good court opinions with respect to interpreting reverse-engineering (something licenses attempt to enforce in terms of usage).
 The courts ruled that reverse-engineering can be fair-use such as with the famous [Sega v. Accolade](https://www.copyright.gov/fair-use/summaries/segaenters-accolade-9thcir1992.pdf) with other courts setting the bounds to exclude, naturally, [cases where that effort is redistributed](https://www.hklaw.com/en/insights/publications/2018/01/reverse-engineering-source-code-of-software-is-not).
 In these cases, distribution (and intent) is key. All other usage governed by copyright could be vaguely argued as fair-use. And then, who knows if that is right?
-Every other rule would be expected to be clarified in a contractual agreement, which a distributed software license would not be... [kinda...](https://www.theregister.co.uk/2017/05/13/gnu_gpl_enforceable_contract/) it's complicated.
+Every other rule would be expected to be clarified in a contractual agreement, which a distributed software license would not be... [kinda...](https://www.theregister.co.uk/2017/05/13/gnu_gpl_enforceable_contract/) it's complicated. (Note: For a very good and thorough discussion about the free/open source software community's powerful use of copyright and the difficulties inherent to "ethical licensing," see Christie Koehler's [Open Source Licenses and the Ethical Use of Software](https://subfictional.com/open-source-licenses-and-the-ethical-use-of-software/).)
 
 ## Can Ethical Enforcement Encourage Ethical Use?
 
