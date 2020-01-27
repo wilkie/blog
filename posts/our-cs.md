@@ -41,7 +41,7 @@ For my part, I (along with Daniel Mosse, Chair of Computer Science at U. Pitt) l
 
 Therefore, the first two parts of the workshop were about distributed systems in general. We discussed the role and motivation of distributed systems over centralized ones and gave an example of each. Afterward, I posed a real-world example of a system that could be implemented either way (bus card scanners for public transportation) and the students were quick to apply their newfound skills in designing a system and criticizing its flaws or finding and then mitigating malicious attacks.
 
-From there, I proposed the code sharing design. It is worth explaining a little bit. The motivation stems from [this article](posts/apples) which calls for a reduction of abstractions. The design of the systems comes from [another article](posts/djehuty-technical) and this [talk](https://speakerdeck.com/wilkie/xomb-plus-djehuty-a-remix-os-for-computation-liberation).
+From there, I proposed the code sharing design. It is worth explaining a little bit. The motivation stems from [this article](apples) which calls for a reduction of abstractions. The design of the systems comes from [another article](djehuty-technical) and this [talk](https://speakerdeck.com/wilkie/xomb-plus-djehuty-a-remix-os-for-computation-liberation).
 
 ![border|Thinking about distributed systems through implementation](our_cs_1_small.JPG)
 
