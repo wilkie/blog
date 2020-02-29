@@ -48,7 +48,7 @@ GEM
     rackula (0.6.0)
       falcon (~> 0.19.0)
       samovar (~> 1.8)
-    rake (12.3.2)
+    rake (12.3.3)
     redcarpet (3.4.0)
     samovar (1.10.0)
       event
